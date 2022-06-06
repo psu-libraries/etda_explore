@@ -1,0 +1,24 @@
+version: '3.5'
+services:
+  solr:
+    image: solr:8.11.1-slim
+    restart: always
+    environment:
+      SOLR_STOP_WAIT: 10
+      SOLR_USERNAME: etda
+      SOLR_PASSWORD: etda
+    volumes:
+    - solr-data:/var/solr
+    - type: bind
+      source: ./solr
+      target: /tmp
+    ports:
+    - ${SOLR_PORT:-8983}:8983
+    # command: [
+    #   "solr",
+    #   "-c",
+    #   "-f"
+    # ]
+
+volumes:
+  solr-data:
