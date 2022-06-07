@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'etda_explore/solr_admin'
 
 namespace :solr do
     desc 'Load Fixtures' 
@@ -10,4 +11,14 @@ namespace :solr do
       Blacklight.default_index.connection.commit
 
     end
+
+    desc 'Initialize Solr'
+    task init: :environment do
+      puts "Starting initialization of Solr cores"
+      conf = EtdaExplore::SolrAdmin.new
+      conf.upload_config unless conf.configset_exists?
+      conf.create_collection unless conf.collection_exists?
+      conf.modify_collection
+    end
+
 end

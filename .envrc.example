@@ -1,0 +1,11 @@
+# Required configuration
+export PARTNER=graduate
+
+# Solr Parameters
+export SOLR_USERNAME=etda
+export SOLR_PASSWORD=etda
+export SOLR_HOST=127.0.0.1
+export SOLR_CONFIG_DIR=conf/solr
+export SOLR_COLLECTION=blacklight-core
+export SOLR_NUM_SHARDS=1
+export SOLR_PORT=8983
