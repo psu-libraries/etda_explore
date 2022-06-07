@@ -9,6 +9,8 @@ gem "rails", "~> 7.0.3"
 # Blacklight for solr interface
 gem "blacklight", "~> 7"
 
+gem 'faraday'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
