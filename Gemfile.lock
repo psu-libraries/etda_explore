@@ -119,6 +119,7 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.10.0)
+    etda_utilities (0.16.0)
     execjs (2.8.1)
     faraday (2.3.0)
       faraday-net_http (~> 2.0)
@@ -345,6 +346,7 @@ DEPENDENCIES
   debug
   devise
   devise-guests (~> 0.8)
+  etda_utilities
   importmap-rails
   jbuilder
   jquery-rails

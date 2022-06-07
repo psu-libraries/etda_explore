@@ -31,3 +31,27 @@
 
 en:
   hello: "Hello world"
+
+  graduate:
+    program:
+        label: Graduate Program
+    committee:
+      label: Committee Member
+      list:
+        label: Committee Members
+
+  honors:
+    program:
+        label: Area of Honors
+    committee:
+      label: Thesis Supervisor
+      list:
+        label: Thesis Supervisors
+
+  milsch:
+    program:
+        label: Millennium Scholars Program Name
+    committee:
+      label: Thesis Supervisor
+      list:
+        label: Thesis Supervisor
