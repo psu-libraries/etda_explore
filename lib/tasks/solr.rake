@@ -4,13 +4,15 @@ require_relative '../../app/models/fake_solr_document'
 
 namespace :solr do
     desc 'Load Fixtures' 
-    task load_fixtures: :environment do
+    task :load_fixtures, [:num] => :environment do |_task, args|
+      args.with_defaults(num: 20)
 
-      20.times do 
+      args[:num].to_i.times do |index|
+        puts "Adding Item #{index} to the collection"
         doc = FakeSolrDocument.new
         Blacklight.default_index.connection.add(doc.doc)
-        Blacklight.default_index.connection.commit
       end
+        Blacklight.default_index.connection.commit
 
     end
 
