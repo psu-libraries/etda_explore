@@ -245,14 +245,17 @@
       copyField also supports a maxChars to copy setting.  -->
 
   <!-- Text fields from SolrCell to search by default in our catch-all field -->
-  <copyField source="title" dest="text"/>
+  <!-- <copyField source="title" dest="text"/>
   <copyField source="author" dest="text"/>
   <copyField source="description" dest="text"/>
   <copyField source="keywords" dest="text"/>
   <copyField source="content" dest="text"/>
   <copyField source="content_type" dest="text"/>
   <copyField source="resourcename" dest="text"/>
-  <copyField source="url" dest="text"/>
+  <copyField source="url" dest="text"/> -->
+  <copyField source="*_ssi" dest="text"/>
+  <copyField source="*_ssim" dest="text"/>
+  <copyField source="*_tesi" dest="text"/>
 
   <!-- Create a string version of author for faceting -->
   <copyField source="author" dest="author_ssi"/>

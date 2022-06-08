@@ -140,61 +140,54 @@ class CatalogController < ApplicationController
     # This one uses all the defaults set by the solr request handler. Which
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
-  
-    config.index.search_fields = [
-      "abstract_tesi",
-      "author_name_tesi",
-      "committee_member_and_role_tesim",
-      "degree_description_ssi",
-      "degree_name_ssi",
-      "degree_type_slug_ssi",
-      "degree_type_ssi",
-      # "file_name_ssi",
-      "keyword_tesim",
-      "program_name_tesi",
-      "semester_ssi",
-      "title_tesi",
-      "year_isi"
-    ]
 
-    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false) do |field|
-      all_names = config.index.search_fields.join(" ")
+    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false)
+
+    #Author
+    config.add_search_field('author', label: 'Author Name') do |field|
       field.solr_parameters = {
-        qf: "#{all_names} id all_text_timv",
-        pf: "title_tesi"
+        qf: "${author_qf}",
+        pf: "${author_pf}"
       }
     end
 
-    # TODO add explore fields (author, title, program_name, keyword, comittee_memeber_name, abstract)
-    # https://github.com/psu-stewardship/etda_explore/blob/4800f97ca0d6bb03be9342147ff8a5f131b7835e/app/controllers/catalog_controller.rb
-    # in solrconfig.xml ${title_qf} <str name=title_qf> title_tsim^200</str>
-
-    config.add_search_field('title') do |field|
-      # solr_parameters hash are sent to Solr as ordinary url query params.
+    # Title
+    config.add_search_field('title', label: 'Title') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'title',
         qf: 'title_tesi',
         pf: 'title_tesi'
       }
     end
 
-    config.add_search_field('author', label: 'Author Last Name') do |field|
+    # Program
+    config.add_search_field('program_name', label: I18n.t("#{current_partner.id}.program.label")) do |field|
       field.solr_parameters = {
-        # "spellcheck.dictionary": "last_name",
-        qf: 'last_name_tesi',
-        pf: 'last_name_tesi'
+        qf: 'program_name_tesi',
+        pf: 'program_name_tesi'
       }
     end
 
-    # Specifying a :qt only to show it's possible, and so our internal automated
-    # tests can test it. In this case it's the same as
-    # config[:default_solr_parameters][:qt], so isn't actually neccesary.
-    config.add_search_field('subject') do |field|
-      field.qt = 'search'
+    # Keyword
+    config.add_search_field('keyword', label: 'Keyword') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'subject',
-        qf: '${subject_qf}',
-        pf: '${subject_pf}'
+        qf: 'keyword_tesim',
+        pf: 'keyword_tesim'
+      }
+    end
+
+    # Committee
+    config.add_search_field('committee_member_name', label: I18n.t("#{current_partner.id}.committee.label")) do |field|
+      field.solr_parameters = {
+        qf: 'committee_member_and_role_tesim',
+        pf: 'committee_member_and_role_tesim'
+      }
+    end
+
+    # Abstract
+    config.add_search_field('abstract', label: 'Abstract') do |field|
+      field.solr_parameters = {
+        qf: 'abstract_tesi',
+        pf: 'abstract_tesi'
       }
     end
 

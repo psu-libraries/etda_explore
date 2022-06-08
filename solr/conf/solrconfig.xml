@@ -52,6 +52,23 @@
         abstract_tesi^10
         text
       </str>
+    
+      <str name="author_qf">
+        author_name_tesi^25000
+        last_name_ssi^750
+        last_name_tesi^750
+        first_name_ssi^100
+        middle_name_ssi
+      </str>
+      
+      <str name="author_pf">
+        author_name_tesi^100
+        last_name_ssi^50
+        last_name_tesi^50
+        middle_name_ssi
+        first_name_ssi
+      </str>
+
 
       <str name="fl">
          *,
