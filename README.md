@@ -11,6 +11,12 @@ Things you may want to cover:
 
 * Configuration
 
+All configuration is done via environemnt variables. the .envrc.example file shows the apps tunables
+```
+cp .envrc.example .envrc
+source .envrc
+```
+
 * Database creation
 
 * Database initialization

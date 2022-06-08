@@ -9,6 +9,10 @@ gem "rails", "~> 7.0.3"
 # Blacklight for solr interface
 gem "blacklight", "~> 7"
 
+gem 'faraday'
+
+gem 'faker'
+
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 
@@ -77,6 +81,7 @@ end
 
 group :development, :test do
   gem "solr_wrapper", ">= 0.3"
+  gem "pry"
 end
 gem "rsolr", ">= 1.0", "< 3"
 gem "bootstrap", "~> 4.0"
