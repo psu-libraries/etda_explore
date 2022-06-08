@@ -111,12 +111,12 @@ class CatalogController < ApplicationController
     config.add_show_field 'degree_description_ssi', label: 'Degree'
     config.add_show_field 'degree_type_ssi',        label: 'Document Type'
     if current_partner.graduate?
-      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense',
-                                                    accessor: "defense"
+      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense'
+                                                    # accessor: "defense"
     end
 
-    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label"),
-                                                             helper_method: "render_as_list"
+    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label")
+                                                            #  helper_method: "render_as_list"
 
     config.add_show_field 'keyword_ssim',           label: 'Keywords'
 
@@ -140,28 +140,49 @@ class CatalogController < ApplicationController
     # This one uses all the defaults set by the solr request handler. Which
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
+  
+    config.index.search_fields = [
+      "abstract_tesi",
+      "author_name_tesi",
+      "committee_member_and_role_tesim",
+      "degree_description_ssi",
+      "degree_name_ssi",
+      "degree_type_slug_ssi",
+      "degree_type_ssi",
+      # "file_name_ssi",
+      "keyword_tesim",
+      "program_name_tesi",
+      "semester_ssi",
+      "title_tesi",
+      "year_isi"
+    ]
 
-    config.add_search_field 'all_fields', label: 'All Fields'
+    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false) do |field|
+      all_names = config.index.search_fields.join(" ")
+      field.solr_parameters = {
+        qf: "#{all_names} id all_text_timv",
+        pf: "title_tesi"
+      }
+    end
 
-
-    # Now we see how to over-ride Solr request handler defaults, in this
-    # case for a BL "search field", which is really a dismax aggregate
-    # of Solr search fields.
+    # TODO add explore fields (author, title, program_name, keyword, comittee_memeber_name, abstract)
+    # https://github.com/psu-stewardship/etda_explore/blob/4800f97ca0d6bb03be9342147ff8a5f131b7835e/app/controllers/catalog_controller.rb
+    # in solrconfig.xml ${title_qf} <str name=title_qf> title_tsim^200</str>
 
     config.add_search_field('title') do |field|
       # solr_parameters hash are sent to Solr as ordinary url query params.
       field.solr_parameters = {
         'spellcheck.dictionary': 'title',
-        qf: '${title_qf}',
-        pf: '${title_pf}'
+        qf: 'title_tesi',
+        pf: 'title_tesi'
       }
     end
 
-    config.add_search_field('author') do |field|
+    config.add_search_field('author', label: 'Author Last Name') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'author',
-        qf: '${author_qf}',
-        pf: '${author_pf}'
+        # "spellcheck.dictionary": "last_name",
+        qf: 'last_name_tesi',
+        pf: 'last_name_tesi'
       }
     end
 
