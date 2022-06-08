@@ -111,12 +111,12 @@ class CatalogController < ApplicationController
     config.add_show_field 'degree_description_ssi', label: 'Degree'
     config.add_show_field 'degree_type_ssi',        label: 'Document Type'
     if current_partner.graduate?
-      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense',
-                                                    accessor: "defense"
+      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense'
+                                                    # accessor: "defense"
     end
 
-    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label"),
-                                                             helper_method: "render_as_list"
+    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label")
+                                                            #  helper_method: "render_as_list"
 
     config.add_show_field 'keyword_ssim',           label: 'Keywords'
 
