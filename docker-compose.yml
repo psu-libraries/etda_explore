@@ -5,8 +5,8 @@ services:
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
-      SOLR_USERNAME: etda
-      SOLR_PASSWORD: etda
+      SOLR_USERNAME: ${SOLR_USERNAME}
+      SOLR_PASSWORD: ${SOLR_PASSWORD}
     volumes:
     - solr-data:/var/solr
     - type: bind
@@ -14,11 +14,9 @@ services:
       target: /tmp
     ports:
     - ${SOLR_PORT:-8983}:8983
-    # command: [
-    #   "solr",
-    #   "-c",
-    #   "-f"
-    # ]
-
+    command: [
+      "/bin/bash",
+      "-c",
+      "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr -c -f",]
 volumes:
   solr-data:

@@ -8,6 +8,10 @@ Bundler.require(*Rails.groups)
 
 module EtdaExplore
   class Application < Rails::Application
+    require 'etda_explore/solr_config'
+    
+    config.solr =  EtdaExplore::SolrConfig.new
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
