@@ -7,7 +7,7 @@ RSpec.describe 'Searching', type: :feature do
     Blacklight.default_index.connection.commit
   end
 
-  it 'returns expected results' do
+  it 'searches all fields' do
     title = @doc.doc[:title_ssi]
     visit '/'
     select("All Fields", from: "search_field")
