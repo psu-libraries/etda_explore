@@ -93,33 +93,30 @@ class CatalogController < ApplicationController
     # The ordering of the field names is the order of the display
     config.add_index_field 'author_name_tesi',  label: 'Author'
 
-    config.add_index_field 'title_ssi',         label: 'Title'
-    config.add_index_field 'program_name_ssi',  label: current_partner.program_label
-    config.add_index_field 'keyword_ssim',      label: 'Keywords'
-    config.add_index_field 'final_submission_file_isim',      label: 'File'
-    config.add_index_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label")
+    config.add_index_field 'title_ssi', label: 'Title'
+    config.add_index_field 'program_name_ssi', label: current_partner.program_label
+    config.add_index_field 'keyword_ssim', label: 'Keywords', helper_method: :render_as_list
+    config.add_index_field 'final_submission_file_isim', label: 'File'
+    config.add_index_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label"),
+                                                              helper_method: :render_as_list
 
     # Fields to be displayed in the show (single result) view
     # The ordering of the field names is the order of the display
     config.add_show_field 'author_name_tesi', label: 'Author'
     if current_partner.graduate?
-     config.add_show_field 'email_ssi',            label: 'Email'
+     config.add_show_field 'email_ssi', label: 'Email'
     end
-    config.add_show_field 'program_name_ssi',       label: I18n.t("#{current_partner.id}.program.label")
+    config.add_show_field 'program_name_ssi', label: I18n.t("#{current_partner.id}.program.label")
     config.add_show_field 'degree_description_ssi', label: 'Degree'
-    config.add_show_field 'degree_type_ssi',        label: 'Document Type'
+    config.add_show_field 'degree_type_ssi', label: 'Document Type'
     if current_partner.graduate?
-      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense'
-                                                    # accessor: "defense"
+      config.add_show_field 'defended_at_dtsi', label: 'Date of Defense' #, accessor: "defense"
     end
 
-    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label")
-                                                            #  helper_method: "render_as_list"
-
-    config.add_show_field 'keyword_ssim',           label: 'Keywords'
-
-    config.add_show_field 'abstract_tesi',          label: 'Abstract'
-
+    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label"),
+                                                             helper_method: :render_as_list
+    config.add_show_field 'keyword_ssim', label: 'Keywords', helper_method: :render_as_list
+    config.add_show_field 'abstract_tesi', label: 'Abstract'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
