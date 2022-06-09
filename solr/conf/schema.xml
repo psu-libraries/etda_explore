@@ -15,20 +15,6 @@
      <field name="db_legacy_id" type="string" indexed="true" stored="true" required="false" multiValued="false" />
      <field name="db_legacy_old_id" type="string" indexed="true" stored="true" required="false" multiValued="false" />
 
-     <field name="sku" type="text_en_splitting_tight" indexed="true" stored="true" omitNorms="true"/>
-     <field name="name" type="text_general" indexed="true" stored="true"/>
-     <field name="manu" type="text_general" indexed="true" stored="true" omitNorms="true"/>
-     <field name="cat" type="string" indexed="true" stored="true" multiValued="true"/>
-     <field name="features" type="text_general" indexed="true" stored="true" multiValued="true"/>
-     <field name="includes" type="text_general" indexed="true" stored="true" termVectors="true" termPositions="true" termOffsets="true" />
-
-     <field name="weight" type="float" indexed="true" stored="true"/>
-     <field name="price"  type="float" indexed="true" stored="true"/>
-     <field name="popularity" type="int" indexed="true" stored="true" />
-     <field name="inStock" type="boolean" indexed="true" stored="true" />
-
-     <field name="store" type="location" indexed="true" stored="true"/>
-
      <!-- Common metadata fields, named specifically to match up with
        SolrCell metadata when parsing rich documents such as Word, PDF.
        Some fields are multiValued only because Tika currently may return
@@ -56,7 +42,6 @@
          using copyField below. This is to save space. Use this field for returning and
          highlighting document content. Use the "text" field to search the content. -->
      <field name="content" type="text_general" indexed="false" stored="true" multiValued="true"/>
-      
 
      <!-- catchall field, containing all other searchable text fields (implemented
          via copyField further on in this schema  -->
@@ -65,12 +50,6 @@
      <!-- catchall text field that indexes tokens both normally and in reverse for efficient
           leading wildcard queries. -->
     <field name="text_rev" type="text_general_rev" indexed="true" stored="false" multiValued="true"/>
-
-    <!-- non-tokenized version of manufacturer to make it easier to sort or group
-       results by manufacturer.  copied from "manu" via copyField -->
-    <field name="manu_exact" type="string" indexed="true" stored="false"/>
-
-    <field name="payloads" type="payloads" indexed="true" stored="true"/>
     
     <field name="lat" type="tdouble" stored="true" indexed="true" multiValued="false"/>
     <field name="lng" type="tdouble" stored="true" indexed="true" multiValued="false"/>
@@ -265,25 +244,21 @@
       destination field is to use the dynamic field syntax.
       copyField also supports a maxChars to copy setting.  -->
 
-  <copyField source="*_tsim" dest="all_text_timv" maxChars="3000"/>
-  <copyField source="*_tesim" dest="all_text_timv" maxChars="3000"/>
-  <copyField source="*_ssim" dest="all_text_timv" maxChars="3000"/>
-  <copyField source="*_si" dest="all_text_timv" maxChars="3000"/>
+  <!-- Text fields from SolrCell to search by default in our catch-all field -->
+  <!-- <copyField source="title" dest="text"/>
+  <copyField source="author" dest="text"/>
+  <copyField source="description" dest="text"/>
+  <copyField source="keywords" dest="text"/>
+  <copyField source="content" dest="text"/>
+  <copyField source="content_type" dest="text"/>
+  <copyField source="resourcename" dest="text"/>
+  <copyField source="url" dest="text"/> -->
+  <copyField source="*_ssi" dest="text"/>
+  <copyField source="*_ssim" dest="text"/>
+  <copyField source="*_tesi" dest="text"/>
 
-  <copyField source="*_tsim" dest="suggest"/>
-  <copyField source="*_tesim" dest="suggest"/>
-  <copyField source="*_ssim" dest="suggest"/>
-  <copyField source="*_si" dest="suggest"/>
-
-  <!-- TODO: Look into if these are actually being used. -->
-  <copyField source="*_tsim" dest="spell"/>
-  <copyField source="*_tesim" dest="spell"/>
-  <copyField source="*_ssim" dest="spell"/>
-  <copyField source="*_si" dest="spell"/>
-
-  <copyField source="author_tsim" dest="author_spell"/>
-  <copyField source="subject_ssim" dest="subject_spell"/>
-  <copyField source="title_tsim" dest="title_spell"/>
+  <!-- Create a string version of author for faceting -->
+  <copyField source="author" dest="author_ssi"/>
 
   <types>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />

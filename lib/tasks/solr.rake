@@ -3,6 +3,16 @@ require 'etda_explore/solr_admin'
 require_relative '../../app/models/fake_solr_document'
 
 namespace :solr do
+
+    desc 'Reset Solr'
+    task reset: :environment do 
+      conf = EtdaExplore::SolrAdmin.new
+      conf.delete_all_collections
+      conf.delete_all_configsets
+
+      Rake::Task["solr:init"].invoke
+    end
+
     desc 'Load Fixtures' 
     task :load_fixtures, [:num] => :environment do |_task, args|
       args.with_defaults(num: 20)

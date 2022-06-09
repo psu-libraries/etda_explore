@@ -109,12 +109,12 @@ class CatalogController < ApplicationController
     config.add_show_field 'degree_description_ssi', label: 'Degree'
     config.add_show_field 'degree_type_ssi',        label: 'Document Type'
     if current_partner.graduate?
-      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense',
-                                                    accessor: "defense"
+      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense'
+                                                    # accessor: "defense"
     end
 
-    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label"),
-                                                             helper_method: "render_as_list"
+    config.add_show_field 'committee_member_and_role_tesim', label: I18n.t("#{current_partner.id}.committee.list.label")
+                                                            #  helper_method: "render_as_list"
 
     config.add_show_field 'keyword_ssim',           label: 'Keywords'
 
@@ -139,39 +139,53 @@ class CatalogController < ApplicationController
     # solr request handler? The one set in config[:default_solr_parameters][:qt],
     # since we aren't specifying it otherwise.
 
-    config.add_search_field 'all_fields', label: 'All Fields'
+    config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false)
 
-
-    # Now we see how to over-ride Solr request handler defaults, in this
-    # case for a BL "search field", which is really a dismax aggregate
-    # of Solr search fields.
-
-    config.add_search_field('title') do |field|
-      # solr_parameters hash are sent to Solr as ordinary url query params.
+    #Author
+    config.add_search_field('author', label: 'Author Name') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'title',
-        qf: '${title_qf}',
-        pf: '${title_pf}'
+        qf: "${author_qf}",
+        pf: "${author_pf}"
       }
     end
 
-    config.add_search_field('author') do |field|
+    # Title
+    config.add_search_field('title', label: 'Title') do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'author',
-        qf: '${author_qf}',
-        pf: '${author_pf}'
+        qf: 'title_tesi',
+        pf: 'title_tesi'
       }
     end
 
-    # Specifying a :qt only to show it's possible, and so our internal automated
-    # tests can test it. In this case it's the same as
-    # config[:default_solr_parameters][:qt], so isn't actually neccesary.
-    config.add_search_field('subject') do |field|
-      field.qt = 'search'
+    # Program
+    config.add_search_field('program_name', label: I18n.t("#{current_partner.id}.program.label")) do |field|
       field.solr_parameters = {
-        'spellcheck.dictionary': 'subject',
-        qf: '${subject_qf}',
-        pf: '${subject_pf}'
+        qf: 'program_name_tesi',
+        pf: 'program_name_tesi'
+      }
+    end
+
+    # Keyword
+    config.add_search_field('keyword', label: 'Keyword') do |field|
+      field.solr_parameters = {
+        qf: 'keyword_tesim',
+        pf: 'keyword_tesim'
+      }
+    end
+
+    # Committee
+    config.add_search_field('committee_member_name', label: I18n.t("#{current_partner.id}.committee.label")) do |field|
+      field.solr_parameters = {
+        qf: 'committee_member_and_role_tesim',
+        pf: 'committee_member_and_role_tesim'
+      }
+    end
+
+    # Abstract
+    config.add_search_field('abstract', label: 'Abstract') do |field|
+      field.solr_parameters = {
+        qf: 'abstract_tesi',
+        pf: 'abstract_tesi'
       }
     end
 
