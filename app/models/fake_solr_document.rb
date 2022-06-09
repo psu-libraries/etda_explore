@@ -2,20 +2,24 @@
 class FakeSolrDocument
     attr_reader :doc
 
-    def initialize
+    def initialize(access_level=nil)
         title = Faker::Hipster.sentence(word_count: 3)
         abstract = Faker::Hipster.sentence(word_count: 10)
+        access_level_ss = ['restricted', 'open_access'].sample unless access_level
         name = Faker::Name
+        semester = ['Spring', 'Summer', 'Fall'].sample
+        file_name = Faker::File.file_name(ext: 'pdf').split('/')[1]
         last_name = name.last_name
         first_name = name.first_name
         middle_name = name.middle_name
+        final_submission_file_isim = Faker::Number.unique.within(range: 1..7000)
         keywords = Faker::Hipster.words(number: 5)
         committee_member_name = name.name
         @doc = {
                 "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
                 "final_submission_files_uploaded_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
                 "id": Faker::Number.number(digits: 4),
-                "access_level_ss": "open_access",
+                "access_level_ss": access_level_ss,
                 "db_id": Faker::Number.unique.within(range: 1..1000),
                 "db_legacy_old_id": Faker::Number.unique.within(range: 1..1000),
                 "released_metadata_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
@@ -23,7 +27,7 @@ class FakeSolrDocument
                 "title_ssi": title,
                 "db_legacy_id": Faker::Number.unique.within(range:1..1000),
                 "abstract_tesi": abstract,
-                "semester_ssi": "Spring",
+                "semester_ssi": semester,
                 "download_access_group_ssim": [
                   "public",
                   "open_access"
@@ -32,10 +36,10 @@ class FakeSolrDocument
                   "public"
                 ],
                 "final_submission_file_isim": [
-                  1
+                  final_submission_file_isim
                 ],
                 "file_name_ssim": [
-                  "thesis_1.pdf"
+                  file_name
                 ],
                 "author_name_tesi": name.name,
                 "last_name_ssi": last_name,
@@ -43,7 +47,7 @@ class FakeSolrDocument
                 "middle_name_ssi": middle_name,
                 "first_name_ssi": first_name,
                 "degree_name_ssi": "MS",
-                "degree_description_ssi": "Master of Science",
+                "degree_description_ssi": degree_description_ssi,
                 "degree_type_slug_ssi": "Master Thesis",
                 "degree_type_ssi": "Master Thesis",
                 "program_name_tesi": "Statistics",
@@ -70,6 +74,19 @@ class FakeSolrDocument
                 "keyword_ssim": keywords,
                 "keyword_tesim": keywords
         }
+    end
+
+    def degree_description_ssi
+
+      [
+        "Doctor of Education",
+        "Doctor of Philosophy",
+        "Master of Architecture",
+        "Master of Arts",
+        "Master of Engineering",
+        "Master of Science"
+      ].sample
+
     end
 
 end
