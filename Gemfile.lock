@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/psu-stewardship/etda_utilities.git
+  revision: 4fb1abe1e6a36bdc93ead6a1705f03102609da62
+  ref: 3-explore-refactor-partner
+  specs:
+    etda_utilities (0.16.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -120,7 +127,6 @@ GEM
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.10.0)
-    etda_utilities (0.16.0)
     execjs (2.8.1)
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
@@ -355,7 +361,7 @@ DEPENDENCIES
   debug
   devise
   devise-guests (~> 0.8)
-  etda_utilities
+  etda_utilities!
   faker
   faraday
   importmap-rails

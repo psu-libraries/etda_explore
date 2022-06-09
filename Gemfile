@@ -90,4 +90,4 @@ gem "sassc-rails", "~> 2.1"
 gem "jquery-rails"
 gem "devise"
 gem "devise-guests", "~> 0.8"
-gem "etda_utilities"
+gem "etda_utilities", git: 'https://github.com/psu-stewardship/etda_utilities.git', ref: '3-explore-refactor-partner'
