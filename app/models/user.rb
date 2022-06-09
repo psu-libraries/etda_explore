@@ -4,7 +4,7 @@ class User < ApplicationRecord
   include Blacklight::User
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :registerable,
+  devise :http_header_authenticatable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
   # Method added by Blacklight; Blacklight uses #to_s on your
@@ -12,5 +12,9 @@ class User < ApplicationRecord
   # the account.
   def to_s
     email
+  end
+
+  def password_required?
+    false
   end
 end

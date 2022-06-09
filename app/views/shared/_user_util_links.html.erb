@@ -1,0 +1,22 @@
+<ul class="navbar-nav">
+
+  <% if has_user_authentication_provider? %>
+    <% if current_user %>
+    <li class="nav-item">
+      <%= link_to t('blacklight.header_links.logout'), destroy_user_session_path, class: 'nav-link' %>
+    </li>
+    <% unless current_user.to_s.blank? -%>
+    <li class="nav-item">
+    <div class="nav-link">
+      <%= current_user %>
+    </div>
+    </li>
+    <% end %>
+    <% else %>
+    <li class="nav-item">
+      <%= link_to t('blacklight.header_links.login'), login_path, class: 'nav-link' %>
+    </li>
+    <% end %>
+  <% end %>
+</ul>
+
