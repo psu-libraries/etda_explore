@@ -36,3 +36,5 @@
 
 # Ignore application configuration
 .envrc
+
+.byebug_history
