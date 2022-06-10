@@ -61,7 +61,7 @@ jobs:
             ./bin/generate_app
   test:
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: harbor.k8s.libraries.psu.edu/library/ruby-2.7.5-node-16:20220420
       - image: solr:8.11.1-slim
         command: [
           "/bin/bash",
