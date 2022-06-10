@@ -3,6 +3,6 @@
 module BlacklightDisplayHelper
   # Given a list of items, displays each item on its own line
   def render_as_list(options = {})
-    content_tag 'span', options[:value].join('<br>'), nil, false
+    tag.span(options[:value].join('<br>'), nil, false)
   end
 end

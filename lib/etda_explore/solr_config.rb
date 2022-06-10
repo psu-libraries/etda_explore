@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'zip'
 
 module EtdaExplore
@@ -36,7 +37,8 @@ module EtdaExplore
 
     def query_url
       if solr_username && solr_password
-        "http://#{solr_username}:#{ URI.encode_www_form_component(solr_password)}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
+        solr_auth = "#{solr_username}:#{URI.encode_www_form_component(solr_password)}"
+        "http://#{solr_auth}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
       else
         "http://#{solr_host}:#{solr_port}/solr/#{collection_name}"
       end

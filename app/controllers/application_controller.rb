@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
@@ -13,13 +15,12 @@ class ApplicationController < ActionController::Base
   end
 
   private
-  
-  def home_or_original_path
-    original_fullpath = request.env.fetch('ORIGINAL_FULLPATH', '/')
-    # prevent redirect loops when user hits /login directly
-    return '/' if original_fullpath == '/login'
 
-    original_fullpath
-  end
+    def home_or_original_path
+      original_fullpath = request.env.fetch('ORIGINAL_FULLPATH', '/')
+      # prevent redirect loops when user hits /login directly
+      return '/' if original_fullpath == '/login'
 
+      original_fullpath
+    end
 end

@@ -1,0 +1,21 @@
+inherit_gem:
+  niftany: niftany_rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.7.5
+  Exclude:
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'
+
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/devise.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'spec/**/*'
