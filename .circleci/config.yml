@@ -77,7 +77,7 @@ jobs:
     - checkout
     - restore_cache:
         keys:
-          - bundle-{{ checksum "Gemfile.lock" }}
+          - gemfile-{{ checksum "Gemfile.lock" }}
     - run:
         name: "Bundle"
         command: |
