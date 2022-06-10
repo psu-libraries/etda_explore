@@ -1,9 +1,6 @@
 inherit_gem:
   niftany: niftany_rubocop.yml
 
-inherit_from:
-  - .rubocop_todo.yml
-
 AllCops:
   TargetRubyVersion: 2.7.5
   Exclude:
@@ -13,3 +10,12 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+
+Layout/LineLength:
+  Exclude:
+    - 'config/initializers/devise.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+    - 'spec/**/*'

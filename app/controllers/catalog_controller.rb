@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-class CatalogController < ApplicationController
 
+class CatalogController < ApplicationController
   include Blacklight::Catalog
 
   configure_blacklight do |config|
@@ -24,16 +24,16 @@ class CatalogController < ApplicationController
     config.show.document_actions.delete(:bookmark)
 
     # solr path which will be added to solr base url before the other solr params.
-    #config.solr_path = 'select'
-    #config.document_solr_path = 'get'
+    # config.solr_path = 'select'
+    # config.document_solr_path = 'get'
 
     # items to show per page, each number in the array represent another option to choose from.
-    #config.per_page = [10,20,50,100]
+    # config.per_page = [10,20,50,100]
 
     # solr field configuration for search results/index views
     config.index.title_field = 'title_ssi'
-    #config.index.display_type_field = 'format'
-    #config.index.thumbnail_field = 'thumbnail_path_ss'
+    # config.index.display_type_field = 'format'
+    # config.index.thumbnail_field = 'thumbnail_path_ss'
 
     config.add_results_collection_tool(:sort_widget)
     config.add_results_collection_tool(:per_page_widget)
@@ -48,9 +48,9 @@ class CatalogController < ApplicationController
     config.add_nav_action(:search_history, partial: 'blacklight/nav/search_history')
 
     # solr field configuration for document/show views
-    #config.show.title_field = 'title_tsim'
-    #config.show.display_type_field = 'format'
-    #config.show.thumbnail_field = 'thumbnail_path_ss'
+    # config.show.title_field = 'title_tsim'
+    # config.show.display_type_field = 'format'
+    # config.show.thumbnail_field = 'thumbnail_path_ss'
 
     # solr fields that will be treated as facets by the blacklight application
     #   The ordering of the field names is the order of the display
@@ -73,23 +73,28 @@ class CatalogController < ApplicationController
     # facet bar
     #
     # set :index_range to true if you want the facet pagination view to have facet prefix-based navigation
-    #  (useful when user clicks "more" on a large facet and wants to navigate alphabetically across a large set of results)
-    # :index_range can be an array or range of prefixes that will be used to create the navigation (note: It is case sensitive when searching values)
+    #  (useful when user clicks "more" on a large facet and wants
+    # to navigate alphabetically across a large set of results)
+    # :index_range can be an array or range of prefixes that will be used to
+    # create the navigation (note: It is case sensitive when searching values)
 
     # Facets are displayed in the order listed here
-    config.add_facet_field 'program_name_ssi',           limit: true, label: current_partner.program_label, search_key: 'program_name_tesi'
+    config.add_facet_field 'program_name_ssi', limit: true, label: current_partner.program_label,
+                                               search_key: 'program_name_tesi'
     config.add_facet_field 'degree_name_ssi',            limit: true, label: 'Degree'
     config.add_facet_field 'year_isi',                   limit: true, label: 'Year'
-    config.add_facet_field 'committee_member_name_ssim', limit: true, label: current_partner.committee_label, search_key: 'committee_member_name_tesim'
+    config.add_facet_field 'committee_member_name_ssim', limit: true, label: current_partner.committee_label,
+                                                         search_key: 'committee_member_name_tesim'
     config.add_facet_field 'keyword_ssim',               limit: true, label: 'Keyword', search_key: 'keyword_tesim'
-    config.add_facet_field 'last_name_ssi',              limit: true, label: 'Author Last Name', search_key: 'author_name_tesi'
+    config.add_facet_field 'last_name_ssi',              limit: true, label: 'Author Last Name',
+                                                         search_key: 'author_name_tesi'
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
     # handler defaults, or have no facets.
     config.add_facet_fields_to_solr_request!
 
-   # Fields displayed in the index (search results) view
+    # Fields displayed in the index (search results) view
     # The ordering of the field names is the order of the display
     config.add_index_field 'author_name_tesi',  label: 'Author'
 
@@ -103,23 +108,22 @@ class CatalogController < ApplicationController
     # The ordering of the field names is the order of the display
     config.add_show_field 'author_name_tesi', label: 'Author'
     if current_partner.graduate?
-     config.add_show_field 'email_ssi',            label: 'Email'
+      config.add_show_field 'email_ssi', label: 'Email'
     end
     config.add_show_field 'program_name_ssi',       label: current_partner.program_label
     config.add_show_field 'degree_description_ssi', label: 'Degree'
     config.add_show_field 'degree_type_ssi',        label: 'Document Type'
     if current_partner.graduate?
-      config.add_show_field 'defended_at_dtsi',     label: 'Date of Defense'
-                                                    # accessor: "defense"
+      config.add_show_field 'defended_at_dtsi', label: 'Date of Defense'
+      # accessor: "defense"
     end
 
     config.add_show_field 'committee_member_and_role_tesim', label: current_partner.committee_list_label
-                                                            #  helper_method: "render_as_list"
+    #  helper_method: "render_as_list"
 
     config.add_show_field 'keyword_ssim',           label: 'Keywords'
 
     config.add_show_field 'abstract_tesi',          label: 'Abstract'
-
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
@@ -141,11 +145,11 @@ class CatalogController < ApplicationController
 
     config.add_search_field('all_fields', label: 'All Fields', include_in_advanced_search: false)
 
-    #Author
+    # Author
     config.add_search_field('author', label: 'Author Name') do |field|
       field.solr_parameters = {
-        qf: "${author_qf}",
-        pf: "${author_pf}"
+        qf: '${author_qf}',
+        pf: '${author_pf}'
       }
     end
 
