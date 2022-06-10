@@ -62,12 +62,22 @@ jobs:
   test:
     docker:
       - image: cimg/ruby:2.7.5-browsers
+      - image: mysql:8
+        environment:
+          MYSQL_ROOT_PASSWORD: etda
+          MYSQL_USER: etda
+          MYSQL_PASSWORD: etda
+          MYSQL_DATABASE: explore
       - image: solr:8.11.1-slim
         command: [
           "/bin/bash",
            "-c",
            "solr -c && solr auth enable -credentials etda:etda -z localhost:9983; solr stop && solr -c -f",]
     environment:
+      MYSQL_HOST: '127.0.0.1'
+      MYSQL_USER: etda
+      MYSQL_PASSWORD: etda
+      MYSQL_DATABASE: etda
       RAILS_ENV: test
       PARTNER: graduate
       SOLR_USERNAME: etda
@@ -90,6 +100,9 @@ jobs:
     - run:
         name: "Wait for Solr"
         command: dockerize -wait tcp://localhost:8983 -timeout 2m
+    - run:
+        name: "Wait for MySQL"
+        command: dockerize -wait tcp://localhost:3306 -timeout 2m
     - run:
         name: "Lint"
         command: |

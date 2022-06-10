@@ -1,6 +1,14 @@
 # Required configuration
 export PARTNER=graduate
 
+# MySQL Parameters
+export MYSQL_USER=etda
+export MYSQL_PASSWORD=etda
+export MYSQL_DATABASE=explore
+# Change this to localhost if you are running rails outside of docker
+export MYSQL_HOST=mysql
+export MYSQL_LOCAL_PORT=3306
+
 # Solr Parameters
 export SOLR_USERNAME=etda
 export SOLR_PASSWORD=etda

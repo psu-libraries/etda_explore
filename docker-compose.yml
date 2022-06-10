@@ -1,5 +1,17 @@
 version: '3.5'
 services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - ${MYSQL_LOCAL_PORT:-3306}:3306
   solr:
     image: solr:8.11.1-slim
     restart: always
@@ -20,3 +32,4 @@ services:
       "solr -c && solr auth enable -credentials $$SOLR_USERNAME:$$SOLR_PASSWORD -z localhost:9983; solr stop && solr -c -f",]
 volumes:
   solr-data:
+  mysql-data:
