@@ -61,7 +61,7 @@ jobs:
             ./bin/generate_app
   test:
     docker:
-      - image: circleci/ruby:2.7.5-buster-node-browsers
+      - image: cimg/ruby:2.7.5-browsers
       - image: solr:8.11.1-slim
         command: [
           "/bin/bash",
