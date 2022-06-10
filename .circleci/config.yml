@@ -122,6 +122,7 @@ workflows:
           filters:
             branches:
               only:
+                - circle
                 - main
                 - /preview\/.*/
       - deploy:
