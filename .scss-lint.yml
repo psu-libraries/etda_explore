@@ -1,0 +1,11 @@
+# scss-lint config file
+
+# Lint all scss files
+scss_files: "**/*.scss"
+
+# Files to exclude
+exclude: [
+  'vendor/*',
+  'node_modules/*',
+  'app/javascript/blacklight/styles/*'
+]

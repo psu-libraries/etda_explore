@@ -36,3 +36,9 @@
 
 # Ignore application configuration
 .envrc
+
+# Other
+.cache
+vendor/bundle
+.bash_history
+solr/start_*.properties

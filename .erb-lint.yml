@@ -1,0 +1,5 @@
+---
+# Uses File.fnmatch? for comparison
+exclude:
+  - '*vendor/*'
+  - '*node_modules/*'

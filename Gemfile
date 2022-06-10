@@ -91,3 +91,5 @@ gem "jquery-rails"
 gem "devise"
 gem "devise-guests", "~> 0.8"
 gem "etda_utilities"
+
+gem "niftany", "~> 0.9.0"
