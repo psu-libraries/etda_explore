@@ -104,7 +104,7 @@ jobs:
 
 workflows:
   version: 2
-  authorizer:
+  explore:
     jobs:
       - release:
           context: org-global
