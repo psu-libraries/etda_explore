@@ -11,6 +11,10 @@ AllCops:
     - 'bin/**/*'
     - 'node_modules/**/*'
 
+Rails/ContentTag:
+  Exclude:
+    - 'app/helpers/blacklight_display_helper.rb'
+
 Layout/LineLength:
   Exclude:
     - 'config/initializers/devise.rb'
