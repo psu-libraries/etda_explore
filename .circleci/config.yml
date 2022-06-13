@@ -1,0 +1,143 @@
+version: 2.1
+
+orbs:
+  docker: circleci/docker@1.5.0
+
+jobs:
+  release:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/etda-explore
+      GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: git@github.com:psu-libraries/etda-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd etda-config
+            /usr/local/bin/pr-release clusters/prod/manifests/etda_explore/prod.yaml
+
+  publish:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+        user: root
+    steps:
+      - setup_remote_docker:
+          version: 20.10.6
+          docker_layer_caching: true
+      - checkout
+      - docker/check:
+          registry: harbor.k8s.libraries.psu.edu
+      - docker/build:
+          image: library/etda-explore
+          registry: harbor.k8s.libraries.psu.edu
+          extra_build_args: "--target production"
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: library/etda-explore
+          registry: harbor.k8s.libraries.psu.edu
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/etda-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Updating Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd ai-s3-authorizer-config
+            ./bin/generate_app
+  test:
+    docker:
+      - image: cimg/ruby:2.7.5-browsers
+      - image: solr:8.11.1-slim
+        command: [
+          "/bin/bash",
+           "-c",
+           "solr -c && solr auth enable -credentials etda:etda -z localhost:9983; solr stop && solr -c -f",]
+    environment:
+      RAILS_ENV: test
+      PARTNER: graduate
+      SOLR_USERNAME: etda
+      SOLR_PASSWORD: etda
+      SOLR_COLLECTION: etda
+    steps:
+    - checkout
+    - restore_cache:
+        keys:
+          - gemfile-{{ checksum "Gemfile.lock" }}
+    - run:
+        name: "Bundle"
+        command: |
+          gem install bundler
+          bundle check --path vendor/bundle || bundle install --deployment
+    - save_cache:
+        paths:
+          - vendor/bundle
+        key: bundle-{{ checksum "Gemfile.lock" }}
+    - run:
+        name: "Wait for Solr"
+        command: dockerize -wait tcp://localhost:8983 -timeout 2m
+    - run:
+        name: "Lint"
+        command: |
+          bundle exec niftany
+    - run:
+        name: Setup Code Climate test-reporter
+        command: |
+          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          chmod +x ./cc-test-reporter
+    - run:
+        name: "Test"
+        command: |
+          ./cc-test-reporter before-build
+          bundle exec rake solr:init
+          bundle exec rake db:create
+          bundle exec rake db:migrate
+          bundle exec rspec
+          ./cc-test-reporter after-build
+
+workflows:
+  version: 2
+  explore:
+    jobs:
+      - release:
+          context: org-global
+          name: "Release"
+          filters:
+            tags:
+              only:
+                - /^v\d+.\d+.\d+.*/
+            branches:
+              ignore:
+                - /.*/
+      - test
+      - publish:
+          context: org-global
+          filters:
+            branches:
+              only:
+                - circle
+                - main
+                - /preview\/.*/
+      - deploy:
+          context: org-global
+          requires:
+            - publish
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
