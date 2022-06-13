@@ -3,9 +3,9 @@
 require 'devise/redirect_to_login_failure'
 
 Devise.add_module(:http_header_authenticatable,
-  strategy: true,
-  controller: :sessions,
-  model: 'devise/models/http_header_authenticatable')
+                  strategy: true,
+                  controller: :sessions,
+                  model: 'devise/models/http_header_authenticatable')
 
 # Assuming you have not yet modified this file, each configuration option below
 # is set to its default value. Note that some are commented out while others
@@ -288,7 +288,7 @@ Devise.setup do |config|
   #   manager.intercept_401 = false
   #   manager.default_strategies(scope: :user).unshift :some_external_strategy
   # end
-  
+
   config.warden do |manager|
     manager.failure_app = RedirectToLoginFailure
   end
