@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/psu-stewardship/etda_utilities.git
+  revision: 77cd1ce3b337da31c003e195f5edc4a06d2247ab
+  branch: partner-header-title
+  specs:
+    etda_utilities (0.17.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -137,7 +144,6 @@ GEM
       rubocop
       smart_properties
     erubi (1.10.0)
-    etda_utilities (0.17.0)
     execjs (2.8.1)
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
@@ -422,7 +428,7 @@ DEPENDENCIES
   capybara
   devise
   devise-guests (~> 0.8)
-  etda_utilities
+  etda_utilities!
   faker
   faraday
   importmap-rails
