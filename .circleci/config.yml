@@ -57,11 +57,17 @@ jobs:
           command: |
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
-            cd ai-s3-authorizer-config
+            cd etda-config
             ./bin/generate_app
   test:
     docker:
       - image: cimg/ruby:2.7.5-browsers
+      - image: mysql:8
+        environment:
+          MYSQL_ROOT_PASSWORD: etda
+          MYSQL_USER: etda
+          MYSQL_PASSWORD: etda
+          MYSQL_DATABASE: explore
       - image: solr:8.11.1-slim
         command: [
           "/bin/bash",
@@ -70,6 +76,10 @@ jobs:
     environment:
       RAILS_ENV: test
       PARTNER: graduate
+      MYSQL_HOST: '127.0.0.1'
+      MYSQL_USER: root
+      MYSQL_PASSWORD: etda
+      MYSQL_DATABASE: etda
       SOLR_USERNAME: etda
       SOLR_PASSWORD: etda
       SOLR_COLLECTION: etda
