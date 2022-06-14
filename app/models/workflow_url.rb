@@ -4,7 +4,11 @@ module WorkflowUrl
 
   class << self
     def call
-      etda_utilities_hosts.workflow_submit_host(partner, host)
+      if ENV['WORKFLOW_HOST']
+        "https://#{ENV['WORKFLOW_HOST']}"
+      else
+        "https://" + etda_utilities_hosts.workflow_submit_host(partner, host)
+      end
     end
 
     private
@@ -14,7 +18,7 @@ module WorkflowUrl
       end
 
       def host
-        ENV['WORKFLOW_HOST'] || 'prod'
+        Rails.application.secrets.stage || 'prod'
       end
 
       def etda_utilities_hosts
