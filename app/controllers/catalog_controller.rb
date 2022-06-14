@@ -99,7 +99,7 @@ class CatalogController < ApplicationController
     config.add_index_field 'author_name_tesi', label: 'Author'
     config.add_index_field 'title_ssi', label: 'Title'
     config.add_index_field 'program_name_ssi', label: current_partner.program_label
-    config.add_index_field 'keyword_ssim', label: 'Keywords', helper_method: :render_as_list
+    config.add_index_field 'keyword_ssim', label: 'Keywords', helper_method: :render_as_facet_list
     config.add_index_field 'final_submission_file_isim', label: 'File'
     config.add_index_field 'committee_member_and_role_tesim', label: current_partner.committee_list_label,
                                                               helper_method: :render_as_list

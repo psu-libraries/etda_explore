@@ -11,4 +11,19 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
       expect(keywords).to eq '<span>Keyword 1<br>Keyword 2</span>'
     end
   end
+
+  describe '#render_as_facet_list' do
+    let(:keywords_doc) {
+      {
+        value: ['Keyword 1', 'Keyword 2'],
+        field: 'keyword_facet'
+      }
+    }
+
+    it 'displays the list separated by line breaks' do
+      keywords = render_as_facet_list keywords_doc
+      expect(keywords).to eq '<span><a href="/?f[keyword_facet][]=Keyword+1">Keyword 1</a><br>' \
+                                     '<a href="/?f[keyword_facet][]=Keyword+2">Keyword 2</a></span>'
+    end
+  end
 end
