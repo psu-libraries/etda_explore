@@ -2,6 +2,6 @@
 
 module ApplicationHelper
   def render_page_title
-    current_partner.slug + " Explore"
+    "#{current_partner.slug} Explore"
   end
 end

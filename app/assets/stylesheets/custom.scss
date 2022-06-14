@@ -1,13 +1,15 @@
-/* Bootstrap Overrides */
+// Bootstrap Overrides //
+
+$white: #fff;
 
 $theme-colors: (
-  "primary": #2674CA,
-  "dark": #000000
+  "primary": #2674ca,
+  "dark": #000
 );
 
 .logo-title {
   a {
-    color: #fff;
+    color: $white;
 
     &:hover {
       text-decoration: none;
