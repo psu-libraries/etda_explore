@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/psu-stewardship/etda_utilities.git
-  revision: 77cd1ce3b337da31c003e195f5edc4a06d2247ab
+  revision: fc660c265729bbedb261c51c8257bf70fbdc4cda
   branch: partner-header-title
   specs:
     etda_utilities (0.17.0)

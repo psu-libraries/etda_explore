@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def about; end
+
   private
 
     def home_or_original_path
