@@ -88,7 +88,7 @@ end
 gem 'bootstrap', '~> 4.0'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
-gem 'etda_utilities', git: 'https://github.com/psu-stewardship/etda_utilities.git', branch: 'partner-header-title'
+gem 'etda_utilities'
 gem 'jquery-rails'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
