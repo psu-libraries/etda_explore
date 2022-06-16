@@ -1,0 +1,18 @@
+// Bootstrap Overrides //
+
+$white: #fff;
+
+$theme-colors: (
+  "primary": #2674ca,
+  "dark": #000
+);
+
+.logo-title {
+  a {
+    color: $white;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
