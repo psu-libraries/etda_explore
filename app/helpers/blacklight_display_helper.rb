@@ -76,5 +76,4 @@ module BlacklightDisplayHelper
     def facet_link(value, field)
       link_to(value, "/?f[#{field}][]=#{CGI.escape value}")
     end
-  
 end

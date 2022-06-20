@@ -22,15 +22,15 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns' do
-      get :solr_download_final_submission, :params =>  { :id => doc.doc[:final_submission_file_isim].first }
+      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response.status).to eq(200)
     end
   end
 
-  context 'when restricted to institution and logged out' do 
+  context 'when restricted to institution and logged out' do
     let(:doc) { FakeSolrDocument.new }
 
-    before do 
+    before do
       doc.doc[:access_level_ss] = 'restricted_to_institution'
       doc.doc[:final_submission_file_isim] = ['1234']
       Blacklight.default_index.connection.add(doc.doc)
@@ -39,17 +39,17 @@ RSpec.describe FilesController, type: :controller do
       FileUtils.touch('tmp/open_access/34/1234/thesis_1.pdf')
     end
 
-    it 'raises an error' do 
+    it 'raises an error' do
       expect {
-        get :solr_download_final_submission, :params =>  { :id => doc.doc[:final_submission_file_isim].first }
+        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       }.to raise_error(CanCan::AccessDenied)
     end
   end
 
-  context 'when restricted to institution and logged in' do 
+  context 'when restricted to institution and logged in' do
     let(:doc) { FakeSolrDocument.new }
 
-    before do 
+    before do
       doc.doc[:access_level_ss] = 'restricted_to_institution'
       doc.doc[:final_submission_file_isim] = ['1235']
       Blacklight.default_index.connection.add(doc.doc)
@@ -62,16 +62,16 @@ RSpec.describe FilesController, type: :controller do
       sign_in user
     end
 
-    it 'returns a 200 message' do 
-      get :solr_download_final_submission, :params =>  { :id => doc.doc[:final_submission_file_isim].first }
+    it 'returns a 200 message' do
+      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response.status).to eq(200)
     end
   end
 
-  context 'when restricted' do 
+  context 'when restricted' do
     let(:doc) { FakeSolrDocument.new }
 
-    before do 
+    before do
       doc.doc[:access_level_ss] = 'restricted'
       doc.doc[:final_submission_file_isim] = ['1236']
       Blacklight.default_index.connection.add(doc.doc)
@@ -84,8 +84,8 @@ RSpec.describe FilesController, type: :controller do
       sign_in user
     end
 
-    it 'does a thing' do 
-      get :solr_download_final_submission, :params =>  { :id => doc.doc[:final_submission_file_isim].first }
+    it 'does a thing' do
+      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response.status).to be(500)
     end
   end
