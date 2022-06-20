@@ -26,4 +26,55 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
                                      '<a href="/?f[keyword_facet][]=Keyword+2">Keyword 2</a></span>'
     end
   end
+
+  describe '#render_download_links' do
+    let(:oa_doc) do
+      {
+        value: [1],
+        document: {
+          'access_level_ss' => 'open_access'
+        }
+      }
+    end
+    let(:rti_doc) do
+      {
+        value: [2],
+        document: {
+          'access_level_ss' => 'restricted_to_institution'
+        }
+      }
+    end
+    let(:r_doc) do
+      {
+        value: [3],
+        document: {
+          'access_level_ss' => 'restricted'
+        }
+      }
+    end
+
+    context 'when current_user is present' do
+      before do
+        allow_any_instance_of(described_class).to receive(:current_user).and_return 'test123@psu.edu'
+      end
+
+      it 'returns a link for open access and restricted to institution submissions' do
+        expect(render_download_links(oa_doc)).to eq "<p>#{oa_doc.fetch(:value).first}</p>"
+        expect(render_download_links(rti_doc)).to eq "<p>#{rti_doc.fetch(:value).first}</p>"
+        expect(render_download_links(r_doc)).to eq "<p>No files available due to restrictions.</p>"
+      end
+    end
+
+    context 'when current_user is not present' do
+      before do
+        allow_any_instance_of(described_class).to receive(:current_user).and_return nil
+      end
+
+      it 'only returns a link for open access submissions' do
+        expect(render_download_links(oa_doc)).to eq "<p>#{oa_doc.fetch(:value).first}</p>"
+        expect(render_download_links(rti_doc)).to eq "<p>No files available due to restrictions.</p>"
+        expect(render_download_links(r_doc)).to eq "<p>No files available due to restrictions.</p>"
+      end
+    end
+  end
 end
