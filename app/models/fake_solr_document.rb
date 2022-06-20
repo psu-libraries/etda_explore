@@ -16,7 +16,7 @@ class FakeSolrDocument
       "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       "final_submission_files_uploaded_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
       "id": Faker::Number.number(digits: 4),
-      "access_level_ss": 'open_access',
+      "access_level_ss": ['open_access', 'restricted_to_institution'].sample,
       "db_id": Faker::Number.unique.within(range: 1..1000),
       "db_legacy_old_id": Faker::Number.unique.within(range: 1..1000),
       "released_metadata_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
@@ -33,7 +33,7 @@ class FakeSolrDocument
         'public'
       ],
       "final_submission_file_isim": [
-        1
+        Faker::Number.unique.within(range: 1..1000)
       ],
       "file_name_ssim": [
         'thesis_1.pdf'

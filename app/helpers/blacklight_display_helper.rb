@@ -6,6 +6,29 @@ module BlacklightDisplayHelper
     content_tag :span, options[:value].join('<br>'), nil, false
   end
 
+  def render_download_links(options = {})
+    current_user = current_or_guest_user
+    document = options.fetch(:document)
+    access_level = document[:access_level_ss]
+
+    if current_user.guest? && (access_level != 'open_access')
+
+      content_tag(
+        :span,
+        link_to('Login to Download', '/login'),
+        nil,
+        false
+      )
+    else
+      content_tag(
+        :span,
+        download_links(document),
+        nil,
+        false
+      )
+    end
+  end
+
   # Given a list of items, displays each item as links on its own line
   def render_as_facet_list(options = {})
     field = options.fetch(:field)
@@ -19,6 +42,20 @@ module BlacklightDisplayHelper
   end
 
   private
+
+    def download_links(document)
+      links = []
+
+      document.final_submissions.each do |final_submission_id, name|
+        links.append(
+          content_tag(:span,
+                      link_to("Download #{name}",
+                              Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id)))
+        )
+      end
+
+      links.join('')
+    end
 
     def facet_link(value, field)
       link_to(value, "/?f[#{field}][]=#{CGI.escape value}")
