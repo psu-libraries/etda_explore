@@ -18,7 +18,7 @@ RSpec.describe 'CustomDocumentComponent', type: :feature do
     it 'shows open access thumbnail' do
       visit "/catalog/#{doc.doc[:id]}"
       expect(page).to have_css("img[src*='open_access_icon']")
-      expect(page).to have_content("Open Access")
+      expect(page).to have_content('Open Access')
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe 'CustomDocumentComponent', type: :feature do
     it 'shows restricted to institution thumbnail' do
       visit "/catalog/#{doc.doc[:id]}"
       expect(page).to have_css("img[src*='restricted_to_institution_icon']")
-      expect(page).to have_content("Restricted (Penn State Only)")
+      expect(page).to have_content('Restricted (Penn State Only)')
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.describe 'CustomDocumentComponent', type: :feature do
     it 'shows restricted to institution thumbnail' do
       visit "/catalog/#{doc.doc[:id]}"
       expect(page).to have_css("img[src*='restricted_icon']")
-      expect(page).to have_content("Restricted")
+      expect(page).to have_content('Restricted')
     end
   end
 end

@@ -30,7 +30,7 @@ module BlacklightDisplayHelper
     elsif document['access_level_ss'] == 'open_access'
       content_tag(:p, value)
     else
-      content_tag(:p, "No files available due to restrictions.")
+      content_tag(:p, 'No files available due to restrictions.')
     end
   end
 

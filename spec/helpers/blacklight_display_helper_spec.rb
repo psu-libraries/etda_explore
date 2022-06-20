@@ -61,7 +61,7 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
       it 'returns a link for open access and restricted to institution submissions' do
         expect(render_download_links(oa_doc)).to eq "<p>#{oa_doc.fetch(:value).first}</p>"
         expect(render_download_links(rti_doc)).to eq "<p>#{rti_doc.fetch(:value).first}</p>"
-        expect(render_download_links(r_doc)).to eq "<p>No files available due to restrictions.</p>"
+        expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
     end
 
@@ -72,8 +72,8 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
 
       it 'only returns a link for open access submissions' do
         expect(render_download_links(oa_doc)).to eq "<p>#{oa_doc.fetch(:value).first}</p>"
-        expect(render_download_links(rti_doc)).to eq "<p>No files available due to restrictions.</p>"
-        expect(render_download_links(r_doc)).to eq "<p>No files available due to restrictions.</p>"
+        expect(render_download_links(rti_doc)).to eq '<p>No files available due to restrictions.</p>'
+        expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
     end
   end
