@@ -96,6 +96,7 @@ class CatalogController < ApplicationController
 
     # Fields displayed in the index (search results) view
     # The ordering of the field names is the order of the display
+    config.index.document_component = CustomDocumentComponent
     config.add_index_field 'author_name_tesi', label: 'Author'
     config.add_index_field 'title_ssi', label: 'Title'
     config.add_index_field 'program_name_ssi', label: current_partner.program_label
@@ -106,6 +107,7 @@ class CatalogController < ApplicationController
 
     # Fields to be displayed in the show (single result) view
     # The ordering of the field names is the order of the display
+    config.show.document_component = CustomDocumentComponent
     config.add_show_field 'author_name_tesi', label: 'Author'
     if current_partner.graduate?
       config.add_show_field 'email_ssi', label: 'Email'
