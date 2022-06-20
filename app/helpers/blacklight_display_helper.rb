@@ -77,8 +77,8 @@ module BlacklightDisplayHelper
       link_to(value, "/?f[#{field}][]=#{CGI.escape value}")
     end
 
-    def current_user
-      current_or_guest_user
+    # def current_user
+      # current_or_guest_user
       # ApplicationController::HelperMethods.current_user
-    end
+    # end
 end
