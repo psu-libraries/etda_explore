@@ -14,10 +14,12 @@ AllCops:
 Rails/ContentTag:
   Exclude:
     - 'app/helpers/blacklight_display_helper.rb'
+    - 'app/components/custom_document_component.rb'
 
 Layout/LineLength:
   Exclude:
     - 'config/initializers/devise.rb'
+    - 'spec/helpers/blacklight_display_helper_spec.rb'
 
 Metrics/BlockLength:
   Exclude:
@@ -26,4 +28,7 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Exclude:
-    - 'app/controllers/catalog_controller.rb'
+
+RSpec/AnyInstance:
+  Exclude:
+    - 'spec/helpers/blacklight_display_helper_spec.rb'

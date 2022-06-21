@@ -31,6 +31,7 @@ Rails.application.routes.draw do
   end
 
   get '/about', to: 'application#about'
+  get '/files/final_submissions/:id', to: 'files#solr_download_final_submission', as: :final_submission_file
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
