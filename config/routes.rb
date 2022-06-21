@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   mount Blacklight::Engine => '/'
   root to: 'catalog#index'
   concern :searchable, Blacklight::Routes::Searchable.new
+  concern :oai_provider, BlacklightOaiProvider::Routes.new
 
   authenticate :user do
     get '/login', to: 'application#login', as: :login
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
+    concerns :oai_provider
   end
   devise_for :users
 

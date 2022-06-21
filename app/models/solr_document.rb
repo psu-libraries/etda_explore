@@ -2,6 +2,7 @@
 
 class SolrDocument
   include Blacklight::Solr::Document
+  include BlacklightOaiProvider::SolrDocument
 
   # self.unique_key = 'id'
 
@@ -17,4 +18,26 @@ class SolrDocument
   # and Blacklight::Document::SemanticFields#to_semantic_values
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
+
+  # Dublin Core mappings for OAI endpoint
+  field_semantics.merge!(
+    title: "title_ssi",
+    creator: "author_name_tesi",
+    subject: "keyword_ssim",
+    coverage: "program_name_ssi",
+    relation: "degree_name_ssi",
+    description: "abstract_tesi",
+    contributor: "committee_member_and_role_tesim",
+    rights: "access_level_ss",
+    date: "final_submission_files_uploaded_at_dtsi",
+    timestamp: "released_metadata_at_dtsi",
+    identifier: "id"
+  )
+
+  def to_semantic_values
+    hash = super
+    hash[:identifier] = ["#{EtdaUtilities::Hosts.explore_url}/catalog/#{hash[:identifier].first}"]
+    hash[:date] = [Date.parse(hash[:date].first).strftime('%Y-%m-%dT%H:%M:%SZ')]
+    hash
+  end
 end
