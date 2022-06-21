@@ -19,6 +19,7 @@ Rails/ContentTag:
 Layout/LineLength:
   Exclude:
     - 'config/initializers/devise.rb'
+    - 'spec/helpers/blacklight_display_helper_spec.rb'
 
 Metrics/BlockLength:
   Exclude:

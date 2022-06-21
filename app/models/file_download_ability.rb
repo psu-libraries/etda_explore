@@ -8,6 +8,8 @@ class FileDownloadAbility
 
     current_access_level = solr_document.access_level.current_access_level
 
+    return if current_access_level == 'restricted'
+
     can :read, solr_document if current_access_level == 'open_access'
 
     can :read, solr_document unless user.guest?

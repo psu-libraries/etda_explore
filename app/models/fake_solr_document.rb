@@ -3,20 +3,21 @@
 class FakeSolrDocument
   attr_reader :doc
 
-  def initialize
+  def initialize(options = {})
     title = Faker::Hipster.sentence(word_count: 3)
     abstract = Faker::Hipster.sentence(word_count: 10)
+    access_level = options[:access_level] || ['open_access', 'restricted_to_institution', 'restricted'].sample
     name = Faker::Name
     last_name = name.last_name
     first_name = name.first_name
     middle_name = name.middle_name
-    keywords = Faker::Hipster.words(number: 5)
+    keywords = options[:keywords] || Faker::Hipster.words(number: 5)
     committee_member_name = name.name
     @doc = {
       "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       "final_submission_files_uploaded_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
       "id": Faker::Number.number(digits: 4),
-      "access_level_ss": ['open_access', 'restricted_to_institution', 'restricted'].sample,
+      "access_level_ss": access_level,
       "db_id": Faker::Number.unique.within(range: 1..1000),
       "db_legacy_old_id": Faker::Number.unique.within(range: 1..1000),
       "released_metadata_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,

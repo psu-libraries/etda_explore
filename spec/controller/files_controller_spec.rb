@@ -21,7 +21,7 @@ RSpec.describe FilesController, type: :controller do
       sign_in user
     end
 
-    it 'returns' do
+    it 'returns favorably' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response.status).to eq(200)
     end
@@ -84,7 +84,7 @@ RSpec.describe FilesController, type: :controller do
       sign_in user
     end
 
-    it 'does a thing' do
+    it 'throws a server error' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response.status).to be(500)
     end
