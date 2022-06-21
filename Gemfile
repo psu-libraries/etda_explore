@@ -84,6 +84,7 @@ group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
 end
 
+gem 'blacklight_oai_provider'
 gem 'bootstrap', '~> 4.0'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
@@ -92,4 +93,3 @@ gem 'jquery-rails'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
-gem 'blacklight_oai_provider'

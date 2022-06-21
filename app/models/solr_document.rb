@@ -21,17 +21,17 @@ class SolrDocument
 
   # Dublin Core mappings for OAI endpoint
   field_semantics.merge!(
-    title: "title_ssi",
-    creator: "author_name_tesi",
-    subject: "keyword_ssim",
-    coverage: "program_name_ssi",
-    relation: "degree_name_ssi",
-    description: "abstract_tesi",
-    contributor: "committee_member_and_role_tesim",
-    rights: "access_level_ss",
-    date: "final_submission_files_uploaded_at_dtsi",
-    timestamp: "released_metadata_at_dtsi",
-    identifier: "id"
+    title: 'title_ssi',
+    creator: 'author_name_tesi',
+    subject: 'keyword_ssim',
+    coverage: 'program_name_ssi',
+    relation: 'degree_name_ssi',
+    description: 'abstract_tesi',
+    contributor: 'committee_member_and_role_tesim',
+    rights: 'access_level_ss',
+    date: 'final_submission_files_uploaded_at_dtsi',
+    timestamp: 'released_metadata_at_dtsi',
+    identifier: 'id'
   )
 
   def to_semantic_values
