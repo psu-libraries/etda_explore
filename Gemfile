@@ -11,6 +11,8 @@ gem 'rails', '~> 7.0.3'
 # Blacklight for solr interface
 gem 'blacklight', '~> 7'
 
+gem 'cancancan'
+
 gem 'faraday'
 
 gem 'faker'
