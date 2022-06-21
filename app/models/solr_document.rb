@@ -40,7 +40,7 @@ class SolrDocument
     hash[:date] = [Date.parse(hash[:date].first).strftime('%Y-%m-%dT%H:%M:%SZ')]
     hash
   end
-  
+
   def access_level
     EtdaUtilities::AccessLevel.new(first(:access_level_ss))
   end
