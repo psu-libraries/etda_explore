@@ -4,15 +4,22 @@ $white: #fff;
 
 $theme-colors: (
   "primary": #2674ca,
-  "dark": #000
+  "dark": #1F427C
 );
 
 .logo-title {
   a {
+    border-left: 1px solid $white;
     color: $white;
+    margin-left: 10px;
+    padding-left: 1rem;
 
     &:hover {
       text-decoration: none;
     }
   }
+}
+
+#user-util-collapse {
+  font-size: 14px;
 }
