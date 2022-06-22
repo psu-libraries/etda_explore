@@ -26,6 +26,10 @@ Metrics/BlockLength:
     - 'app/controllers/catalog_controller.rb'
     - 'spec/**/*'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'app/controllers/catalog_controller.rb'
+
 RSpec/AnyInstance:
   Exclude:
     - 'spec/helpers/blacklight_display_helper_spec.rb'

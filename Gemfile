@@ -86,6 +86,7 @@ group :development, :test do
   gem 'solr_wrapper', '>= 0.3'
 end
 
+gem 'blacklight_oai_provider'
 gem 'bootstrap', '~> 4.0'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'

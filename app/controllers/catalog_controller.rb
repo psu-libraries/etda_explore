@@ -2,6 +2,7 @@
 
 class CatalogController < ApplicationController
   include Blacklight::Catalog
+  include BlacklightOaiProvider::Controller
 
   configure_blacklight do |config|
     ## Class for sending and receiving requests from a search index
@@ -211,5 +212,19 @@ class CatalogController < ApplicationController
     # if the name of the solr.SuggestComponent provided in your solrconfig.xml is not the
     # default 'mySuggester', uncomment and provide it below
     # config.autocomplete_suggester = 'mySuggester'
+
+    # Configure OAI endpoint
+    config.oai = {
+      provider: {
+        repository_name: 'Penn_State_University',
+        repository_url: "#{EtdaUtilities::Hosts.explore_url}/catalog/oai",
+        record_prefix: "oai:#{EtdaUtilities::Hosts.explore_url.gsub('https://', '')}",
+        admin_email: 'askalibrarian@psu.edu',
+        sample_id: '109660'
+      },
+      document: {
+        limit: 25
+      }
+    }
   end
 end

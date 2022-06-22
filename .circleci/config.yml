@@ -84,6 +84,7 @@ jobs:
       SOLR_PASSWORD: etda
       SOLR_COLLECTION: etda
       WORKFLOW_HOST: submit-etda-test.libraries.psu.edu
+      EXPLORE_HOST: etda-test.libraries.psu.edu
     steps:
     - checkout
     - restore_cache:
