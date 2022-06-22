@@ -45,8 +45,9 @@ module BlacklightDisplayHelper
     )
   end
 
-  def show_request_alternate
-    return true if FileDownloadAbility.new(this_user, @document).can? :read, @document
+  def show_request_alternate(options = {})
+    document = options.fetch(:document)
+    return true if FileDownloadAbility.new(this_user, document).can? :read, document
 
     false
   end
@@ -59,9 +60,9 @@ module BlacklightDisplayHelper
       document.final_submissions.each do |final_submission_id, name|
         links.append(
           content_tag(:span,
-                      link_to("Download #{name}",
+                      link_to(tag.i('', { class: 'fa fa-download download-link-fa' }) + "Download #{name}",
                               Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                              { class: 'file-link' }))
+                              { class: 'file-link form-control' }))
         )
       end
 

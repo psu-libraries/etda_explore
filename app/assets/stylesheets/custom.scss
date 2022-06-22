@@ -1,10 +1,13 @@
 // Bootstrap Overrides //
 @import 'font-awesome';
 
+$blue-theme: #2674ca;
 $white: #fff;
+$light-gray: #d3d3d3;
+$dark-green: #006400;
 
 $theme-colors: (
-  "primary": #2674ca,
+  "primary": $blue-theme,
   "dark": #000
 );
 
@@ -18,28 +21,23 @@ $theme-colors: (
   }
 }
 
+.download-link-fa {
+  margin: 5px 5px 0 0;
+}
+
 .file-link {
-  @extend .form-control !optional;
-  border-color: lightgray;
-  color: #fff;
-  overflow: visible;
-  display: flex;
-  height: auto;
-  flex: 1;
-  background-color: #2674CA;
+  background-color: $blue-theme;
+  border-color: $light-gray;
   border-radius: 6px;
+  color: $white;
+  display: flex;
+  flex: 1;
+  height: auto;
+  overflow: visible;
 
   &:hover {
-    color: #2674ca;
-    background-color: darkgreen !important;
-    color: whitesmoke;
+    background-color: $dark-green;
+    color: $white;
     text-decoration: none;
-  }
-
-  &:before {
-    @extend .fa !optional;
-    @extend .fa-file-text !optional;
-    margin: 5px 5px 0px 0px;
-    content: "\f019";
   }
 }
