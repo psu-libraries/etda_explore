@@ -25,10 +25,8 @@ class ApplicationController < ActionController::Base
     end
 
     def home_or_original_path
-      original_fullpath = request.env.fetch('ORIGINAL_FULLPATH', '/')
-      # prevent redirect loops when user hits /login directly
-      return '/' if original_fullpath == '/login'
+      return request.referer if request.referer
 
-      original_fullpath
+      '/'
     end
 end
