@@ -1,4 +1,5 @@
 // Bootstrap Overrides //
+@import 'font-awesome';
 
 $white: #fff;
 
@@ -14,5 +15,31 @@ $theme-colors: (
     &:hover {
       text-decoration: none;
     }
+  }
+}
+
+.file-link {
+  @extend .form-control !optional;
+  border-color: lightgray;
+  color: #fff;
+  overflow: visible;
+  display: flex;
+  height: auto;
+  flex: 1;
+  background-color: #2674CA;
+  border-radius: 6px;
+
+  &:hover {
+    color: #2674ca;
+    background-color: darkgreen !important;
+    color: whitesmoke;
+    text-decoration: none;
+  }
+
+  &:before {
+    @extend .fa !optional;
+    @extend .fa-file-text !optional;
+    margin: 5px 5px 0px 0px;
+    content: "\f019";
   }
 }

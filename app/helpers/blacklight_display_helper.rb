@@ -54,7 +54,8 @@ module BlacklightDisplayHelper
         links.append(
           content_tag(:span,
                       link_to("Download #{name}",
-                              Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id)))
+                              Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
+                              { class: 'file-link' }))
         )
       end
 
