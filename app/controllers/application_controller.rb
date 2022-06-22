@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
   layout :determine_layout if respond_to? :layout
 
+  rescue_from CanCan::AccessDenied, with: :render_401
+
   def login
     session[:redirect_url] = home_or_original_path
     if current_user
@@ -17,6 +19,10 @@ class ApplicationController < ActionController::Base
   def about; end
 
   private
+
+    def render_401
+      render template: '/error/401', formats: [:html, :json], status: 401
+    end
 
     def home_or_original_path
       original_fullpath = request.env.fetch('ORIGINAL_FULLPATH', '/')

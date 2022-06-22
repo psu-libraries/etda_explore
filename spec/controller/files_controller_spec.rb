@@ -40,9 +40,8 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'raises an error' do
-      expect {
-        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
-      }.to raise_error(CanCan::AccessDenied)
+      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+      expect(response.status).to eq(401)
     end
   end
 
