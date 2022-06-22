@@ -61,8 +61,8 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
       end
 
       it 'returns a link for open access and restricted to institution submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a href=\"/files/final_submissions/#{oa_doc[:value].first}\">Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
-        expect(render_download_links(rti_doc)).to eq "<span><span><a href=\"/files/final_submissions/#{rti_doc[:value].first}\">Download #{rti_doc[:document][:file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link\" href=\"/files/final_submissions/#{oa_doc[:value].first}\">Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(rti_doc)).to eq "<span><span><a class=\"file-link\" href=\"/files/final_submissions/#{rti_doc[:value].first}\">Download #{rti_doc[:document][:file_name_ssim].first}</a></span></span>"
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
     end
@@ -74,7 +74,7 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
       end
 
       it 'only returns a link for open access submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a href=\"/files/final_submissions/#{oa_doc[:value].first}\">Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link\" href=\"/files/final_submissions/#{oa_doc[:value].first}\">Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
         expect(render_download_links(rti_doc)).to eq '<span><a href="/login">Login to Download</a></span>'
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end

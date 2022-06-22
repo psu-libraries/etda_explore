@@ -45,6 +45,12 @@ module BlacklightDisplayHelper
     )
   end
 
+  def show_request_alternate
+    return true if FileDownloadAbility.new(this_user, @document).can? :read, @document
+
+    false
+  end
+
   private
 
     def download_links(document)
