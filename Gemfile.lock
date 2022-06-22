@@ -156,6 +156,8 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+    font-awesome-rails (4.7.0.8)
+      railties (>= 3.2, < 8.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     hashdiff (1.0.1)
@@ -438,6 +440,7 @@ DEPENDENCIES
   etda_utilities
   faker
   faraday
+  font-awesome-rails (~> 4.7)
   importmap-rails
   jbuilder
   jquery-rails

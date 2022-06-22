@@ -33,3 +33,4 @@ Metrics/ClassLength:
 RSpec/AnyInstance:
   Exclude:
     - 'spec/helpers/blacklight_display_helper_spec.rb'
+    - 'spec/integration/tools_box_spec.rb'
