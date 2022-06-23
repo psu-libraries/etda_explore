@@ -95,3 +95,6 @@ gem 'jquery-rails'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
 gem 'twitter-typeahead-rails', '0.11.1.pre.corejavascript'
+
+# FontAwesome sass integration
+gem 'font-awesome-rails', '~> 4.7'

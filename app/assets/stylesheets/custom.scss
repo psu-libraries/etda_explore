@@ -1,9 +1,13 @@
 // Bootstrap Overrides //
+@import 'font-awesome';
 
+$blue-theme: #2674ca;
 $white: #fff;
+$light-gray: #d3d3d3;
+$dark-green: #006400;
 
 $theme-colors: (
-  "primary": #2674ca,
+  "primary": $blue-theme,
   "dark": #1f427c
 );
 
@@ -18,5 +22,26 @@ $theme-colors: (
     &:hover {
       text-decoration: none;
     }
+  }
+}
+
+.download-link-fa {
+  margin: 5px 5px 0 0;
+}
+
+.file-link {
+  background-color: $blue-theme;
+  border-color: $light-gray;
+  border-radius: 6px;
+  color: $white;
+  display: flex;
+  flex: 1;
+  height: auto;
+  overflow: visible;
+
+  &:hover {
+    background-color: $dark-green;
+    color: $white;
+    text-decoration: none;
   }
 }
