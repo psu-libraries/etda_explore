@@ -82,6 +82,7 @@
       <str name="facet.field">degree_name_ssi</str>
       <str name="facet.field">semester_ssi</str>
       <str name="facet.field">program_name_ssi</str>
+      <str name="facet.field">access_level_ssi</str>
 
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">default</str>
