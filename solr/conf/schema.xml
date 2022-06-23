@@ -260,6 +260,9 @@
   <!-- Create a string version of author for faceting -->
   <copyField source="author" dest="author_ssi"/>
 
+  <!-- Create a ssi version of access_level_ss for faceting -->
+  <copyField source="access_level_ss" dest="access_level_ssi"/>
+
   <types>
     <fieldType name="string" class="solr.StrField" sortMissingLast="true" />
     <fieldType name="boolean" class="solr.BoolField" sortMissingLast="true"/>
