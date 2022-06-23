@@ -13,6 +13,8 @@ class FakeSolrDocument
     middle_name = name.middle_name
     keywords = options[:keywords] || Faker::Hipster.words(number: 5)
     committee_member_name = name.name
+    file_names = options[:file_names] || ['thesis_1.pdf']
+    file_ids = Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
     @doc = {
       "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       "final_submission_files_uploaded_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
@@ -33,12 +35,8 @@ class FakeSolrDocument
       "read_access_group_ssim": [
         'public'
       ],
-      "final_submission_file_isim": [
-        Faker::Number.unique.within(range: 1..1000)
-      ],
-      "file_name_ssim": [
-        'thesis_1.pdf'
-      ],
+      "final_submission_file_isim": file_ids,
+      "file_name_ssim": file_names,
       "author_name_tesi": name.name,
       "last_name_ssi": last_name,
       "last_name_tesi": last_name,
