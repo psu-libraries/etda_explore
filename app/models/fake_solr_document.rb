@@ -37,7 +37,7 @@ class FakeSolrDocument
         Faker::Number.unique.within(range: 1..1000)
       ],
       "file_name_ssim": [
-        'thesis_1.pdf'
+        options[:file_name] || 'thesis_1.pdf'
       ],
       "author_name_tesi": name.name,
       "last_name_ssi": last_name,
