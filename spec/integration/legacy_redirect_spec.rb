@@ -21,41 +21,41 @@ RSpec.describe 'Legacy URLs are redirected', type: :feature do
     Blacklight.default_index.connection.commit
   end
 
-  specify "Old Legacy URLs(/theses/approved/WorldWideIndex/ETD-1177/index.html) should be redirected" do
+  specify 'Old Legacy URLs(/theses/approved/WorldWideIndex/ETD-1177/index.html) should be redirected' do
     visit '/theses/approved/WorldWideIndex/ETD-1177/index.html'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
     visit '/theses/approved/PSUonlyIndex/EHT-1177/index.html'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
   end
 
   specify "Old Legacy URLs(/theses/approved/WorldWideIndex/ETD-1177/) should be accepted without 'index.html'" do
     visit '/theses/approved/WorldWideIndex/ETD-1177'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
   end
 
-  specify "Old Legacy URLs(/theses/approved/WorldWideIndex/ETD-1177/) should be accepted with anything after ETD number" do
+  specify 'Old Legacy URLs(/theses/approved/WorldWideIndex/ETD-1177/) should be accepted with anything after ETD #' do
     visit '/theses/approved/WorldWideIndex/EHT-1177/anythinggoes'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
   end
 
-  specify "Legacy URLs (/paper/id) should be redirected" do
+  specify 'Legacy URLs (/paper/id) should be redirected' do
     visit '/paper/6894'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
   end
 
-  specify "Legacy URLS with paper id should be redirected to document (/paper/id/paperid)" do
+  specify 'Legacy URLS with paper id should be redirected to document (/paper/id/paperid)' do
     visit '/paper/6894/9999'
-    expect(current_path).to eq('/catalog/6894')
+    expect(page).to have_current_path('/catalog/6894')
   end
 
   specify 'legacy search should redirect' do
     visit '/search'
-    expect(current_path).to eq('/catalog')
+    expect(page).to have_current_path('/catalog')
   end
 
   specify 'legacy browse should redirect' do
     visit '/browse'
-    expect(current_path).to eq('/catalog')
+    expect(page).to have_current_path('/catalog')
   end
 
   it 'renders 404 when no record is found' do

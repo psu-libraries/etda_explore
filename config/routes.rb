@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   # Legacy Redirects
   get '/theses/approved/:access_level/:id_prefix-:id/(:all)',
       to: 'legacy_redirect#redirect_original_urls',
-      constraints:  { id_prefix: /E(:?HT|TD)/, access_level: /WorldWideIndex|PSUonlyIndex|WithheldIndex/ }
+      constraints: { id_prefix: /E(:?HT|TD)/, access_level: /WorldWideIndex|PSUonlyIndex|WithheldIndex/ }
   get '/paper/:id/(:all)', to: redirect('/catalog/%{id}'), status: 301
   get '/search', to: redirect('/catalog'), status: 301
   get '/browse', to: redirect('/catalog'), status: 301
