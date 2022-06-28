@@ -25,6 +25,7 @@ Metrics/BlockLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
     - 'spec/**/*'
+    - 'config/routes.rb'
 
 Metrics/ClassLength:
   Exclude:
@@ -34,3 +35,7 @@ RSpec/AnyInstance:
   Exclude:
     - 'spec/helpers/blacklight_display_helper_spec.rb'
     - 'spec/integration/tools_box_spec.rb'
+
+Style/FormatStringToken:
+  Exclude:
+    - 'config/routes.rb'

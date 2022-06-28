@@ -18,10 +18,10 @@ class FakeSolrDocument
     @doc = {
       "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       "final_submission_files_uploaded_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
-      "id": Faker::Number.number(digits: 4),
+      "id": options[:id] || Faker::Number.number(digits: 4),
       "access_level_ss": access_level,
       "db_id": Faker::Number.unique.within(range: 1..1000),
-      "db_legacy_old_id": Faker::Number.unique.within(range: 1..1000),
+      "db_legacy_old_id": options[:db_legacy_old_id] || Faker::Number.unique.within(range: 1..1000),
       "released_metadata_at_dtsi": Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
       "title_tesi": title,
       "title_ssi": title,
