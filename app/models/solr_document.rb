@@ -19,8 +19,6 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
 
-  self.timestamp_key = 'released_metadata_at_dtsi'
-
   # Dublin Core mappings for OAI endpoint
   field_semantics.merge!(
     title: 'title_ssi',
@@ -32,6 +30,7 @@ class SolrDocument
     contributor: 'committee_member_and_role_tesim',
     rights: 'access_level_ss',
     date: 'final_submission_files_uploaded_at_dtsi',
+    timestamp: 'released_metadata_at_dtsi',
     identifier: 'id'
   )
 
