@@ -32,13 +32,13 @@ class SolrDocument
     contributor: 'committee_member_and_role_tesim',
     rights: 'access_level_ss',
     date: 'final_submission_files_uploaded_at_dtsi',
+    timestamp: "released_metadata_at_dtsi",
     identifier: 'id'
   )
 
   def to_semantic_values
     hash = super
     hash[:identifier] = ["#{EtdaUtilities::Hosts.explore_url}/catalog/#{hash[:identifier].first}"]
-    hash[:date] = [Date.parse(hash[:date].first).strftime('%Y-%m-%dT%H:%M:%SZ')]
     hash
   end
 

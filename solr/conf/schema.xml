@@ -129,7 +129,7 @@
 
     <dynamicField name="*_dts" type="date" stored="true" indexed="false" multiValued="false"/>
     <dynamicField name="*_dtsm" type="date" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_dtsi" type="text" stored="true" indexed="true" multiValued="false"/>
+    <dynamicField name="*_dtsi" type="date" stored="true" indexed="true" multiValued="false"/>
     <dynamicField name="*_dtsim" type="date" stored="true" indexed="true" multiValued="true"/>
 
     <!-- DatePointField (_dtt...) (for faster range queries) -->
@@ -280,12 +280,31 @@
     <fieldType name="tlong" class="solr.LongPointField" docValues="true"/>
     <fieldType name="tdouble" class="solr.DoublePointField" docValues="true"/>
 
-    <!-- The format for this date field is of the form 1995-12-31T23:59:59Z
+    <!-- The format for this date field is of the form 1995-12-31T23:59:59Z, and
+         is a more restricted form of the canonical representation of dateTime
+         http://www.w3.org/TR/xmlschema-2/#dateTime
+         The trailing "Z" designates UTC time and is mandatory.
          Optional fractional seconds are allowed: 1995-12-31T23:59:59.999Z
+         All other components are mandatory.
+
+         Expressions can also be used to denote calculations that should be
+         performed relative to "NOW" to determine the value, ie...
+
+               NOW/HOUR
+                  ... Round to the start of the current hour
+               NOW-1DAY
+                  ... Exactly 1 day prior to now
+               NOW/DAY+6MONTHS+3DAYS
+                  ... 6 months and 3 days in the future from the start of
+                      the current day
+
+         Consult the TrieDateField javadocs for more information.
+
+         Note: For faster range queries, consider the tdate type
       -->
-    <fieldType name="date" class="solr.DatePointField" docValues="true"/>
-    <!-- A PointField based date field for faster date range queries and date faceting. -->
-    <fieldType name="tdate" class="solr.DatePointField" docValues="true"/>
+    <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
+    <!-- A Trie based date field for faster date range queries and date faceting. -->
+    <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
 
 
     <!-- This point type indexes the coordinates as separate fields (subFields)
