@@ -32,7 +32,7 @@ class SolrDocument
     contributor: 'committee_member_and_role_tesim',
     rights: 'access_level_ss',
     date: 'final_submission_files_uploaded_at_dtsi',
-    timestamp: "released_metadata_at_dtsi",
+    timestamp: 'released_metadata_at_dtsi',
     identifier: 'id'
   )
 
