@@ -11,6 +11,10 @@ AllCops:
     - 'bin/**/*'
     - 'node_modules/**/*'
 
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/overrides/resumption_token.rb'
+
 Rails/ContentTag:
   Exclude:
     - 'app/helpers/blacklight_display_helper.rb'
