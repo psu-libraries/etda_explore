@@ -18,7 +18,7 @@ class CustomDocumentComponent < Blacklight::DocumentComponent
                      end
     contents << top_content
     contents << tag.div(bottom_content, class: 'row justify-content-center')
-    content_tag(:div, contents.join(''), nil, false)
+    content_tag(:div, contents.join, nil, false)
   end
 
   private

@@ -23,7 +23,7 @@ RSpec.describe FilesController, type: :controller do
 
     it 'returns favorably' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -41,7 +41,7 @@ RSpec.describe FilesController, type: :controller do
 
     it 'raises an error' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
-      expect(response.status).to eq(401)
+      expect(response).to have_http_status(:unauthorized)
     end
   end
 
@@ -63,7 +63,7 @@ RSpec.describe FilesController, type: :controller do
 
     it 'returns a 200 message' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
-      expect(response.status).to eq(200)
+      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -85,7 +85,7 @@ RSpec.describe FilesController, type: :controller do
 
     it 'throws a server error' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
-      expect(response.status).to be(500)
+      expect(response).to have_http_status(:internal_server_error)
     end
   end
 end

@@ -66,7 +66,7 @@ module BlacklightDisplayHelper
         )
       end
 
-      links.join('')
+      links.join
     end
 
     def facet_link(value, field)
