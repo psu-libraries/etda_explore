@@ -147,7 +147,7 @@ workflows:
             branches:
               only:
                 - main
-      - publish_latest:
+      - publish:
           tags: $CIRCLE_SHA1,latest
           context: org-global
           filters:
