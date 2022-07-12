@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include Blacklight::Controller
   layout :determine_layout if respond_to? :layout
 
-  rescue_from CanCan::AccessDenied, with: :render_401
+  rescue_from CanCan::AccessDenied, with: :render401
 
   def login
     session[:redirect_url] = home_or_original_path
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def render_401
+    def render401
       render template: '/error/401', formats: [:html, :json], status: :unauthorized
     end
 
