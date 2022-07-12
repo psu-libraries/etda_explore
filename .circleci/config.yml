@@ -40,7 +40,7 @@ jobs:
       - docker/build:
           image: library/etda-explore
           registry: harbor.k8s.libraries.psu.edu
-          tags: "<< parameters.tags >>"
+          tag: "<< parameters.tags >>"
           extra_build_args: "--target production"
       - docker/push:
           digest-path: /tmp/digest.txt
