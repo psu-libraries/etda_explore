@@ -24,6 +24,9 @@ jobs:
             /usr/local/bin/pr-release clusters/prod/manifests/prod.yaml
 
   publish:
+    parameters:
+      tags:
+        type: string
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v3.0.0
         user: root
@@ -37,6 +40,7 @@ jobs:
       - docker/build:
           image: library/etda-explore
           registry: harbor.k8s.libraries.psu.edu
+          tag: "<< parameters.tags >>"
           extra_build_args: "--target production"
       - docker/push:
           digest-path: /tmp/digest.txt
@@ -137,13 +141,21 @@ workflows:
                 - /.*/
       - test
       - publish:
+          name: "publish"
+          tags: $CIRCLE_SHA1
           context: org-global
           filters:
             branches:
               only:
-                - circle
-                - main
                 - /preview\/.*/
+      - publish:
+          name: "publish_latest"
+          tags: $CIRCLE_SHA1,latest
+          context: org-global
+          filters:
+            branches:
+              only:
+                - main
       - deploy:
           context: org-global
           requires:
@@ -151,5 +163,12 @@ workflows:
           filters:
             branches:
               only:
-                - main
                 - /preview\/.*/
+      - deploy:
+          context: org-global
+          requires:
+            - publish_latest
+          filters:
+            branches:
+              only:
+                - main
