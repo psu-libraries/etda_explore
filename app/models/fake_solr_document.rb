@@ -25,7 +25,7 @@ class FakeSolrDocument
       access_level_ss: access_level,
       db_id: Faker::Number.unique.within(range: 1..1000),
       db_legacy_old_id: options[:db_legacy_old_id] || Faker::Number.unique.within(range: 1..1000),
-      released_metadata_at_dtsi: Faker::Date.between(from: 5.years.ago, to: Date.today).rfc3339,
+      released_metadata_at_dtsi: released_metadata_at_dtsi,
       title_tesi: title,
       title_ssi: title,
       db_legacy_id: Faker::Number.unique.within(range: 1..1000),
