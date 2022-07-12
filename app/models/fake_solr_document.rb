@@ -17,6 +17,7 @@ class FakeSolrDocument
     file_ids = Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
     released_metadata_at_dtsi = options[:released_metadata_at_dtsi] ||
       DateTime.parse(Faker::Date.between(from: 5.years.ago, to: Date.today).to_s).getutc
+    defended_at = Faker::Date.between(from: 5.years.ago, to: Date.today).strftime('%FT%TZ') # eg.'2016-11-17T15:00:00Z'
     @doc = {
       "year_isi": Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       "final_submission_files_uploaded_at_dtsi":
@@ -72,7 +73,8 @@ class FakeSolrDocument
         'Thesis Advisor/Co-Advisor'
       ],
       "keyword_ssim": keywords,
-      "keyword_tesim": keywords
+      "keyword_tesim": keywords,
+      "defended_at_dtsi": defended_at
     }
   end
 end
