@@ -24,7 +24,7 @@ RSpec.describe BlacklightDisplayHelper, type: :helper do
     it 'displays the list separated by line breaks' do
       keywords = render_as_facet_list keywords_doc
       expect(keywords).to eq '<span><a href="/?f[keyword_facet][]=Keyword+1">Keyword 1</a><br>' \
-                                     '<a href="/?f[keyword_facet][]=Keyword+2">Keyword 2</a></span>'
+                             '<a href="/?f[keyword_facet][]=Keyword+2">Keyword 2</a></span>'
     end
   end
 

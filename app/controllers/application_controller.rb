@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   private
 
     def render_401
-      render template: '/error/401', formats: [:html, :json], status: 401
+      render template: '/error/401', formats: [:html, :json], status: :unauthorized
     end
 
     def home_or_original_path
