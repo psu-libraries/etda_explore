@@ -81,7 +81,7 @@ end
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'niftany', github: "psu-libraries/niftany", branch: "update-rubocop"
+  gem 'niftany', github: 'psu-libraries/niftany', branch: 'update-rubocop'
   gem 'pry-byebug'
   gem 'solr_wrapper', '>= 0.3'
 end

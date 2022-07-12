@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/psu-libraries/niftany.git
-  revision: a287fc9dcb801fe00c1b44c6a04957d62358bcd7
+  revision: 58b63f048d60a03db622a06106649d470dab002e
   branch: update-rubocop
   specs:
     niftany (0.9.0)
@@ -9,7 +9,7 @@ GIT
       rubocop (~> 1.3)
       rubocop-performance (~> 1.1)
       rubocop-rails (~> 2.3)
-      rubocop-rspec (~> 1.3)
+      rubocop-rspec (~> 2)
       scss_lint (~> 0.55)
 
 GEM
@@ -344,8 +344,8 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.7.0, < 2.0)
-    rubocop-rspec (1.42.0)
-      rubocop (>= 0.87.0)
+    rubocop-rspec (2.12.1)
+      rubocop (~> 1.31)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
