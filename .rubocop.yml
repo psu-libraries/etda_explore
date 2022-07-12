@@ -11,6 +11,14 @@ AllCops:
     - 'bin/**/*'
     - 'node_modules/**/*'
 
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/models/fake_solr_document.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/overrides/resumption_token.rb'
+
 Rails/ContentTag:
   Exclude:
     - 'app/helpers/blacklight_display_helper.rb'

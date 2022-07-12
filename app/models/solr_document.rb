@@ -19,6 +19,8 @@ class SolrDocument
   # Recommendation: Use field names from Dublin Core
   use_extension(Blacklight::Document::DublinCore)
 
+  self.timestamp_key = 'released_metadata_at_dtsi'
+
   # Dublin Core mappings for OAI endpoint
   field_semantics.merge!(
     title: 'title_ssi',
@@ -37,7 +39,6 @@ class SolrDocument
   def to_semantic_values
     hash = super
     hash[:identifier] = ["#{EtdaUtilities::Hosts.explore_url}/catalog/#{hash[:identifier].first}"]
-    hash[:date] = [Date.parse(hash[:date].first).strftime('%Y-%m-%dT%H:%M:%SZ')]
     hash
   end
 
