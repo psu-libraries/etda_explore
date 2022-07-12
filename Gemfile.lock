@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/psu-libraries/niftany.git
-  revision: 08865ad696cb05b74260487c861fd05aff27321b
+  revision: a287fc9dcb801fe00c1b44c6a04957d62358bcd7
   branch: update-rubocop
   specs:
     niftany (0.9.0)
@@ -184,7 +184,7 @@ GEM
     http-cookie (1.0.5)
       domain_name (~> 0.5)
     http-form_data (2.3.0)
-    i18n (1.10.0)
+    i18n (1.11.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.1.0)
       actionpack (>= 6.0.0)
@@ -222,7 +222,7 @@ GEM
     method_source (1.0.0)
     mini_mime (1.1.2)
     minitar (0.9)
-    minitest (5.15.0)
+    minitest (5.16.2)
     msgpack (1.5.2)
     mysql2 (0.5.4)
     net-imap (0.2.3)
@@ -240,9 +240,9 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.6-x86_64-darwin)
+    nokogiri (1.13.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.6-x86_64-linux)
+    nokogiri (1.13.7-x86_64-linux)
       racc (~> 1.4)
     oai (1.2.1)
       builder (>= 3.1.0)
@@ -264,7 +264,7 @@ GEM
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
-    rack (2.2.3.1)
+    rack (2.2.4)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
     rails (7.0.3)
@@ -284,7 +284,7 @@ GEM
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
-    rails-html-sanitizer (1.4.2)
+    rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
     railties (7.0.3)
       actionpack (= 7.0.3)
