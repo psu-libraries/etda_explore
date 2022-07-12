@@ -59,4 +59,12 @@ class SolrDocument
     end
     docs
   end
+
+  def defense
+    defended_at.present? ? DateTime.parse(defended_at).strftime('%B %d, %Y') : 'None'
+  end
+
+  def defended_at
+    fetch(:defended_at_dtsi, nil)
+  end
 end
