@@ -60,9 +60,9 @@ module BlacklightDisplayHelper
       document.final_submissions.each do |final_submission_id, name|
         links.append(
           content_tag(:span,
-                      link_to(tag.i('', { class: 'fa fa-download download-link-fa' }) + "Download #{name}",
+                      link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                               Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                              { class: 'file-link form-control' }))
+                              class: 'file-link form-control'))
         )
       end
 
