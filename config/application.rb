@@ -11,6 +11,7 @@ Bundler.require(*Rails.groups)
 module EtdaExplore
   class Application < Rails::Application
     require 'etda_explore/solr_config'
+    require 'overrides/resumption_token'
 
     config.solr = EtdaExplore::SolrConfig.new
 

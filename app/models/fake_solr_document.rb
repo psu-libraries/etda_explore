@@ -4,7 +4,7 @@ class FakeSolrDocument
   attr_reader :doc
 
   def initialize(options = {})
-    title = Faker::Hipster.sentence(word_count: 3)
+    title = options[:title] || Faker::Hipster.sentence(word_count: 3)
     abstract = Faker::Hipster.sentence(word_count: 10)
     access_level = options[:access_level] || ['open_access', 'restricted_to_institution', 'restricted'].sample
     name = Faker::Name
@@ -15,6 +15,8 @@ class FakeSolrDocument
     committee_member_name = name.name
     file_names = options[:file_names] || ['thesis_1.pdf']
     file_ids = Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
+    released_metadata_at_dtsi = options[:released_metadata_at_dtsi] ||
+      DateTime.parse(Faker::Date.between(from: 5.years.ago, to: Date.today).to_s).getutc
     defended_at = Faker::Date.between(from: 5.years.ago, to: Date.today).strftime('%FT%TZ') # eg.'2016-11-17T15:00:00Z'
     @doc = {
       year_isi: Faker::Date.between(from: 5.years.ago, to: Date.today).year,
