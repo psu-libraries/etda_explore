@@ -147,7 +147,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - /preview\/.*/
       - publish:
           name: "publish_latest"
           tags: $CIRCLE_SHA1,latest
