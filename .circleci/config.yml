@@ -45,6 +45,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: library/etda-explore
+          tag: "<< parameters.tags >>"
           registry: harbor.k8s.libraries.psu.edu
       - run:
           command: |
