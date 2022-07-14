@@ -6,8 +6,8 @@ module EtdaExplore
   class SolrAdmin
     def self.reset
       conf = new
-      conf.delete_all_collections
-      conf.delete_all_configsets
+      conf.delete_collection
+      conf.delete_configset
       conf.upload_config
       conf.create_collection
     end
@@ -26,28 +26,18 @@ module EtdaExplore
       config_sets.include?(config.configset_name)
     end
 
-    def delete_configset(set = config.configset_name)
-      resp = connection.get(SolrConfig::CONFIG_PATH, action: 'DELETE', name: set)
+    def delete_configset
+      resp = connection.get(SolrConfig::CONFIG_PATH, action: 'DELETE', name: config.configset_name)
       check_resp(resp)
-    end
-
-    def delete_all_configsets
-      config_sets
-        .reject { |set| set == '_default' }
-        .map { |set| delete_configset(set) }
     end
 
     def collection_exists?
       collections.include?(config.collection_name)
     end
 
-    def delete_collection(collection = config.collection_name)
-      resp = connection.get(SolrConfig::COLLECTION_PATH, action: 'DELETE', name: collection)
+    def delete_collection
+      resp = connection.get(SolrConfig::COLLECTION_PATH, action: 'DELETE', name: config.collection_name)
       check_resp(resp)
-    end
-
-    def delete_all_collections
-      collections.map { |collection| delete_collection(collection) }
     end
 
     def create_collection
