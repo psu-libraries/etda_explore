@@ -1,6 +1,6 @@
 # ETDA Explore
 
-ETDA (Electronic Theses and Dissertations Application) Explore is a Ruby on Rails web application build on Blacklight that leverages the metadata of released electronic theses and dissertations to permit the search and retrieval of work preserved by the Pennsylvania State University Libraries. ETDA Explore is the discovery portion part of the larger ETDA service.  ETDA Workflow (the other portion) handles the submission, format review, electronic approval, and short-term storage workflow for students who author electronic theses and dissertations and for the administrators who review the work and release the documents according to policy and the author's wishes.
+ETDA (Electronic Theses and Dissertations Application) Explore is a Ruby on Rails web application build on Blacklight that leverages the metadata of released electronic theses and dissertations to permit the search and retrieval of work preserved by the Pennsylvania State University Libraries. ETDA Explore is the discovery portion part of the larger ETDA service.  ETDA Workflow (the other portion: https://github.com/psu-libraries/etda_workflow) handles the submission, format review, electronic committee approval, and final submission review for students who author electronic theses and dissertations.  ETDA Workflow allows administrators to review the work and release the documents according to policy and the author's wishes.
                                                    
 The application is used by each of several different "partners". Currently these partners are the Graduate School, the Schreyer Honors College, the Millennium Scholars Program, and The School of Science Engineering and Technology. Each partner has its own instance of the application along with its own database.
 
@@ -15,7 +15,7 @@ The application is used by each of several different "partners". Currently these
 
 ### Configuration
 
-All configuration is done via environment variables. the .envrc.example file shows the apps tunables
+All configuration is done via environment variables. The .envrc.example file shows the apps tunables
 ```
 cp .envrc.example .envrc
 source .envrc
@@ -65,3 +65,20 @@ To run the test suite run:
 To run the linter "niftany":
 
     bundle exec niftany
+
+### OAI Endpoint
+
+ETDA Explore uses the blacklight_oai_provider gem to generate an OAI-PMH endpoint.  The endpoint can be reached at `/catalog/oai`; it returns XML.
+
+You can query the endpoint by date range with the following query pattern:
+
+    ?verb=ListRecords&from=2021-01-01&until=2021-05-29&metadataPrefix=oai_dc
+
+
+### Deployment
+
+To deploy a preview, prepend your branch name with `preview/` like so: `preview/your-branch-name`.  A preview will deploy when you push this branch to GitHub.
+
+Any PRs merged to main will automatically be deployed to QA.
+
+To initiate a production deploy, create a new release.  Then, merge the automatically created PR in the config repo: https://github.com/psu-libraries/etda-config
