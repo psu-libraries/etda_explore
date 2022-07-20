@@ -21,7 +21,7 @@ jobs:
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd etda-config
-            /usr/local/bin/pr-release clusters/prod/manifests/prod.yaml
+            ./bin/pr-release clusters/prod/manifests/prod.yaml
 
   publish:
     parameters:
@@ -45,6 +45,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: library/etda-explore
+          tag: "<< parameters.tags >>"
           registry: harbor.k8s.libraries.psu.edu
       - run:
           command: |
@@ -65,7 +66,7 @@ jobs:
             ./bin/generate_app
   test:
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: cimg/ruby:3.1.2-browsers
       - image: mysql:8
         environment:
           MYSQL_ROOT_PASSWORD: etda

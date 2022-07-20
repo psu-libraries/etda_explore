@@ -7,9 +7,9 @@ class LegacyRedirectController < ApplicationController
     doc = bl_response.documents.first || nil
     new_id = doc.present? ? doc.id : nil
     if new_id.present?
-      redirect_to "/catalog/#{new_id}", status: 301
+      redirect_to "/catalog/#{new_id}", status: :moved_permanently
     else
-      render template: '/error/404', formats: [:html, :json], status: 404
+      render template: '/error/404', formats: [:html, :json], status: :not_found
     end
   end
 end
