@@ -8,7 +8,7 @@ The application is used by each of several different "partners". Currently these
 
 | Software |  Version |
 |----------|------|
-| `ruby`    |  2.7 |
+| `ruby`    |  3.1 |
 | `rails`   |  7 |
 | `solr`   |  8 |
 | `mysql` | 8 |
