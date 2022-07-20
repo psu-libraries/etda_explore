@@ -66,7 +66,7 @@ jobs:
             ./bin/generate_app
   test:
     docker:
-      - image: cimg/ruby:2.7.5-browsers
+      - image: cimg/ruby:3.1.2-browsers
       - image: mysql:8
         environment:
           MYSQL_ROOT_PASSWORD: etda

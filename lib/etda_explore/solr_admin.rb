@@ -45,7 +45,7 @@ module EtdaExplore
                             action: 'CREATE',
                             name: config.collection_name,
                             numShards: config.num_shards,
-                            "collection.configName": config.configset_name)
+                            'collection.configName': config.configset_name)
       check_resp(resp)
     end
 
@@ -53,13 +53,13 @@ module EtdaExplore
       resp = connection.get(SolrConfig::COLLECTION_PATH,
                             action: 'MODIFYCOLLECTION',
                             collection: config.collection_name,
-                            "collection.configName": config.configset_name)
+                            'collection.configName': config.configset_name)
       check_resp(resp)
     end
 
     def upload_config
       resp = connection.post(SolrConfig::CONFIG_PATH) do |req|
-        req.params = { "action": 'UPLOAD', "name": config.configset_name }
+        req.params = { action: 'UPLOAD', name: config.configset_name }
         req.headers['Content-Type'] = 'octect/stream'
         req.body = raw_data
       end

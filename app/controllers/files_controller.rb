@@ -10,7 +10,7 @@ class FilesController < ApplicationController
 
     full_file_path = @doc.file_by_id(params[:id].to_i, @doc.access_level.current_access_level)
     if full_file_path.nil?
-      render plain: 'An Error has occurred', status: 500
+      render plain: 'An Error has occurred', status: :internal_server_error
     else
       authorize! :read, @doc
       send_file full_file_path, disposition: :inline
