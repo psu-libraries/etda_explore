@@ -41,8 +41,11 @@ Rails.application.routes.draw do
   get '/search', to: redirect('/catalog'), status: 301
   get '/browse', to: redirect('/catalog'), status: 301
 
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # error pages
+  match '500', to: 'errors#internal_server_error', via: :all
+  match '401', to: 'errors#unauthorized', via: :all
+  match '404', to: 'errors#not_found', via: :all
 
-  # Defines the root path route ("/")
-  # root "articles#index"
+  # catchall for not predefined requests - keep this at the very bottom of the routes file
+  match '*catch_unknown_routes' => 'errors#not_found', via: :all
 end

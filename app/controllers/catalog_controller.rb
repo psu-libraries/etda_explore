@@ -4,6 +4,10 @@ class CatalogController < ApplicationController
   include Blacklight::Catalog
   include BlacklightOaiProvider::Controller
 
+  rescue_from Blacklight::Exceptions::RecordNotFound do
+    redirect_to '/404'
+  end
+
   configure_blacklight do |config|
     ## Class for sending and receiving requests from a search index
     # config.repository_class = Blacklight::Solr::Repository
