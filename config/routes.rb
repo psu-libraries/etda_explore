@@ -42,10 +42,10 @@ Rails.application.routes.draw do
   get '/browse', to: redirect('/catalog'), status: 301
 
   # error pages
-  match '500', to: 'errors#internal_server_error', via: :all
-  match '401', to: 'errors#unauthorized', via: :all
-  match '404', to: 'errors#not_found', via: :all
+  match '500', to: 'errors#render_internal_server_error', via: :all
+  match '401', to: 'errors#render_unauthorized', via: :all
+  match '404', to: 'errors#render_not_found', via: :all
 
   # catchall for not predefined requests - keep this at the very bottom of the routes file
-  match '*catch_unknown_routes' => 'errors#not_found', via: :all
+  match '*catch_unknown_routes' => 'errors#render_not_found', via: :all
 end
