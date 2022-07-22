@@ -22,6 +22,8 @@ gem 'sprockets-rails'
 
 gem 'mysql2'
 
+gem 'okcomputer'
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 5.0'
 
@@ -77,6 +79,7 @@ group :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+  gem 'webmock'
 end
 
 group :development, :test do

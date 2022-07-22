@@ -12,6 +12,7 @@ module EtdaExplore
   class Application < Rails::Application
     require 'etda_explore/solr_config'
     require 'overrides/resumption_token'
+    require 'healthchecks'
 
     config.solr = EtdaExplore::SolrConfig.new
 
