@@ -25,5 +25,8 @@ module EtdaExplore
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # server custom error message pages
+    config.exceptions_app = routes
   end
 end

@@ -9,7 +9,7 @@ class LegacyRedirectController < ApplicationController
     if new_id.present?
       redirect_to "/catalog/#{new_id}", status: :moved_permanently
     else
-      render template: '/error/404', formats: [:html, :json], status: :not_found
+      render template: '/errors/404', formats: [:html, :json], status: :not_found
     end
   end
 end
