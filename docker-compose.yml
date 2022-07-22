@@ -13,7 +13,7 @@ services:
     ports:
       - ${MYSQL_LOCAL_PORT:-3306}:3306
   solr:
-    image: solr:8.11.1-slim
+    image: solr:8.11.2-slim
     restart: always
     environment:
       SOLR_STOP_WAIT: 10

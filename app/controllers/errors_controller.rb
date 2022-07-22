@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ErrorsController < ApplicationController
-  def render_internal_server_error
+  def render_server_error
     render template: 'errors/500', formats: [:html, :json], status: :internal_server_error
   end
 
