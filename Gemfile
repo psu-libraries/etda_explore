@@ -20,6 +20,7 @@ gem 'importmap-rails'
 gem 'jbuilder'
 gem 'jquery-rails'
 gem 'mysql2'
+gem 'okcomputer'
 gem 'puma', '~> 5.0'
 gem 'rails', '~> 7.0.3'
 gem 'redis', '~> 4.0'
@@ -44,6 +45,7 @@ group :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+  gem 'webmock'
 end
 
 group :development, :test do

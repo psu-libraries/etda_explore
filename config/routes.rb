@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   concern :searchable, Blacklight::Routes::Searchable.new
   concern :oai_provider, BlacklightOaiProvider::Routes.new
 
+  mount OkComputer::Engine, at: '/health'
+
   authenticate :user do
     get '/login', to: 'application#login', as: :login
   end
