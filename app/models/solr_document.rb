@@ -68,4 +68,12 @@ class SolrDocument
   def defended_at
     fetch(:defended_at_dtsi, nil)
   end
+
+  def restricted_to_institution?
+    access_level.current_access_level == 'restricted_to_institution'
+  end
+
+  def confirmation
+    I18n.t('registered.confirmation') if restricted_to_institution?
+  end
 end

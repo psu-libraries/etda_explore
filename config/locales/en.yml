@@ -30,8 +30,6 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
-
   graduate:
     program:
         label: Graduate Program
@@ -57,3 +55,6 @@ en:
         label: Thesis Supervisor
 
   libraries_help_link:  https://libraries.psu.edu/website-feedback
+
+  registered:
+      confirmation: 'You are attempting to download information that is restricted to the Penn State University community. By clicking OK you acknowledge that the information downloaded should not be dispersed, used, or reproduced for any purposes outside of the University community.'

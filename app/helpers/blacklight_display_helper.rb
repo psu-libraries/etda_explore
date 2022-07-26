@@ -62,7 +62,7 @@ module BlacklightDisplayHelper
           content_tag(:span,
                       link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                               Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                              class: 'file-link form-control'))
+                              data: { confirm: document.confirmation }, class: 'file-link form-control'))
         )
       end
 
