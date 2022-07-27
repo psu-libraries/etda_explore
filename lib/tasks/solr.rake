@@ -8,7 +8,6 @@ namespace :solr do
   task reset: :environment do
     conf = EtdaExplore::SolrAdmin.new
     conf.delete_collection
-    conf.delete_configset
 
     Rake::Task['solr:init'].invoke
   end
