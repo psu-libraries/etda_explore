@@ -8,6 +8,7 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+    <%= render partial: 'shared/matomo_analytics' if ENV['HOSTNAME'].match(/^etda-ex-/).present? %>
   </head>
 
   <body>
