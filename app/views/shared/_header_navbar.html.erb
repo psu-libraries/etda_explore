@@ -16,6 +16,7 @@
       <%= render 'shared/user_util_links' %>
     </div>
   </div>
+  <%= render partial: 'shared/matomo_analytics' if ENV.fetch('HOSTNAME', 'dev').match(/^etda-ex-/).present? %>
 </nav>
 
 <%= content_tag :div, class: 'navbar-search navbar navbar-light bg-light', role: 'navigation', aria: { label: t('blacklight.search.header') } do %>
