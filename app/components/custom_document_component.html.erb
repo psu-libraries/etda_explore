@@ -8,6 +8,9 @@
                 itemtype: @document.itemtype,
                 class: classes.flatten.join(' ') do %>
   <%= header %>
+  <% if show? %>
+    <%= render GoogleScholarMetadataComponent.new(document: @document) %>
+  <% end %>
   <% if body.present? %>
     <%= body %>
   <% else %>
