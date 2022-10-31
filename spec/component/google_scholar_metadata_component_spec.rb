@@ -8,6 +8,7 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
   subject(:component) { described_class.new(document: doc) }
 
   let(:doc) { SolrDocument.new(fake_solr_doc) }
+  let(:html) { render_inline(component) }
 
   before do
     Blacklight.default_index.connection.add(doc)
@@ -15,7 +16,6 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
   end
 
   context 'with a final submission file pdf' do
-    let(:html) { render_inline(component) }
     let(:fake_solr_doc) { FakeSolrDocument.new(access_level: 'open_access').doc }
 
     it 'renders all the meta tags' do
@@ -32,7 +32,6 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
   end
 
   context 'when the final submission file is not a pdf' do
-    let(:html) { render_inline(component) }
     let(:fake_solr_doc) { FakeSolrDocument.new(access_level: 'open_access', file_names: ['word_doc.docx']).doc }
 
     it 'renders all the meta tags' do
@@ -47,7 +46,6 @@ RSpec.describe GoogleScholarMetadataComponent, type: :component do
   end
 
   context 'when the final submission is not open_access' do
-    let(:html) { render_inline(component) }
     let(:fake_solr_doc) { FakeSolrDocument.new(access_level: 'restricted_to_institution').doc }
 
     it 'renders all the meta tags' do
