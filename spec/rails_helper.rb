@@ -10,6 +10,7 @@ require 'rspec/rails'
 require 'capybara/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'devise'
+require 'view_component/test_helpers'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -63,6 +64,8 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
+
+  config.include ViewComponent::TestHelpers, type: :component
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!

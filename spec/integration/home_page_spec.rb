@@ -19,6 +19,13 @@ describe 'Home page', type: :feature do
     it 'shows Explore button to search' do
       expect(page).to have_button 'Explore'
     end
+
+    it 'does not display Google Scholar meta tags' do
+      expect(page).not_to have_css 'meta[@name="citation_title"]'
+      expect(page).not_to have_css 'meta[@name="citation_author"]'
+      expect(page).not_to have_css 'meta[@name="citation_publication_date"]'
+      expect(page).not_to have_css 'meta[@name="citation_pdf_url"]'
+    end
   end
 
   context 'when a user is logged in' do
