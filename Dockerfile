@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20231225 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240318 as base
 ENV GA_TRACKING_ID=GA-123456789
 WORKDIR /app
 
