@@ -11,4 +11,3 @@ namespace :blacklight do
       .find_each(batch_size: args[:batch_size], &:destroy)
   end
 end
- 
