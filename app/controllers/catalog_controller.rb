@@ -92,6 +92,9 @@ class CatalogController < ApplicationController
                                                          search_key: 'author_name_tesi'
     config.add_facet_field 'access_level_ssi',           limit: true, label: 'Access Level'
 
+    # Add Crawler Detector. If the session is a crawler we will not save the search
+    config.crawler_detector = lambda { |req| req.env['HTTP_USER_AGENT'] =~ /bot|nagios|facebook|python-requests|Python|Kuma|Grammarly/ }
+
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
     # handler defaults, or have no facets.
