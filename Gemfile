@@ -5,7 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.1.2'
 
-gem 'blacklight', '~> 7'
+gem 'blacklight', '~> 7.38'
 gem 'blacklight_oai_provider'
 gem 'bootsnap', require: false
 gem 'bootstrap', '~> 4.0'
@@ -19,10 +19,10 @@ gem 'font-awesome-rails', '~> 4.7'
 gem 'importmap-rails'
 gem 'jbuilder'
 gem 'jquery-rails'
-gem 'mysql2'
+gem 'mysql2', '>= 0.5.6'
 gem 'okcomputer'
-gem 'puma', '~> 5.6'
-gem 'rails', '~> 7.0.8'
+gem 'puma', '~> 6'
+gem 'rails', '~> 7.2.2'
 gem 'redis', '~> 4.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
@@ -50,6 +50,7 @@ end
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'html_tokenizer', '~> 0.0.7'
   gem 'niftany', '>= 0.10'
   gem 'pry-byebug'
   gem 'solr_wrapper', '>= 0.3'
