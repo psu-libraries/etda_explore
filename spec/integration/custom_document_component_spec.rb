@@ -7,10 +7,9 @@ require 'rails_helper'
 # and index page both use CustomDocumentComponent.
 RSpec.describe 'CustomDocumentComponent', type: :feature do
   context 'when the document is open access' do
-    let(:doc) { FakeSolrDocument.new }
+    let(:doc) { FakeSolrDocument.new(access_level: 'open_access') }
 
     before do
-      doc.doc['access_level_ss'] = 'open_access'
       Blacklight.default_index.connection.add(doc.doc)
       Blacklight.default_index.connection.commit
     end
@@ -23,10 +22,9 @@ RSpec.describe 'CustomDocumentComponent', type: :feature do
   end
 
   context 'when the document is restricted_to_institution' do
-    let(:doc) { FakeSolrDocument.new }
+    let(:doc) { FakeSolrDocument.new(access_level: 'restricted_to_institution') }
 
     before do
-      doc.doc['access_level_ss'] = 'restricted_to_institution'
       Blacklight.default_index.connection.add(doc.doc)
       Blacklight.default_index.connection.commit
     end
@@ -39,10 +37,9 @@ RSpec.describe 'CustomDocumentComponent', type: :feature do
   end
 
   context 'when the document is restricted' do
-    let(:doc) { FakeSolrDocument.new }
+    let(:doc) { FakeSolrDocument.new(access_level: 'restricted') }
 
     before do
-      doc.doc['access_level_ss'] = 'restricted'
       Blacklight.default_index.connection.add(doc.doc)
       Blacklight.default_index.connection.commit
     end
