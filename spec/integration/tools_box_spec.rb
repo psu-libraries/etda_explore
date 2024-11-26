@@ -37,7 +37,7 @@ RSpec.describe 'Tools box', type: :feature do
       it 'shows login link and no request alternate format link in tools' do
         visit "/catalog/#{doc[:id]}"
         expect(page).to have_link('Login to Download')
-        expect(page).not_to have_link('Request paper in alternate format.')
+        expect(page).to have_no_link('Request paper in alternate format.')
       end
     end
   end
@@ -48,7 +48,7 @@ RSpec.describe 'Tools box', type: :feature do
     it 'displays message that the file cannot be downloaded' do
       visit "/catalog/#{doc[:id]}"
       expect(page).to have_content 'No files available due to restrictions.'
-      expect(page).not_to have_link('Request paper in alternate format.')
+      expect(page).to have_no_link('Request paper in alternate format.')
     end
   end
 end

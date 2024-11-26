@@ -8,7 +8,7 @@ namespace :verify do
     loop do
       response = blacklight.search(q: 'final_submission_file_isim:*', cursorMark: cursor_mark, sort: 'id asc', rows: 40)
       response.docs.each do |doc|
-        doc.final_submissions.each do |k, _v|
+        doc.final_submissions.each_key do |k|
           file_path = doc.file_by_id(k, doc.access_level.current_access_level)
           if file_path.nil?
             # EtdaUtils returns nil for restricted or empty access_levels

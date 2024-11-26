@@ -23,7 +23,7 @@ RSpec.describe 'Catalog', type: :feature do
   context 'when performs basic searches' do
     before do
       fill_in('q', with: doc[:title_ssi])
-      click_button('Explore')
+      click_link_or_button('Explore')
     end
 
     it 'displays all the fields in our index display correctly' do
@@ -47,7 +47,7 @@ RSpec.describe 'Catalog', type: :feature do
     end
 
     it 'displays all the fields in our show display correctly' do
-      click_link(doc[:title_ssi])
+      click_link_or_button(doc[:title_ssi])
       expect(page).to have_content(doc[:title_ssi])
       expect(page).to have_blacklight_label('author_name_tesi').with('Author')
       expect(page).to have_blacklight_field('author_name_tesi').with(doc[:author_display])
@@ -75,7 +75,7 @@ RSpec.describe 'Catalog', type: :feature do
   context 'when performs faceted browsing' do
     before do
       fill_in('q', with: doc[:committee_member_name_tesim].first)
-      click_button('Explore')
+      click_link_or_button('Explore')
     end
 
     it 'allows faceted browsing' do
@@ -93,7 +93,6 @@ RSpec.describe 'Catalog', type: :feature do
       first('.blacklight-committee_member_name_ssim').click
       within('#facet-committee_member_name_ssim') do
         expect(page).to have_content(doc[:committee_member_name_tesim].first)
-        # click_link "more"
       end
       # expect(page).to have_css(".modal-dialog")
       # expect(page).to have_content("Bebe Senger")
@@ -107,42 +106,37 @@ RSpec.describe 'Catalog', type: :feature do
 
     it 'finds an author' do
       fill_in('q', with: doc[:author_name_tesi])
-      click_button 'Explore'
-      # expect(page).to have_content('1 entry found')
+      click_link_or_button 'Explore'
       expect(page).to have_content(doc[:author_name_tesi])
     end
 
     it 'finds a title' do
       fill_in('q', with: doc[:title_ssi])
-      click_button 'Explore'
-      # expect(page).to have_content('1 entry found')
+      click_link_or_button 'Explore'
       expect(page).to have_content(doc[:title_ssi])
     end
 
     it 'finds a keyword' do
       fill_in('q', with: doc[:keyword_ssim].first)
-      click_button 'Explore'
-      # expect(page).to have_content('1 entry found')
+      click_link_or_button 'Explore'
       expect(page).to have_link(doc[:keyword_ssim].first)
     end
 
     it 'finds a committee member' do
       fill_in('q', with: doc[:committee_member_name_ssim].first)
-      click_button 'Explore'
-      # expect(page).to have_content('1 entry found')
+      click_link_or_button 'Explore'
       expect(page).to have_content(doc[:committee_member_name_ssim].first)
     end
 
     it 'finds a program' do
       fill_in('q', with: doc[:program_name_ssi])
-      click_button 'Explore'
-      # expect(page).to have_content('1 - 5 of 5')
+      click_link_or_button 'Explore'
       expect(page).to have_content("#{current_partner.program_label}: #{doc[:program_name_ssi]}")
     end
 
     it 'offers search instructions' do
       fill_in('q', with: 'zzzzzaaaaaa')
-      click_button 'Explore'
+      click_link_or_button 'Explore'
       expect(page).to have_content('No results found')
       expect(page).to have_content('Try modifying your search')
     end

@@ -21,10 +21,10 @@ describe 'Home page', type: :feature do
     end
 
     it 'does not display Google Scholar meta tags' do
-      expect(page).not_to have_css 'meta[@name="citation_title"]'
-      expect(page).not_to have_css 'meta[@name="citation_author"]'
-      expect(page).not_to have_css 'meta[@name="citation_publication_date"]'
-      expect(page).not_to have_css 'meta[@name="citation_pdf_url"]'
+      expect(page).to have_no_css 'meta[@name="citation_title"]'
+      expect(page).to have_no_css 'meta[@name="citation_author"]'
+      expect(page).to have_no_css 'meta[@name="citation_publication_date"]'
+      expect(page).to have_no_css 'meta[@name="citation_pdf_url"]'
     end
   end
 
@@ -45,7 +45,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'does not show a link to the login page' do
-      expect(page).not_to have_link 'Login', href: login_path
+      expect(page).to have_no_link 'Login', href: login_path
     end
 
     it_behaves_like 'a page with the public layout'
@@ -59,7 +59,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'does not show a log out link' do
-      expect(page).not_to have_link 'Log out', href: destroy_user_session_path
+      expect(page).to have_no_link 'Log out', href: destroy_user_session_path
     end
 
     it_behaves_like 'a page with the public layout'
