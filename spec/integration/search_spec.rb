@@ -14,7 +14,7 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('All Fields', from: 'search_field')
     fill_in 'q', with: title
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
     expect(page).to have_content @doc.doc[:last_name_ssi]
   end
@@ -24,7 +24,7 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Author Name', from: 'search_field')
     fill_in 'q', with: last_name
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
     expect(page).to have_content @doc.doc[:title_ssi]
   end
@@ -34,7 +34,7 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Title', from: 'search_field')
     fill_in 'q', with: title
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
     expect(page).to have_content @doc.doc[:last_name_ssi]
   end
@@ -44,9 +44,9 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Graduate Program', from: 'search_field')
     fill_in 'q', with: program
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
-    expect(page).to have_selector '.blacklight-program_name_ssi', text: @doc.doc[:program_name_ssi]
+    expect(page).to have_css '.blacklight-program_name_ssi', text: @doc.doc[:program_name_ssi]
   end
 
   it 'searches for keyword' do
@@ -54,9 +54,9 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Keyword', from: 'search_field')
     fill_in 'q', with: keyword
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
-    expect(page).to have_selector '.blacklight-keyword_ssim', text: /#{@doc.doc[:keyword_ssi]}/
+    expect(page).to have_css '.blacklight-keyword_ssim', text: /#{@doc.doc[:keyword_ssi]}/
   end
 
   it 'searches for committee member' do
@@ -64,7 +64,7 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Committee Member', from: 'search_field')
     fill_in 'q', with: committee_member
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
     expect(page).to have_content @doc.doc[:title_ssi]
   end
@@ -74,7 +74,7 @@ RSpec.describe 'Searching', type: :feature do
     visit '/'
     select('Abstract', from: 'search_field')
     fill_in 'q', with: abstract
-    click_button 'Search'
+    click_link_or_button 'Search'
     expect(all('.document-title-heading').count).to be > 0
     expect(page).to have_content @doc.doc[:title_ssi]
   end

@@ -21,6 +21,6 @@ RSpec.describe 'OAI', type: :feature do
 
   it 'does not return the document when outside of the range' do
     visit '/catalog/oai?verb=ListRecords&from=2000-01-01T00:00:00Z&until=2010-04-07T12:00:00Z&metadataPrefix=oai_dc'
-    expect(page).not_to have_content @doc.doc[:title_ssi]
+    expect(page).to have_no_content @doc.doc[:title_ssi]
   end
 end

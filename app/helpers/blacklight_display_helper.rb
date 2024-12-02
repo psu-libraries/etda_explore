@@ -55,15 +55,11 @@ module BlacklightDisplayHelper
   private
 
     def download_links(document)
-      links = []
-
-      document.final_submissions.each do |final_submission_id, name|
-        links.append(
-          content_tag(:span,
-                      link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                              Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                              data: { confirm: document.confirmation }, class: 'file-link form-control'))
-        )
+      links = document.final_submissions.map do |final_submission_id, name|
+        content_tag(:span,
+                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                            Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
+                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
       end
 
       links.join
