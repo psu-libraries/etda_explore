@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@1.5.0
+  docker: circleci/docker@2.6.0
 
 jobs:
   release:
@@ -32,7 +32,6 @@ jobs:
         user: root
     steps:
       - setup_remote_docker:
-          version: default
           docker_layer_caching: true
       - checkout
       - docker/check:
