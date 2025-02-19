@@ -4,7 +4,7 @@ WORKDIR /app
 
 ENV TZ=America/New_York
 
-RUN apt-get update && apt-get install --no-install-recommends mariadb-client libmariadbclient-dev libsqlite3-dev -y
+RUN apt-get update && apt-get install --no-install-recommends mariadb-client libmariadb-dev libsqlite3-dev -y
 
 RUN useradd -u 10000 app -d /app
 RUN chown -R app /app
