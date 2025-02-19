@@ -6,7 +6,7 @@ module HealthChecks
       solr = RSolr.connect(url: Rails.configuration.solr.query_url)
       resp = solr.get('admin/ping')
       status = resp&.dig('status')
-      zk_connected = resp&.dig('responseHeader')&.dig('zkConnected')
+      zk_connected = resp&.dig('responseHeader', 'zkConnected')
       @message = Hash.new
       @message['zkConnected'] = zk_connected
       @message['status'] = status
