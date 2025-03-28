@@ -23,7 +23,7 @@ gem 'mysql2', '>= 0.5.6'
 gem 'okcomputer'
 gem 'puma', '~> 6'
 gem 'rails', '~> 7.2.2'
-gem 'rails-cloudflare-turnstile'
+gem "bot_challenge_page", "~> 0.3.0"
 gem 'redis', '~> 4.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
