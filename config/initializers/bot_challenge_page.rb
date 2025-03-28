@@ -7,9 +7,11 @@ Rails.application.config.to_prepare do
   # Some testing keys are also available: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
   #
   # Always pass testing sitekey: "1x00000000000000000000AA"
-  BotChallengePage::BotChallengePageController.bot_challenge_config.cf_turnstile_sitekey = ENV.fetch('CF_SITE_KEY', '1x00000000000000000000AA')
+  BotChallengePage::BotChallengePageController.bot_challenge_config.cf_turnstile_sitekey = ENV.fetch(
+    'CF_SITE_KEY','1x00000000000000000000AA')
   # Always pass testing secret_key: "1x0000000000000000000000000000000AA"
-  BotChallengePage::BotChallengePageController.bot_challenge_config.cf_turnstile_secret_key = ENV.fetch('CF_SECRET_KEY', '1x0000000000000000000000000000000AA')
+  BotChallengePage::BotChallengePageController.bot_challenge_config.cf_turnstile_secret_key = ENV.fetch(
+    'CF_SECRET_KEY', '1x0000000000000000000000000000000AA')
 
   BotChallengePage::BotChallengePageController.bot_challenge_config.redirect_for_challenge = false
 
