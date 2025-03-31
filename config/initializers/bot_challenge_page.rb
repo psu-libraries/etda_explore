@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.config.to_prepare do
-  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = ENV.fetch('RAILS_ENV') != 'test'
+  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = true
 
   # Get from CloudFlare Turnstile: https://www.cloudflare.com/application-services/products/turnstile/
   # Some testing keys are also available: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
@@ -23,6 +23,9 @@ Rails.application.config.to_prepare do
 
   # How long will a challenge success exempt a session from further challenges?
   BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 1.hour
+  BotChallengePage::BotChallengePageController.allow_exempt = ->(controller) {
+    controller.request.path == "/health"
+  }
 
   # Exempt some requests from bot challenge protection
   # BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
