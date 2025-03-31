@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.4.1-node-22:20250131 AS base
 ENV GA_TRACKING_ID=GA-123456789
 WORKDIR /app
 
@@ -21,7 +21,7 @@ COPY --chown=app . /app
 CMD ["/app/bin/startup"]
 
 # Final Target
-FROM base as production
+FROM base AS production
 ENV PARTNER=graduate
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rails assets:precompile
