@@ -23,7 +23,8 @@ Rails.application.config.to_prepare do
 
   # How long will a challenge success exempt a session from further challenges?
   BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 1.hour
-  BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller) {
+
+  BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _) {
     controller.request.path == '/health'
   }
 
