@@ -8,9 +8,9 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  before_action only: :index do |controller|
-    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
-  end
+  # before_action only: :index do |controller|
+  #   BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
+  # end
 
   configure_blacklight do |config|
     ## Class for sending and receiving requests from a search index
