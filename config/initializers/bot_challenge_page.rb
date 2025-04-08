@@ -22,9 +22,9 @@ Rails.application.config.to_prepare do
   BotChallengePage::BotChallengePageController.bot_challenge_config.redirect_for_challenge = false
 
   # How long will a challenge success exempt a session from further challenges?
-  BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 2.seconds
+  BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 24.hours
   BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _config) {
-    controller.params[:search_field] == nil
+    controller.params[:search_field] == nil || !!controller.request.headers["User-Agent"] =~ /bot/i
   }
 
   # Exempt some requests from bot challenge protection
