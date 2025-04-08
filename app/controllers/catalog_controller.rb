@@ -8,7 +8,7 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  before_action only: :index do |controller|
+  before_action do |controller|
     BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
   end
 
