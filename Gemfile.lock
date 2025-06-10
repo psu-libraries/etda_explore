@@ -158,7 +158,7 @@ GEM
       rubocop
       smart_properties
     erubi (1.13.1)
-    etda_utilities (0.20.2)
+    etda_utilities (0.21.0)
     execjs (2.10.0)
     faker (3.5.1)
       i18n (>= 1.8.11, < 2)
