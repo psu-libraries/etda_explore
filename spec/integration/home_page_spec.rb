@@ -26,6 +26,14 @@ describe 'Home page', type: :feature do
       expect(page).to have_no_css 'meta[@name="citation_publication_date"]'
       expect(page).to have_no_css 'meta[@name="citation_pdf_url"]'
     end
+
+    it 'has link to advanced search' do
+      click_link 'Advanced search'
+      expect(page).to have_current_path('/catalog/advanced')
+      expect(page).to have_content('Advanced search')
+      expect(page).to have_content('AND have these attributes')
+      expect(page).to have_content('Search tips')
+    end
   end
 
   context 'when a user is logged in' do
