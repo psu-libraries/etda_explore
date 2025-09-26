@@ -110,19 +110,12 @@ jobs:
         command: |
           bundle exec niftany
     - run:
-        name: Setup Code Climate test-reporter
-        command: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-    - run:
         name: "Test"
         command: |
-          ./cc-test-reporter before-build
           bundle exec rake solr:init
           bundle exec rake db:create
           bundle exec rake db:migrate
           bundle exec rspec
-          ./cc-test-reporter after-build
 
 workflows:
   version: 2
