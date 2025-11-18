@@ -2,6 +2,7 @@
 export PARTNER=graduate
 export WORKFLOW_HOST=submit-etda.libraries.psu.edu
 export EXPLORE_HOST=etda.libraries.psu.edu
+export RAILS_ENV=development
 
 # MySQL Parameters
 # We should use root so we can create the test database
