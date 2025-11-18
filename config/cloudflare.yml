@@ -1,0 +1,3 @@
+cloudflare_turnstile:
+  site_key: <%= ENV.fetch("CF_SITE_KEY")  %>
+  secret_key: <%= ENV.fetch("CF_SECRET_KEY") %>

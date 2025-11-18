@@ -9,6 +9,7 @@ gem 'blacklight', '~> 7.38'
 gem 'blacklight_oai_provider'
 gem 'bootsnap', require: false
 gem 'bootstrap', '~> 4.0'
+gem 'bot_challenge_page', '~> 0.3.0'
 gem 'cancancan'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
@@ -51,7 +52,7 @@ end
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'html_tokenizer', '~> 0.0.7'
-  gem 'niftany', '>= 0.10'
+  gem 'niftany', '>= 0.12'
   gem 'pry-byebug'
   gem 'solr_wrapper', '>= 0.3'
 end

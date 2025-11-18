@@ -3,9 +3,14 @@
 class ApplicationController < ActionController::Base
   # Adds a few additional behaviors into the application controller
   include Blacklight::Controller
+
   layout :determine_layout if respond_to? :layout
 
   rescue_from CanCan::AccessDenied, with: :access_denied
+
+  before_action do |controller|
+    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
+  end
 
   def login
     session[:redirect_url] = home_or_original_path
