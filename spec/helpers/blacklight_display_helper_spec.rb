@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe BlacklightDisplayHelper do
   include DeviseGuests::Controllers::Helpers
+
   describe '#render_as_list' do
     let(:keywords_doc) { { value: ['Keyword 1', 'Keyword 2'] } }
 

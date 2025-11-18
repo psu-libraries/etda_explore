@@ -11,3 +11,11 @@
 # ExcludedMethods: refine
 Metrics/BlockLength:
   Max: 36
+
+Naming/PredicateMethod:
+  Exclude:
+    - 'app/helpers/blacklight_display_helper.rb'
+
+Capybara/NegationMatcherAfterVisit:
+  Exclude:
+    - 'spec/integration/oai_spec.rb'
