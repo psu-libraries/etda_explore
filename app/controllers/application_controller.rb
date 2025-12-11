@@ -8,10 +8,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, with: :access_denied
 
-  before_action do |controller|
-    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
-  end
-
   def login
     session[:redirect_url] = home_or_original_path
     if current_user
