@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.config.to_prepare do
-  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = ENV.fetch('RAILS_ENV') != 'test'
+  enabled =
+    !Rails.env.test? &&
+    ActiveModel::Type::Boolean.new.cast(ENV.fetch('CLOUDFLARE_CHALLENGE_ENABLED', 'true'))
+
+  BotChallengePage::BotChallengePageController.bot_challenge_config.enabled = enabled
 
   # Get from CloudFlare Turnstile: https://www.cloudflare.com/application-services/products/turnstile/
   # Some testing keys are also available: https://developers.cloudflare.com/turnstile/troubleshooting/testing/
@@ -26,7 +30,7 @@ Rails.application.config.to_prepare do
   BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _config) {
     # Does not challenge the user if they are not making a search (EG "About Page")
     # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-    controller.params[:search_field] == nil || !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
+    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
   }
 
   # Exempt some requests from bot challenge protection
