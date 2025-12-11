@@ -13,7 +13,7 @@ export MYSQL_DATABASE=explore
 export MYSQL_HOST=mysql
 export MYSQL_LOCAL_PORT=3306
 
-# Solr Parameters
+# Solr Parameters 
 export SOLR_USERNAME=etda
 export SOLR_PASSWORD=etda
 export SOLR_HOST=127.0.0.1
