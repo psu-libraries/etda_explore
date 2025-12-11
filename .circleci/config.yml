@@ -301,7 +301,7 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v\d+\.\d+\.\d+.*/
-      - test
+      - test-application
       - build-image:
           name: build-image
           context:
