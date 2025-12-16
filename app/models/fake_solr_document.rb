@@ -6,7 +6,8 @@ class FakeSolrDocument
   def initialize(options = {})
     title = options[:title] || Faker::Hipster.sentence(word_count: 3)
     abstract = Faker::Hipster.sentence(word_count: 10)
-    access_level = options[:access_level] || ['open_access', 'restricted_to_institution', 'restricted_liberal_arts', 'restricted'].sample
+    access_level = options[:access_level] || ['open_access', 'restricted_to_institution', 'restricted_liberal_arts',
+                                              'restricted'].sample
     name = Faker::Name
     last_name = name.last_name
     first_name = name.first_name
