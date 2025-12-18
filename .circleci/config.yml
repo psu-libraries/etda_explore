@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.8.2
+  docker: circleci/docker@3.0.1
   browser-tools: circleci/browser-tools@1.5.2
 
 parameters:
@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.3.0"
+    default: "v4.4.0"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
@@ -135,7 +135,7 @@ jobs:
           registry: $REGISTRY_HOST
           tag: $TAG
           extra_build_args: "--target production"
-          use-buildkit: true
+          use_buildkit: true
       - run:
           name: Save Docker image
           command: |
@@ -287,8 +287,21 @@ jobs:
           bundle exec rspec
 
 workflows:
-  version: 2
+  handle-delete-event:
+    when:
+      equal: ["delete", << pipeline.parameters.GHA_Event >>]
+    jobs:
+      - delete-deployment:
+          name: delete-deployment
+          context:
+            - org-global
+          delete_branch: << pipeline.parameters.GHA_Meta >>
+          filters:
+            branches:
+              only: main
   explore-ci-cd:
+    unless:
+      equal: ["delete", << pipeline.parameters.GHA_Event >>]
     jobs:
       - release-image: 
           name: release-image
