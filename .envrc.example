@@ -4,7 +4,7 @@ export WORKFLOW_HOST=submit-etda.libraries.psu.edu
 export EXPLORE_HOST=etda.libraries.psu.edu
 export RAILS_ENV=development
 export AUTO_REMEDIATE_WEBHOOK_PATH="/webhooks/auto_remediate"
-export AUTO_REMEDIATE_WEBHOOK_API_KEY=abc123
+export AUTO_REMEDIATE_WEBHOOK_TOKEN=abc123
 
 # MySQL Parameters
 # We should use root so we can create the test database

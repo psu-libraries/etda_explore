@@ -5,33 +5,29 @@ class AutoRemediateWebhookService
     @final_submission_file_id = final_submission_file_id
   end
 
-  def call
-    payload = { final_submission_file_id: @final_submission_file_id }
+  def notify
+    payload = { final_submission_file_id: final_submission_file_id }
     headers = {
       'Content-Type' => 'application/json',
-      'X-API-Key' => auto_remediate_webhook_api_key
+      'X-API-Key' => auto_remediate_webhook_token
     }
 
-    response = Faraday.post(
-      "#{base_url}#{auto_remediate_webhook_path}",
-      payload.to_json,
-      headers
+    conn = Faraday.new(
+      url: "#{base_url}#{auto_remediate_webhook_path}",
+      headers: headers
     )
 
-    unless response.status == 200
-      raise "AutoRemediateWebhookService: HTTP #{response.status} " \
-            "response body=#{response.body.to_s[0, 500]}"
+    conn.post do |req|
+      req.body = payload.to_json
     end
-
-    response
   end
 
   private
 
     attr_reader :final_submission_file_id
 
-    def auto_remediate_webhook_api_key
-      ENV.fetch('AUTO_REMEDIATE_WEBHOOK_API_KEY')
+    def auto_remediate_webhook_token
+      ENV.fetch('AUTO_REMEDIATE_WEBHOOK_TOKEN')
     end
 
     def auto_remediate_webhook_path
