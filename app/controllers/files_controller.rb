@@ -13,7 +13,7 @@ class FilesController < ApplicationController
       render plain: 'An Error has occurred', status: :internal_server_error
     else
       authorize! :read, @doc
-      AutoRemediateWebhookJob.perform_async(params[:id])
+      AutoRemediateWebhookJob.perform_later(params[:id])
       send_file full_file_path, disposition: :inline
     end
   end

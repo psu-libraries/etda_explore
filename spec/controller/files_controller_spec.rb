@@ -5,6 +5,10 @@ require 'rails_helper'
 require 'fileutils'
 
 RSpec.describe FilesController, type: :controller do
+  before do
+    allow(AutoRemediateWebhookJob).to receive(:perform_later)
+  end
+
   context 'when open access' do
     let(:doc) { FakeSolrDocument.new }
 
@@ -24,6 +28,9 @@ RSpec.describe FilesController, type: :controller do
     it 'returns favorably' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:ok)
+      expect(AutoRemediateWebhookJob)
+        .to have_received(:perform_later)
+        .with(doc.doc[:final_submission_file_isim].first)
     end
   end
 
@@ -42,6 +49,7 @@ RSpec.describe FilesController, type: :controller do
     it 'raises an error' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:unauthorized)
+      expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
   end
 
@@ -64,6 +72,9 @@ RSpec.describe FilesController, type: :controller do
     it 'returns a 200 message' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:ok)
+      expect(AutoRemediateWebhookJob)
+        .to have_received(:perform_later)
+        .with(doc.doc[:final_submission_file_isim].first)
     end
   end
 
@@ -86,6 +97,7 @@ RSpec.describe FilesController, type: :controller do
     it 'throws a server error' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:internal_server_error)
+      expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
   end
 end
