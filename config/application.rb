@@ -29,5 +29,8 @@ module EtdaExplore
 
     # server custom error message pages
     config.exceptions_app = routes
+
+    # Use async adapter for Active Job in all environments by default
+    config.active_job.queue_adapter = :async
   end
 end
