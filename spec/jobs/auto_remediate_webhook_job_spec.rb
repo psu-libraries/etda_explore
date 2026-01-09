@@ -23,14 +23,14 @@ RSpec.describe AutoRemediateWebhookJob do
       service_double = instance_double(AutoRemediateWebhookService)
 
       allow(AutoRemediateWebhookService).to receive(:new)
-        .with(final_submission_file_id: final_id)
+        .with(final_id)
         .and_return(service_double)
       allow(service_double).to receive(:notify).and_return(true)
 
       described_class.perform_now(final_id)
 
       expect(AutoRemediateWebhookService).to have_received(:new)
-        .with(final_submission_file_id: final_id)
+        .with(final_id)
       expect(service_double).to have_received(:notify)
     end
 
@@ -47,7 +47,7 @@ RSpec.describe AutoRemediateWebhookJob do
 
       service_double = instance_double(AutoRemediateWebhookService)
       allow(AutoRemediateWebhookService).to receive(:new)
-        .with(final_submission_file_id: final_id)
+        .with(final_id)
         .and_return(service_double)
       allow(service_double).to receive(:notify).and_raise(StandardError, 'Error')
 
