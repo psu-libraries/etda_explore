@@ -70,7 +70,7 @@ class SolrDocument
   end
 
   def restricted_to_institution?
-    access_level.current_access_level == 'restricted_to_institution'
+    access_level.current_access_level.in?(['restricted_to_institution', 'restricted_liberal_arts'])
   end
 
   def confirmation

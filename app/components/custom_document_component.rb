@@ -9,10 +9,8 @@ class CustomDocumentComponent < Blacklight::DocumentComponent
                                     alt: document['access_level_ss'].to_s,
                                     width: 160), class: 'row justify-content-center')
     bottom_content = case access_level
-                     when 'restricted_to_institution'
+                     when 'restricted_to_institution', 'restricted_liberal_arts'
                        tag.span('Restricted (Penn State Only)', class: "#{badge_classes} badge-primary text-wrap")
-                     when 'restricted_liberal_arts'
-                       tag.span('Restricted (Liberal Arts Only)', class: "#{badge_classes} badge-primary text-wrap")
                      when 'restricted'
                        tag.span(access_level.titleize, class: "#{badge_classes} badge-danger")
                      else
