@@ -20,18 +20,18 @@ RSpec.describe 'Catalog', type: :feature do
     visit '/catalog'
   end
 
-  context 'when performs basic searches' do
-    before do
-      fill_in('q', with: doc[:title_ssi])
-      click_link_or_button('Explore')
-    end
-
-    it 'shows three options under access level facet' do
+  it 'shows three options under access level facet' do 
       click_link_or_button('Access Level')
       expect(page).to have_content('open_access')
       expect(page).to have_content('restricted_to_institution')
       expect(page).to have_content('restricted')
       expect(page).to have_no_content('restricted_liberal_arts')
+    end
+
+  context 'when performs basic searches' do
+    before do
+      fill_in('q', with: doc[:title_ssi])
+      click_link_or_button('Explore')
     end
 
     it 'displays all the fields in our index display correctly' do
