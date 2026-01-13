@@ -5,7 +5,8 @@ class CustomDocumentComponent < Blacklight::DocumentComponent
     contents = []
     badge_classes = 'badge col-md-10'
     access_level = document['access_level_ss']
-    top_content = tag.div(image_tag("#{document['access_level_ss']}_icon.png",
+    image_access_level = access_level == 'restricted_liberal_arts' ? 'restricted_to_institution' : access_level
+    top_content = tag.div(image_tag("#{image_access_level}_icon.png",
                                     alt: document['access_level_ss'].to_s,
                                     width: 160), class: 'row justify-content-center')
     bottom_content = case access_level

@@ -26,6 +26,14 @@ RSpec.describe 'Catalog', type: :feature do
       click_link_or_button('Explore')
     end
 
+    it 'shows three options under access level facet' do
+      click_link_or_button('Access Level')
+      expect(page).to have_content('open_access')
+      expect(page).to have_content('restricted_to_institution')
+      expect(page).to have_content('restricted')
+      expect(page).to have_no_content('restricted_liberal_arts')
+    end
+
     it 'displays all the fields in our index display correctly' do
       within("article[data-document-id=\"#{doc[:id]}\"]") do
         expect(page).to have_blacklight_label('author_name_tesi').with('Author')

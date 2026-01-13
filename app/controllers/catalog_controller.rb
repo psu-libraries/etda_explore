@@ -94,7 +94,21 @@ class CatalogController < ApplicationController
     config.add_facet_field 'keyword_ssim',               limit: true, label: 'Keyword', search_key: 'keyword_tesim'
     config.add_facet_field 'last_name_ssi',              limit: true, label: 'Author Last Name',
                                                          search_key: 'author_name_tesi'
-    config.add_facet_field 'access_level_ssi',           limit: true, label: 'Access Level'
+    config.add_facet_field 'access_level_ssi', limit: true, label: 'Access Level',
+                                               query: {
+                                                 restricted_to_institution: {
+                                                   fq: 'access_level_ssi:("restricted_liberal_arts" OR "restricted_to_institution")',
+                                                   label: 'restricted_to_institution'
+                                                 },
+                                                 open_access: {
+                                                   fq: 'access_level_ssi:"open_access"',
+                                                   label: 'open_access'
+                                                 },
+                                                 restricted: {
+                                                   fq: 'access_level_ssi:"restricted"',
+                                                   label: 'restricted'
+                                                 }
+                                               }
 
     # Have BL send all facet field names to Solr, which has been the default
     # previously. Simply remove these lines if you'd rather use Solr request
