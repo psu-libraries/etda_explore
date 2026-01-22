@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.4.0"
+    default: "v4.4.1"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
@@ -35,19 +35,19 @@ parameters:
     default: "prod"    
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
 
 commands:
-
   clone-config-repo:
     steps:
       - add_ssh_keys
       - run:
           name: Prepare GitHub Access
           command: |
+            mkdir -p ~/.ssh
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone << pipeline.parameters.CONFIG_REPO_URL >>
 
@@ -93,9 +93,10 @@ jobs:
       clusters: << parameters.clusters >>
       CONFIG_REPO: git@github.com:psu-libraries/etda-config.git
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
     steps:
       - clone-config-repo
@@ -208,6 +209,7 @@ jobs:
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
     parameters:
       clusters:
         type: string
@@ -229,7 +231,7 @@ jobs:
                 ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
-            done            
+            done
 
   test-application:
     docker:
