@@ -55,19 +55,28 @@ module BlacklightDisplayHelper
   private
 
     def download_links(document)
+      modal_trigger_options = if document.remediated_final_submissions.present?
+                                { toggle: 'modal',
+                                  target: '#downloadModal' }
+                              end
+
       links = document.final_submissions.map do |final_submission_id, name|
-        content_tag(:span,
-                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                            Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                            data: { confirm: document.confirmation, toggle: 'modal', target: '#downloadModal' },
-                            class: 'file-link form-control')) + modal(final_submission_id)
+        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id)
+        data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
+        link_content = content_tag(:span,
+                                   link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                                           file_path,
+                                           data: data_options,
+                                           class: 'file-link form-control'))
+
+        if document.remediated_final_submissions.present?
+          link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
+        else
+          link_content
+        end
       end
 
       links.join
-    end
-
-    def modal(final_submission_id)
-      render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
     end
 
     def facet_link(value, field)

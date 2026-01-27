@@ -40,6 +40,7 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
     - 'app/controllers/catalog_controller.rb'
+    - 'app/models/fake_solr_document.rb'
 
 RSpec/AnyInstance:
   Exclude:
