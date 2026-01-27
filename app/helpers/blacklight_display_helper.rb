@@ -59,10 +59,15 @@ module BlacklightDisplayHelper
         content_tag(:span,
                     link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                             Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
+                            data: { confirm: document.confirmation, toggle: 'modal', target: '#downloadModal' },
+                            class: 'file-link form-control')) + modal(final_submission_id)
       end
 
       links.join
+    end
+
+    def modal(final_submission_id)
+      render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
     end
 
     def facet_link(value, field)
