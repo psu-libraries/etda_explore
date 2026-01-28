@@ -106,13 +106,13 @@ class FakeSolrDocument
     end
 
     def file_ids
-      @file_ids ||= Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
+      @file_ids ||= @options[:file_ids] || Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
     end
 
     def remediated_file_ids
-      @remediated_file_ids ||= if [true, false].sample
-                                 Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
-                               end
+      @remediated_file_ids ||= @options[:remediated_file_ids] || if [true, false].sample
+                                                                   Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) }
+                                                                 end
     end
 
     def remediated_file_names

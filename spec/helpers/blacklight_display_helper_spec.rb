@@ -31,7 +31,17 @@ RSpec.describe BlacklightDisplayHelper do
 
   describe '#render_download_links' do
     let(:oa_doc) do
-      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'open_access').doc)
+      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'open_access',
+                                                  remediated_file_ids: [11]).doc)
+      {
+        document: doc,
+        value: doc[:final_submission_file_isim],
+        field: 'final_submission_file_isim'
+      }
+    end
+    let(:oa_doc_no_remediated) do
+      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'open_access',
+                                                  remediated_file_ids: []).doc)
       {
         document: doc,
         value: doc[:final_submission_file_isim],
@@ -39,7 +49,17 @@ RSpec.describe BlacklightDisplayHelper do
       }
     end
     let(:rti_doc) do
-      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'restricted_to_institution').doc)
+      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'restricted_to_institution',
+                                                  remediated_file_ids: [11]).doc)
+      {
+        document: doc,
+        value: doc[:final_submission_file_isim],
+        field: 'final_submission_file_isim'
+      }
+    end
+    let(:rti_doc_no_remediated_multi_final_subs) do
+      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'restricted_to_institution',
+                                                  remediated_file_ids: [], file_ids: [1, 2]).doc)
       {
         document: doc,
         value: doc[:final_submission_file_isim],
@@ -47,7 +67,8 @@ RSpec.describe BlacklightDisplayHelper do
       }
     end
     let(:r_doc) do
-      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'restricted').doc)
+      doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'restricted',
+                                                  remediated_file_ids: []).doc)
       {
         document: doc,
         value: doc[:final_submission_file_isim],
@@ -66,6 +87,19 @@ RSpec.describe BlacklightDisplayHelper do
         expect(render_download_links(rti_doc)).to eq "<span><span><a data-confirm=\"#{I18n.t('registered.confirmation')}\" class=\"file-link form-control\" href=\"/files/final_submissions/#{rti_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{rti_doc[:document][:file_name_ssim].first}</a></span></span>"
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
+
+      it 'includes modal trigger attributes and modal only when no remediated files' do
+        expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
+        expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
+        expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
+        expect(render_download_links(oa_doc_no_remediated)).to include /Accessible Version in Progress|We're generating an accessible version/
+        expect(render_download_links(oa_doc_no_remediated)).to have_link('OK',
+                                                                         href: "/files/final_submissions/#{oa_doc_no_remediated[:value].first}")
+        expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-toggle="modal"').twice
+      end
     end
 
     context 'when current_user is not present' do
@@ -78,6 +112,17 @@ RSpec.describe BlacklightDisplayHelper do
         expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
         expect(render_download_links(rti_doc)).to eq '<span><a href="/login">Login to Download</a></span>'
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
+      end
+
+      it 'includes modal trigger attributes and modal only when no remediated files' do
+        expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+        expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
+        expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
+        expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
+        # Not logged in so no modal for RTI
+        expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-toggle="modal"'
       end
     end
   end
