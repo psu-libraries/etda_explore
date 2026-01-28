@@ -1,0 +1,26 @@
+<div class="modal fade" id="downloadModal-<%= final_submission_id %>" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h4 class="modal-title">Accessible Version in Progress</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+          <p>We're generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it's ready.</p>
+
+          <p>You can still download the current version by clicking "OK".</p>
+
+          <h6><strong>What's happening:</strong></h6>
+          <p>An accessible PDF is being generated using Adobe with AI used to generate alternative text (alt text) for images in the PDF.</p>
+        </div>
+        <div class="modal-footer">
+        <%= link_to "OK",
+                    Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
+                    class: "btn btn-primary",
+                    onclick: "$('#downloadModal-#{final_submission_id}').modal('hide')" %>
+        </div>
+    </div>
+    </div>
+</div>

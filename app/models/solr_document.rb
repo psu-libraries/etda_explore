@@ -61,6 +61,16 @@ class SolrDocument
     docs
   end
 
+  def remediated_final_submissions
+    return {} if self[:remediated_final_submission_file_isim].blank?
+
+    docs = {}
+    self[:remediated_final_submission_file_isim].each_with_index do |id, index|
+      docs[id] = self[:remediated_file_name_ssim][index]
+    end
+    docs
+  end
+
   def defense
     defended_at.present? ? DateTime.parse(defended_at).strftime('%B %d, %Y') : 'None'
   end
