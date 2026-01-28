@@ -34,7 +34,8 @@ Rails.application.routes.draw do
   end
 
   get '/about', to: 'application#about'
-  get '/files/final_submissions/:id', to: 'files#solr_download_final_submission', as: :final_submission_file
+  get '/files/final_submissions/:id', to: 'files#solr_download_final_submission', defaults: { remediated: false }, as: :final_submission_file
+  get 'files/remediated_final_submissions/:id', to: 'files#solr_download_final_submission', defaults: { remediated: true }, as: :remediated_final_submission_file
 
   # Legacy Redirects
   get '/theses/approved/:access_level/:id_prefix-:id/(:all)',

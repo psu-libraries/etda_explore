@@ -18,6 +18,8 @@ class FakeSolrDocument
     released_metadata_at_dtsi = options[:released_metadata_at_dtsi] ||
       DateTime.parse(Faker::Date.between(from: 5.years.ago, to: Date.today).to_s).getutc
     defended_at = Faker::Date.between(from: 5.years.ago, to: Date.today).strftime('%FT%TZ') # eg.'2016-11-17T15:00:00Z'
+    remediated_final_submission_file_ids = options[:remediated] ? Array.new(file_names.count) { Faker::Number.unique.within(range: 1..1000) } : nil
+    remediated_final_file_names = options[:remediated] ? file_names.map { |fn| fn.sub('.pdf', '_remediated.pdf') } : nil
     @doc = {
       year_isi: Faker::Date.between(from: 5.years.ago, to: Date.today).year,
       final_submission_files_uploaded_at_dtsi: DateTime.parse(Faker::Date.between(from: 5.years.ago,
@@ -41,6 +43,8 @@ class FakeSolrDocument
       ],
       final_submission_file_isim: file_ids,
       file_name_ssim: file_names,
+      remediated_final_submission_file_isim: remediated_final_submission_file_ids,
+      remediated_file_name_ssim: remediated_final_file_names,
       author_name_tesi: name.name,
       last_name_ssi: last_name,
       last_name_tesi: last_name,

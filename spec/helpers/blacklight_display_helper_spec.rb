@@ -80,5 +80,36 @@ RSpec.describe BlacklightDisplayHelper do
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
     end
+
+    context 'when document has remediated final submission' do
+      let(:remed_oa_doc) do
+        doc = SolrDocument.new(FakeSolrDocument.new(access_level: 'open_access', remediated: true).doc)
+        {
+          document: doc,
+          value: doc[:remediated_final_submission_file_isim],
+          field: 'remediated_final_submission_file_isim'
+        }
+      end
+    context 'when current_user is the author' do
+      before do
+        user = User.new(email: remed_oa_doc[:document][:author_email_ssi], guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns links for both remediated and final submission files' do
+        expect(render_download_links(remed_oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{remed_oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{remed_oa_doc[:document][:remediated_file_name_ssim].first}</a></span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{remed_oa_doc[:document].final_submissions.key(remed_oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{remed_oa_doc[:document][:file_name_ssim].first}</a></span></span>"
+      end
+    end
+
+    context 'when current_user is not the author' do
+      before do
+        user = User.new(email: 'test123@psu.edu', guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns link for remediated submission file only' do
+        expect(render_download_links(remed_oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{remed_oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{remed_oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
+      end
+    end
   end
 end

@@ -21,6 +21,9 @@ namespace :solr do
       doc = FakeSolrDocument.new
       Blacklight.default_index.connection.add(doc.doc)
     end
+    puts "Adding remediated doc to the collection"
+    remed_doc = FakeSolrDocument.new(access_level: 'open_access', title: 'Remediated files',remediated: true)
+    Blacklight.default_index.connection.add(remed_doc.doc)
     Blacklight.default_index.connection.commit
   end
 

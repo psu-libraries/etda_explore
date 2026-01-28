@@ -55,14 +55,32 @@ module BlacklightDisplayHelper
   private
 
     def download_links(document)
-      links = document.final_submissions.map do |final_submission_id, name|
+      if document.remediated_final_submissions.any?
+        links = remediated_final_submissions_links(document)
+        links << final_submission_links(document) if this_user.email == document[:author_email_ssi]
+      else
+        links = final_submission_links(document)
+      end
+
+      links.join
+    end
+
+    def remediated_final_submissions_links(document)
+      document.remediated_final_submissions.map do |remediated_final_submission_id, name|
+        content_tag(:span,
+                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                            Rails.application.routes.url_helpers.remediated_final_submission_file_path(remediated_final_submission_id),
+                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
+      end
+    end
+
+    def final_submission_links(document)
+      document.final_submissions.map do |final_submission_id, name|
         content_tag(:span,
                     link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                             Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
                             data: { confirm: document.confirmation }, class: 'file-link form-control'))
       end
-
-      links.join
     end
 
     def facet_link(value, field)
