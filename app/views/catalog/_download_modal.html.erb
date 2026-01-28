@@ -1,4 +1,4 @@
-<div class="modal fade" id="downloadModal" tabindex="-1">
+<div class="modal fade" id="downloadModal-<%= final_submission_id %>" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
@@ -22,7 +22,7 @@
         <%= link_to "OK",
                     Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
                     class: "btn btn-primary",
-                    onclick: "$('#downloadModal').modal('hide')" %>
+                    onclick: "$('#downloadModal-#{final_submission_id}').modal('hide')" %>
         </div>
     </div>
     </div>
