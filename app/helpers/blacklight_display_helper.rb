@@ -76,10 +76,24 @@ module BlacklightDisplayHelper
 
     def final_submission_links(document)
       document.final_submissions.map do |final_submission_id, name|
-        content_tag(:span,
-                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                            Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
-                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
+        modal_trigger_options = if document.remediated_final_submissions.blank?
+                                  { toggle: 'modal',
+                                    target: "#downloadModal-#{final_submission_id}" }
+                                end
+
+        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id)
+        data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
+        link_content = content_tag(:span,
+                                   link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                                           file_path,
+                                           data: data_options,
+                                           class: 'file-link form-control'))
+
+        if document.remediated_final_submissions.blank?
+          link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
+        else
+          link_content
+        end
       end
     end
 
