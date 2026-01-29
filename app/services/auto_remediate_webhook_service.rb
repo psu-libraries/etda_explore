@@ -17,6 +17,7 @@ class AutoRemediateWebhookService
 
     def connection
       # Retries up to 5 times, doubling the wait each time (exponential backoff).
+      # Configured to only retry on POST requests with common transient errors.
       Faraday.new(url: url, headers: headers) do |f|
         f.request :retry,
                   methods: %i[post],
