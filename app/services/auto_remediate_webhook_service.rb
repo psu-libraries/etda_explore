@@ -19,6 +19,7 @@ class AutoRemediateWebhookService
       # Retries up to 5 times, doubling the wait each time (exponential backoff).
       Faraday.new(url: url, headers: headers) do |f|
         f.request :retry,
+                  methods: %i[post],
                   max: 5,
                   interval: 0.7,
                   backoff_factor: 2,
