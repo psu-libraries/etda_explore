@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class AutoRemediateWebhookService
+  TRANSIENT_ERRORS = [
+    Faraday::TimeoutError,
+    Faraday::ConnectionFailed,
+    Faraday::SSLError
+  ].freeze
+
   def initialize(final_submission_file_id)
     @final_submission_file_id = final_submission_file_id
   end
@@ -17,8 +23,19 @@ class AutoRemediateWebhookService
       headers: headers
     )
 
-    conn.post do |req|
-      req.body = payload.to_json
+    attempts = 0
+
+    begin
+      attempts += 1
+
+      conn.post do |req|
+        req.body = payload.to_json
+      end
+    rescue *TRANSIENT_ERRORS
+      raise if attempts >= 5
+
+      sleep(0.7 * (2**(attempts - 1))) # exponential backoff
+      retry
     end
   end
 
