@@ -58,5 +58,48 @@ RSpec.describe AutoRemediateWebhookService do
         }.to raise_error(KeyError)
       end
     end
+
+    context 'when network errors occur but succeeds before retry limit' do
+      before do
+        stub_request(:post, /#{full_url}/)
+          .with(headers: {
+                  'Content-Type' => 'application/json',
+                  'X-API-Key' => webhook_token
+                },
+                body: { final_submission_file_id: final_submission_file_id }.to_json)
+          .to_timeout.then
+          .to_raise(Faraday::ConnectionFailed.new('connection failed')).then
+          .to_raise(Faraday::ConnectionFailed.new('connection failed')).then
+          .to_return(status: 200, body: 'ok')
+      end
+
+      it 'retries the request and eventually succeeds' do
+        resp = described_class.new(final_submission_file_id).notify
+        expect(resp.status).to be(200)
+        expect(resp.body).to be('ok')
+      end
+    end
+
+    context 'when network errors occur but exceeds retry limit' do
+      before do
+        stub_request(:post, /#{full_url}/)
+          .with(headers: {
+                  'Content-Type' => 'application/json',
+                  'X-API-Key' => webhook_token
+                },
+                body: { final_submission_file_id: final_submission_file_id }.to_json)
+          .to_timeout.then
+          .to_raise(Faraday::ConnectionFailed.new('connection failed')).then
+          .to_timeout.then
+          .to_raise(Faraday::SSLError.new('SSL error')).then
+          .to_timeout
+      end
+
+      it 'raises the last encountered error after exhausting retries' do
+        expect {
+          described_class.new(final_submission_file_id).notify
+        }.to raise_error(Faraday::ConnectionFailed)
+      end
+    end
   end
 end
