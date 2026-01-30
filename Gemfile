@@ -5,8 +5,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.4.1'
 
-gem 'blacklight', '~> 7.38'
-gem 'blacklight_oai_provider'
+gem 'blacklight', '~> 8.12.3'
+gem 'blacklight_oai_provider', github: 'projectblacklight/blacklight_oai_provider', ref: '69795b0'
 gem 'bootsnap', require: false
 gem 'bootstrap', '~> 4.0'
 gem 'bot_challenge_page', '~> 0.3.0'
