@@ -10,7 +10,7 @@ RSpec.describe 'Catalog', type: :feature do
   }
   let(:program_label) { program_labels[current_partner.id] }
 
-  let(:doc) { FakeSolrDocument.new.doc }
+  let(:doc) { FakeSolrDocument.new(remediated_file_ids: []).doc }
 
   before do
     doc[:access_level_ss] = 'open_access'
