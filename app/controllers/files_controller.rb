@@ -22,7 +22,11 @@ class FilesController < ApplicationController
 
     def full_file_path(file_param_id, remediated)
       blacklight = Blacklight::Solr::Repository.new(CatalogController.blacklight_config)
-      response = remediated ? blacklight.search(q: "remediated_final_submission_file_isim:#{file_param_id}") : blacklight.search(q: "final_submission_file_isim:#{file_param_id}")
+      response = if remediated
+                   blacklight.search(q: "remediated_final_submission_file_isim:#{file_param_id}")
+                 else
+                   blacklight.search(q: "final_submission_file_isim:#{file_param_id}")
+                 end
       @doc = response.documents.first || nil
 
       @doc.file_by_id(file_param_id.to_i, @doc.access_level.current_access_level, remediated)

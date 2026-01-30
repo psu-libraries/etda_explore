@@ -28,6 +28,8 @@ Rails/ContentTag:
 
 Layout/LineLength:
   Exclude:
+    - 'app/helpers/blacklight_display_helper.rb'
+    - 'app/models/solr_document.rb'
     - 'config/initializers/devise.rb'
     - 'spec/helpers/blacklight_display_helper_spec.rb'
 

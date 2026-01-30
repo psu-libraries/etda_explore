@@ -126,28 +126,26 @@ RSpec.describe BlacklightDisplayHelper do
       end
     end
 
-    context 'when document has remediated final submission' do
-      context 'when current_user is the author' do
-        before do
-          user = User.new(email: oa_doc[:document][:author_email_ssi], guest: false)
-          allow_any_instance_of(described_class).to receive(:this_user).and_return user
-        end
-
-        it 'returns links for both remediated and final submission files' do
-          expect(render_download_links(oa_doc)).to include("<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span>")
-          expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
-        end
+    context 'when current_user is the author' do
+      before do
+        user = User.new(email: oa_doc[:document][:author_email_ssi], guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      context 'when current_user is not the author' do
-        before do
-          user = User.new(email: 'test123@psu.edu', guest: false)
-          allow_any_instance_of(described_class).to receive(:this_user).and_return user
-        end
+      it 'returns links for both remediated and final submission files' do
+        expect(render_download_links(oa_doc)).to include("<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span>")
+        expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
+      end
+    end
 
-        it 'returns link for remediated submission file only' do
-          expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
-        end
+    context 'when current_user is not the author' do
+      before do
+        user = User.new(email: 'test123@psu.edu', guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns link for remediated submission file only' do
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
       end
     end
   end
