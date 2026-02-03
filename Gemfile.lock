@@ -112,9 +112,10 @@ GEM
       zeitwerk
     bootsnap (1.18.4)
       msgpack (~> 1.2)
-    bootstrap (4.6.2.1)
+    bootstrap (5.1.3)
       autoprefixer-rails (>= 9.1.0)
-      popper_js (>= 1.16.1, < 2)
+      popper_js (>= 2.9.3, < 3)
+      sassc-rails (>= 2.0.0)
     bot_challenge_page (0.3.0)
       http (~> 5.2)
       rack-attack (~> 6.7)
@@ -289,7 +290,7 @@ GEM
     parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
-    popper_js (1.16.1)
+    popper_js (2.11.8)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -533,7 +534,7 @@ DEPENDENCIES
   blacklight (~> 8.12.3)
   blacklight_oai_provider!
   bootsnap
-  bootstrap (~> 4.0)
+  bootstrap (~> 5.1.3)
   bot_challenge_page (~> 0.3.0)
   byebug
   cancancan
