@@ -13,7 +13,8 @@ class FilesController < ApplicationController
       render plain: 'An Error has occurred', status: :internal_server_error
     else
       authorize! :read, @doc
-      AutoRemediateWebhookJob.perform_later(params[:id])
+      # We can remove the feature flag when we are confident in the new feature's performance
+      AutoRemediateWebhookJob.perform_later(params[:id]) if ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
       send_file full_file_path, disposition: :inline
     end
   end
