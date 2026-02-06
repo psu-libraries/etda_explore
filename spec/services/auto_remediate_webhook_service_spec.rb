@@ -11,8 +11,8 @@ RSpec.describe AutoRemediateWebhookService do
 
   before do
     ENV['WORKFLOW_HOST'] = 'workflow.example.test'
-    ENV['AUTO_REMEDIATE_WEBHOOK_PATH'] = '/webhooks/auto_remediate'
-    ENV['AUTO_REMEDIATE_WEBHOOK_TOKEN'] = webhook_token
+    ENV["AUTO_REMEDIATE_WEBHOOK_PATH_#{current_partner.slug.upcase}"] = '/webhooks/auto_remediate'
+    ENV["AUTO_REMEDIATE_WEBHOOK_TOKEN_#{current_partner.slug.upcase}"] = webhook_token
 
     stub_request(:post, /#{full_url}/)
       .with(headers: {
@@ -25,8 +25,8 @@ RSpec.describe AutoRemediateWebhookService do
 
   after do
     ENV.delete('WORKFLOW_HOST')
-    ENV.delete('AUTO_REMEDIATE_WEBHOOK_PATH')
-    ENV.delete('AUTO_REMEDIATE_WEBHOOK_TOKEN')
+    ENV.delete("AUTO_REMEDIATE_WEBHOOK_PATH_#{current_partner.slug.upcase}")
+    ENV.delete("AUTO_REMEDIATE_WEBHOOK_TOKEN_#{current_partner.slug.upcase}")
   end
 
   describe '#notify' do
@@ -42,7 +42,7 @@ RSpec.describe AutoRemediateWebhookService do
 
     context 'when webhook token is missing' do
       it 'raises KeyError' do
-        ENV.delete('AUTO_REMEDIATE_WEBHOOK_TOKEN')
+        ENV.delete("AUTO_REMEDIATE_WEBHOOK_TOKEN_#{current_partner.slug.upcase}")
 
         expect {
           described_class.new(final_submission_file_id).notify
@@ -52,7 +52,7 @@ RSpec.describe AutoRemediateWebhookService do
 
     context 'when webhook path is missing' do
       it 'raises KeyError' do
-        ENV.delete('AUTO_REMEDIATE_WEBHOOK_PATH')
+        ENV.delete("AUTO_REMEDIATE_WEBHOOK_PATH_#{current_partner.slug.upcase}")
         expect {
           described_class.new(final_submission_file_id).notify
         }.to raise_error(KeyError)
