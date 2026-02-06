@@ -48,7 +48,7 @@ class AutoRemediateWebhookService
     end
 
     def auto_remediate_webhook_path
-      ENV.fetch("AUTO_REMEDIATE_WEBHOOK_PATH_#{current_partner.slug.upcase}")
+      ENV.fetch('AUTO_REMEDIATE_WEBHOOK_PATH')
     end
 
     def base_url
