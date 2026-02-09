@@ -13,7 +13,7 @@ class FilesController < ApplicationController
       if ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && params[:remediated] != true
         AutoRemediateWebhookJob.perform_later(params[:id])
       end
-      send_file full_file_path, disposition: :inline
+      send_file file_path, disposition: :inline
     end
   end
 
