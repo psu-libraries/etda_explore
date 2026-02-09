@@ -10,7 +10,7 @@ RSpec.describe 'Catalog', type: :feature do
   }
   let(:program_label) { program_labels[current_partner.id] }
 
-  let(:doc) { FakeSolrDocument.new.doc }
+  let(:doc) { FakeSolrDocument.new(remediated_file_ids: []).doc }
 
   before do
     doc[:access_level_ss] = 'open_access'
@@ -69,6 +69,42 @@ RSpec.describe 'Catalog', type: :feature do
       expect(page).to have_blacklight_field('keyword_ssim').with(doc[:keyword_ssim].first)
       expect(page).to have_link("Download #{doc[:file_name_ssim].first}")
       expect(page).to have_link('Request paper in alternate format')
+    end
+  end
+
+  context 'when the document has been remediated' do
+    let(:remediated_doc) { FakeSolrDocument.new(access_level: 'open_access', remediated_file_ids: [11]).doc }
+
+    before do
+      sign_in user
+      remediated_doc[:access_level_ss] = 'open_access'
+      Blacklight.default_index.connection.add(remediated_doc)
+      Blacklight.default_index.connection.commit
+      visit '/catalog'
+      fill_in('q', with: remediated_doc[:title_ssi])
+      click_link_or_button('Explore')
+    end
+
+    context 'when the user is the author' do
+      let(:user) { User.new(email: remediated_doc[:author_email_ssi], guest: false) }
+
+      it 'displays remediated and final submission download links for the author' do
+        allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
+        click_link_or_button(remediated_doc[:title_ssi])
+        expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
+        expect(page).to have_link("Download #{remediated_doc[:file_name_ssim].first}")
+      end
+    end
+
+    context 'when the user is not the author' do
+      let(:user) { User.new(email: 'test1234@psu.edu', guest: false) }
+
+      it 'displays only remediated download link for non-author users' do
+        allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
+        click_link_or_button(remediated_doc[:title_ssi])
+        expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
+        expect(page).to have_no_link("Download #{remediated_doc[:file_name_ssim].first}")
+      end
     end
   end
 
