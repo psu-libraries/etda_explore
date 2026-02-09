@@ -9,6 +9,10 @@ RSpec.describe FilesController, type: :controller do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
   end
 
+  after do
+    ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
+  end
+
   context 'when open access' do
     let(:doc) { FakeSolrDocument.new }
 
@@ -28,9 +32,34 @@ RSpec.describe FilesController, type: :controller do
     it 'returns favorably' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:ok)
-      expect(AutoRemediateWebhookJob)
-        .to have_received(:perform_later)
-        .with(doc.doc[:final_submission_file_isim].first)
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+      end
+
+      it 'triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+        expect(AutoRemediateWebhookJob)
+          .to have_received(:perform_later)
+          .with(doc.doc[:final_submission_file_isim].first)
+      end
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+      end
+
+      it 'does not triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(doc.doc[:final_submission_file_isim].first)
+      end
     end
   end
 
@@ -72,9 +101,34 @@ RSpec.describe FilesController, type: :controller do
     it 'returns a 200 message' do
       get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
       expect(response).to have_http_status(:ok)
-      expect(AutoRemediateWebhookJob)
-        .to have_received(:perform_later)
-        .with(doc.doc[:final_submission_file_isim].first)
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+      end
+
+      it 'triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+        expect(AutoRemediateWebhookJob)
+          .to have_received(:perform_later)
+          .with(doc.doc[:final_submission_file_isim].first)
+      end
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+      end
+
+      it 'does not triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(doc.doc[:final_submission_file_isim].first)
+      end
     end
   end
 
