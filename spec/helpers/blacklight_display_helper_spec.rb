@@ -83,8 +83,8 @@ RSpec.describe BlacklightDisplayHelper do
       end
 
       it 'returns a link for open access and restricted to institution submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
-        expect(render_download_links(rti_doc)).to eq "<span><span><a data-confirm=\"#{I18n.t('registered.confirmation')}\" class=\"file-link form-control\" href=\"/files/final_submissions/#{rti_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{rti_doc[:document][:file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(rti_doc)).to eq "<span><span><a data-confirm=\"#{I18n.t('registered.confirmation')}\" class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{rti_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{rti_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
 
@@ -109,7 +109,7 @@ RSpec.describe BlacklightDisplayHelper do
       end
 
       it 'only returns a link for open access submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
         expect(render_download_links(rti_doc)).to eq '<span><a href="/login">Login to Download</a></span>'
         expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
       end
@@ -123,6 +123,29 @@ RSpec.describe BlacklightDisplayHelper do
         expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
         # Not logged in so no modal for RTI
         expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-toggle="modal"'
+      end
+    end
+
+    context 'when current_user is the author' do
+      before do
+        user = User.new(email: oa_doc[:document][:author_email_ssi], guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns links for both remediated and final submission files' do
+        expect(render_download_links(oa_doc)).to include("<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span>")
+        expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
+      end
+    end
+
+    context 'when current_user is not the author' do
+      before do
+        user = User.new(email: 'test123@psu.edu', guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns link for remediated submission file only' do
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
       end
     end
   end

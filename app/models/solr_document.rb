@@ -46,9 +46,12 @@ class SolrDocument
     EtdaUtilities::AccessLevel.new(first(:access_level_ss))
   end
 
-  def file_by_id(file_param_id, file_access_level)
+  def file_by_id(file_param_id, file_access_level, remediated)
     file_path = EtdaUtilities::EtdaFilePaths.new
-    file_path.explore_download_file_path(file_param_id, file_access_level, final_submissions[file_param_id.to_i])
+    file_path.explore_download_file_path(file_param_id,
+                                         file_access_level,
+                                         remediated ? remediated_final_submissions[file_param_id.to_i] : final_submissions[file_param_id.to_i],
+                                         remediated: remediated)
   end
 
   def final_submissions

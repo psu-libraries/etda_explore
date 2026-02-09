@@ -20,7 +20,7 @@ RSpec.describe 'Tools box', type: :feature do
   end
 
   context 'when submissions is restricted to institution' do
-    let(:doc) { FakeSolrDocument.new(access_level: 'restricted_to_institution').doc }
+    let(:doc) { FakeSolrDocument.new(access_level: 'restricted_to_institution', remediated_file_ids: []).doc }
 
     context 'when user is logged in' do
       it 'shows download link and request alternate format link in tools' do
