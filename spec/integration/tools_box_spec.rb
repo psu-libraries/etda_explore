@@ -9,7 +9,7 @@ RSpec.describe 'Tools box', type: :feature do
   end
 
   context 'when submissions is open access' do
-    let(:doc) { FakeSolrDocument.new(access_level: 'open_access').doc }
+    let(:doc) { FakeSolrDocument.new(access_level: 'open_access', remediated_file_ids: []).doc }
 
     it 'shows download link and request alternate format link in tools' do
       visit "/catalog/#{doc[:id]}"
