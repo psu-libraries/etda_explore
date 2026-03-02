@@ -208,6 +208,7 @@ jobs:
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
     parameters:
       clusters:
         type: string
