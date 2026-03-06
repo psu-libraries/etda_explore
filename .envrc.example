@@ -25,3 +25,5 @@ export SOLR_CONFIG_DIR=solr/conf
 export SOLR_COLLECTION=blacklight-core
 export SOLR_NUM_SHARDS=1
 export SOLR_PORT=8983
+
+export CLOUDFLARE_CHALLENGE_ENABLED=true
