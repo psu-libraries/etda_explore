@@ -8,8 +8,10 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  before_action do |controller|
-    BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(controller, immediate: true)
+  before_action :enforce_bot_challenge, only: :index
+
+  def index
+    super
   end
 
   configure_blacklight do |config|
@@ -233,4 +235,10 @@ class CatalogController < ApplicationController
       }
     }
   end
+
+  private
+
+    def enforce_bot_challenge
+      BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
+    end
 end
