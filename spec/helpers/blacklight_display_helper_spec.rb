@@ -180,27 +180,9 @@ RSpec.describe BlacklightDisplayHelper do
         allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
-        before do
-          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
-        end
-
-        it 'returns links for both remediated and final submission files' do
-          expect(render_download_links(oa_doc)).to include("<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span>")
-          expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
-        end
-      end
-
-      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is false' do
-        before do
-          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
-        end
-
-        it 'only returns links for final submission files' do
-          expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
-        end
+      it 'returns links for both remediated and final submission files' do
+        expect(render_download_links(oa_doc)).to include("<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span>")
+        expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
       end
     end
 
@@ -210,26 +192,8 @@ RSpec.describe BlacklightDisplayHelper do
         allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
-        before do
-          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
-        end
-
-        it 'returns link for remediated submission file only' do
-          expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
-        end
-      end
-
-      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is false' do
-        before do
-          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
-        end
-
-        it 'returns links for final submission files only' do
-          expect(render_download_links(oa_doc)).to include("<span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:document].final_submissions.key(oa_doc[:document][:file_name_ssim].first)}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>")
-        end
+      it 'returns link for remediated submission file only' do
+        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/remediated_final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
       end
     end
   end

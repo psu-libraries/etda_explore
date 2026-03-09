@@ -55,7 +55,7 @@ module BlacklightDisplayHelper
   private
 
     def download_links(document)
-      if document.remediated_final_submissions.any? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
+      if document.remediated_final_submissions.any?
         links = remediated_final_submissions_links(document)
         links << final_submission_links(document) if this_user.email == document[:author_email_ssi]
       else
@@ -90,7 +90,7 @@ module BlacklightDisplayHelper
                                            data: data_options,
                                            class: 'file-link form-control'))
 
-        if document.remediated_final_submissions.blank? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
+        if should_show_modal
           link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
         else
           link_content

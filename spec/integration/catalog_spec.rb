@@ -20,10 +20,6 @@ RSpec.describe 'Catalog', type: :feature do
     visit '/catalog'
   end
 
-  after do
-    ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
-  end
-
   context 'when performs basic searches' do
     before do
       fill_in('q', with: doc[:title_ssi])
@@ -89,61 +85,25 @@ RSpec.describe 'Catalog', type: :feature do
       click_link_or_button('Explore')
     end
 
-    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
-      before do
-        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
-      end
+    context 'when the user is the author' do
+      let(:user) { User.new(email: remediated_doc[:author_email_ssi], guest: false) }
 
-      context 'when the user is the author' do
-        let(:user) { User.new(email: remediated_doc[:author_email_ssi], guest: false) }
-
-        it 'displays remediated and final submission download links for the author' do
-          allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
-          click_link_or_button(remediated_doc[:title_ssi])
-          expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
-          expect(page).to have_link("Download #{remediated_doc[:file_name_ssim].first}")
-        end
-      end
-
-      context 'when the user is not the author' do
-        let(:user) { User.new(email: 'test1234@psu.edu', guest: false) }
-
-        it 'displays only remediated download link for non-author users' do
-          allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
-          click_link_or_button(remediated_doc[:title_ssi])
-          expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
-          expect(page).to have_no_link("Download #{remediated_doc[:file_name_ssim].first}")
-        end
+      it 'displays remediated and final submission download links for the author' do
+        allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
+        click_link_or_button(remediated_doc[:title_ssi])
+        expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
+        expect(page).to have_link("Download #{remediated_doc[:file_name_ssim].first}")
       end
     end
 
-    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is false' do
-      before do
-        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
-        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
-      end
+    context 'when the user is not the author' do
+      let(:user) { User.new(email: 'test1234@psu.edu', guest: false) }
 
-      context 'when the user is the author' do
-        let(:user) { User.new(email: remediated_doc[:author_email_ssi], guest: false) }
-
-        it 'displays final submission download links for the author' do
-          allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
-          click_link_or_button(remediated_doc[:title_ssi])
-          expect(page).to have_link("Download #{remediated_doc[:file_name_ssim].first}")
-          expect(page).to have_no_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
-        end
-      end
-
-      context 'when the user is not the author' do
-        let(:user) { User.new(email: 'test1234@psu.edu', guest: false) }
-
-        it 'displays final submission download link for non-author users' do
-          allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
-          click_link_or_button(remediated_doc[:title_ssi])
-          expect(page).to have_link("Download #{remediated_doc[:file_name_ssim].first}")
-          expect(page).to have_no_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
-        end
+      it 'displays only remediated download link for non-author users' do
+        allow_any_instance_of(BlacklightDisplayHelper).to receive(:this_user).and_return user
+        click_link_or_button(remediated_doc[:title_ssi])
+        expect(page).to have_link("Download #{remediated_doc[:remediated_file_name_ssim].first}")
+        expect(page).to have_no_link("Download #{remediated_doc[:file_name_ssim].first}")
       end
     end
   end
