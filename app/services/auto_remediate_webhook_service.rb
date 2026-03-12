@@ -44,7 +44,7 @@ class AutoRemediateWebhookService
     attr_reader :final_submission_file_id
 
     def auto_remediate_webhook_token
-      ENV.fetch("AUTO_REMEDIATE_WEBHOOK_TOKEN_#{current_partner.slug.upcase}")
+      ENV.fetch("AUTO_REMEDIATE_WEBHOOK_TOKEN_#{current_partner.id.upcase}")
     end
 
     def auto_remediate_webhook_path
