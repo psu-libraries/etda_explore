@@ -32,10 +32,10 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"    
+    default: "prod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
@@ -63,7 +63,7 @@ commands:
               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
-            echo "export TAG=$TAG" >> "$BASH_ENV"    
+            echo "export TAG=$TAG" >> "$BASH_ENV"
 
 executors:
 
@@ -114,14 +114,14 @@ jobs:
               export TARGET_CLUSTER="$cluster"
               echo "Processing cluster: $TARGET_CLUSTER"
               /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
-            done   
+            done
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/etda-explore"     # Use "library/etda-explore" as the repository name in the registry
     executor:
       name: ci-utils
-      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
@@ -175,7 +175,7 @@ jobs:
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
-          tag: $TAG  
+          tag: $TAG
 
   delete-deployment:
     parameters:
@@ -230,7 +230,7 @@ jobs:
                 ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
-            done            
+            done
 
   test-application:
     docker:
@@ -304,7 +304,7 @@ workflows:
     unless:
       equal: ["delete", << pipeline.parameters.GHA_Event >>]
     jobs:
-      - release-image: 
+      - release-image:
           name: release-image
           clusters: << pipeline.parameters.CLUSTERS_PROD >>
           context:
@@ -332,7 +332,7 @@ workflows:
           context:
             - org-global
           filters:
-            branches:              
+            branches:
               only:
                 - main
                 - /preview\/.*/
@@ -350,4 +350,4 @@ workflows:
                 - /preview\/.*/
           requires:
             - test-application
-            - push-image            
+            - push-image
