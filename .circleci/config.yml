@@ -234,7 +234,7 @@ jobs:
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.9-browsers
       - image: mysql:8
         environment:
           MYSQL_ROOT_PASSWORD: etda
