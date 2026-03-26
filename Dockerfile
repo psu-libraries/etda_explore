@@ -13,8 +13,10 @@ COPY Gemfile* /app/
 RUN chown -R app /app
 
 USER app
-RUN gem install bundler:2.3.5
-RUN bundle install --path vendor/bundle
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
+RUN bundle config set path 'vendor/bundle'
+RUN bundle install
 
 COPY --chown=app . /app
 
