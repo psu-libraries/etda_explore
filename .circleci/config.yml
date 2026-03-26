@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@3.0.1
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4.0
 
 parameters:
 
@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.6.1"
+    default: "v4.6.2"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
