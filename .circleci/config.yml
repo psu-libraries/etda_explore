@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@3.0.1
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4.0
 
 parameters:
 
@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.6.1"
+    default: "v4.6.2"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
@@ -32,10 +32,10 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"    
+    default: "prod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
@@ -63,7 +63,7 @@ commands:
               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
-            echo "export TAG=$TAG" >> "$BASH_ENV"    
+            echo "export TAG=$TAG" >> "$BASH_ENV"
 
 executors:
 
@@ -114,14 +114,14 @@ jobs:
               export TARGET_CLUSTER="$cluster"
               echo "Processing cluster: $TARGET_CLUSTER"
               /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
-            done   
+            done
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
       REGISTRY_REPO: "library/etda-explore"     # Use "library/etda-explore" as the repository name in the registry
     executor:
       name: ci-utils
-      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
@@ -175,7 +175,7 @@ jobs:
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
-          tag: $TAG  
+          tag: $TAG
 
   delete-deployment:
     parameters:
@@ -230,11 +230,11 @@ jobs:
                 ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
-            done            
+            done
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.9-browsers
       - image: mysql:8
         environment:
           MYSQL_ROOT_PASSWORD: etda
@@ -267,7 +267,9 @@ jobs:
         name: "Bundle"
         command: |
           gem install bundler
-          bundle check --path vendor/bundle || bundle install --deployment
+          bundle config set path 'vendor/bundle'
+          bundle config set deployment 'true'
+          bundle check || bundle install
     - save_cache:
         paths:
           - vendor/bundle
@@ -304,7 +306,7 @@ workflows:
     unless:
       equal: ["delete", << pipeline.parameters.GHA_Event >>]
     jobs:
-      - release-image: 
+      - release-image:
           name: release-image
           clusters: << pipeline.parameters.CLUSTERS_PROD >>
           context:
@@ -332,7 +334,7 @@ workflows:
           context:
             - org-global
           filters:
-            branches:              
+            branches:
               only:
                 - main
                 - /preview\/.*/
@@ -350,4 +352,4 @@ workflows:
                 - /preview\/.*/
           requires:
             - test-application
-            - push-image            
+            - push-image
