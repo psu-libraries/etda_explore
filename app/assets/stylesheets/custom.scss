@@ -18,6 +18,7 @@ $theme-colors: (
     margin-left: 30px;
     padding-left: 1rem;
     padding-right: 0;
+    text-decoration: none;
 
     &:hover {
       text-decoration: none;
@@ -45,3 +46,25 @@ $theme-colors: (
     text-decoration: none;
   }
 }
+
+.container {
+  max-width: 1140px;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+.btn {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+
