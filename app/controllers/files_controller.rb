@@ -3,6 +3,8 @@
 class FilesController < ApplicationController
   include Blacklight::Document::SchemaOrg
 
+  before_action :enforce_bot_challenge, only: :solr_download_final_submission
+
   def solr_download_final_submission
     file_path = full_file_path(params[:id], params[:remediated])
     if file_path.nil?
@@ -33,5 +35,9 @@ class FilesController < ApplicationController
       @doc = response.documents.first || nil
 
       @doc.file_by_id(file_param_id.to_i, @doc.access_level.current_access_level, remediated)
+    end
+
+    def enforce_bot_challenge
+      BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 end
