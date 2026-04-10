@@ -6,14 +6,12 @@ class FilesController < ApplicationController
   before_action :enforce_bot_challenge, only: :solr_download_final_submission
 
   def solr_download_final_submission
-    # return if the token is not valid
     token = files_params[:download_token]
     file_id = files_params[:id]
     remediated = ActiveModel::Type::Boolean.new.cast(files_params[:remediated])
 
     should_remediate =
       ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && !remediated && valid_download_token?(token, file_id)
-
     file_path = full_file_path(file_id, remediated)
     if file_path.nil?
       render plain: 'An Error has occurred', status: :internal_server_error

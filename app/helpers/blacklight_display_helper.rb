@@ -66,23 +66,27 @@ module BlacklightDisplayHelper
     end
 
     def remediated_final_submissions_links(document)
+      query_params = { remediated: 'true' }
       document.remediated_final_submissions.map do |remediated_final_submission_id, name|
         content_tag(:span,
                     link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                            Rails.application.routes.url_helpers.remediated_final_submission_file_path(remediated_final_submission_id),
+                            Rails.application.routes.url_helpers.final_submission_file_path(
+                              remediated_final_submission_id, **query_params
+                            ),
                             data: { confirm: document.confirmation }, class: 'file-link form-control'))
       end
     end
 
     def final_submission_links(document)
       document.final_submissions.map do |final_submission_id, name|
+        query_params = { remediated: 'false', download_token: download_token(final_submission_id) }
         should_show_modal = document.remediated_final_submissions.blank? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
         modal_trigger_options = if should_show_modal
                                   { toggle: 'modal',
                                     target: "#downloadModal-#{final_submission_id}" }
                                 end
 
-        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id)
+        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id, **query_params)
         data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
         link_content = content_tag(:span,
                                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
@@ -104,5 +108,18 @@ module BlacklightDisplayHelper
 
     def this_user
       @this_user ||= current_or_guest_user
+    end
+
+    def download_token(final_submission_id)
+      download_token_verifier.generate(
+        final_submission_id,
+        # In seconds, default to 8 minutes
+        expires_in: ENV.fetch('DOWNLOAD_TOKEN_TTL', 480).to_i,
+        purpose: :download_request
+      )
+    end
+
+    def download_token_verifier
+      Rails.application.message_verifier(:download_request_token)
     end
 end
