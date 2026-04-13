@@ -7,6 +7,7 @@ export AUTO_REMEDIATE_WEBHOOK_PATH="/webhooks/auto_remediate"
 export AUTO_REMEDIATE_WEBHOOK_TOKEN_GRADUATE=abc123
 export AUTO_REMEDIATE_WEBHOOK_TOKEN_HONORS=def456
 export AUTO_REMEDIATE_WEBHOOK_TOKEN_MILSCH=ghi789
+export REMEDIATE_TOKEN_TTL
 
 # MySQL Parameters
 # We should use root so we can create the test database

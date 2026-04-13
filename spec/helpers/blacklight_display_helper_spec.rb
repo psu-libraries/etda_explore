@@ -86,9 +86,9 @@ RSpec.describe BlacklightDisplayHelper do
         allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      it 'includes download_token for non-remediated files' do
-        expect(render_download_links(oa_doc_no_remediated)).to include 'download_token='
-        expect(render_download_links(oa_doc)).not_to include 'download_token='
+      it 'includes remediate_token for non-remediated files' do
+        expect(render_download_links(oa_doc_no_remediated)).to include 'remediate_token='
+        expect(render_download_links(oa_doc)).not_to include 'remediate_token='
       end
 
       it 'includes "remediated" as a query parameter' do

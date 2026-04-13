@@ -6,12 +6,12 @@ class FilesController < ApplicationController
   before_action :enforce_bot_challenge, only: :solr_download_final_submission
 
   def solr_download_final_submission
-    token = files_params[:download_token]
+    token = files_params[:remediate_token]
     file_id = files_params[:id]
     remediated = ActiveModel::Type::Boolean.new.cast(files_params[:remediated])
 
     should_remediate =
-      ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && !remediated && valid_download_token?(token, file_id)
+      ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && valid_remediate_token?(token, file_id)
     file_path = full_file_path(file_id, remediated)
     if file_path.nil?
       render plain: 'An Error has occurred', status: :internal_server_error
@@ -28,7 +28,7 @@ class FilesController < ApplicationController
   private
 
     def files_params
-      params.permit(:id, :remediated, :download_token)
+      params.permit(:id, :remediated, :remediate_token)
     end
 
     def current_ability
@@ -51,16 +51,16 @@ class FilesController < ApplicationController
       BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 
-    def valid_download_token?(token, file_id)
+    def valid_remediate_token?(token, file_id)
       return false if token.nil? || token.blank?
 
-      token_file_id = download_token_verifier.verify(token, purpose: :download_request)
+      token_file_id = remediate_token_verifier.verify(token, purpose: :remediate_request)
       token_file_id.to_i == file_id.to_i
     rescue ActiveSupport::MessageVerifier::InvalidSignature
       false
     end
 
-    def download_token_verifier
-      Rails.application.message_verifier(:download_request_token)
+    def remediate_token_verifier
+      Rails.application.message_verifier(:remediate_request_token)
     end
 end

@@ -79,7 +79,7 @@ module BlacklightDisplayHelper
 
     def final_submission_links(document)
       document.final_submissions.map do |final_submission_id, name|
-        query_params = { remediated: 'false', download_token: download_token(final_submission_id) }
+        query_params = { remediated: 'false', remediate_token: remediate_token(final_submission_id) }
         should_show_modal = document.remediated_final_submissions.blank? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
         modal_trigger_options = if should_show_modal
                                   { toggle: 'modal',
@@ -110,16 +110,16 @@ module BlacklightDisplayHelper
       @this_user ||= current_or_guest_user
     end
 
-    def download_token(final_submission_id)
-      download_token_verifier.generate(
+    def remediate_token(final_submission_id)
+      remediate_token_verifier.generate(
         final_submission_id,
         # In seconds, default to 8 minutes
-        expires_in: ENV.fetch('DOWNLOAD_TOKEN_TTL', 480).to_i,
-        purpose: :download_request
+        expires_in: ENV.fetch('REMEDIATE_TOKEN_TTL', 480).to_i,
+        purpose: :remediate_request
       )
     end
 
-    def download_token_verifier
-      Rails.application.message_verifier(:download_request_token)
+    def remediate_token_verifier
+      Rails.application.message_verifier(:remediate_request_token)
     end
 end

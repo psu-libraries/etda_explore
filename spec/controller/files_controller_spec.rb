@@ -5,11 +5,11 @@ require 'rails_helper'
 require 'fileutils'
 
 RSpec.describe FilesController, type: :controller do
-  let(:download_token_verifier) { Rails.application.message_verifier(:download_request_token) }
+  let(:remediate_token_verifier) { Rails.application.message_verifier(:remediate_request_token) }
   let(:doc) { FakeSolrDocument.new }
   let(:file_id) { doc.doc[:final_submission_file_isim].first }
-  let(:download_token) do
-    download_token_verifier.generate(file_id, expires_in: 60, purpose: :download_request)
+  let(:remediate_token) do
+    remediate_token_verifier.generate(file_id, expires_in: 60, purpose: :remediate_request)
   end
 
   before do
@@ -35,7 +35,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns favorably' do
-      get :solr_download_final_submission, params: { id: file_id, download_token: }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
     end
 
@@ -46,13 +46,13 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'triggers the AutoRemediateWebhookJob' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
         expect(AutoRemediateWebhookJob)
           .to have_received(:perform_later)
           .with(file_id)
       end
 
-      it 'does not trigger the AutoRemediationJob if no download_token is provided' do
+      it 'does not trigger the AutoRemediationJob if no remediate_token is provided' do
         get :solr_download_final_submission, params: { id: file_id }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
@@ -60,7 +60,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'does not trigger the AutoRemediationJob if token does not match' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: 'bogus-token' }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: 'bogus-token' }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
           .with(file_id)
@@ -74,7 +74,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'does not triggers the AutoRemediateWebhookJob' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
           .with(file_id)
@@ -93,7 +93,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'raises an error' do
-      get :solr_download_final_submission, params: { id: file_id, download_token: }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:unauthorized)
       expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
@@ -114,7 +114,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns a 200 message' do
-      get :solr_download_final_submission, params: { id: file_id, download_token: }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
     end
 
@@ -125,13 +125,13 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'triggers the AutoRemediateWebhookJob' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
         expect(AutoRemediateWebhookJob)
           .to have_received(:perform_later)
           .with(file_id)
       end
 
-      it 'does not trigger the AutoRemediationJob if no download_token is provided' do
+      it 'does not trigger the AutoRemediationJob if no remediate_token is provided' do
         get :solr_download_final_submission, params: { id: file_id }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
@@ -139,7 +139,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'does not trigger the AutoRemediationJob if token does not match' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: 'bogus-token' }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: 'bogus-token' }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
           .with(file_id)
@@ -153,7 +153,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'does not triggers the AutoRemediateWebhookJob' do
-        get :solr_download_final_submission, params: { id: file_id, download_token: }
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
         expect(AutoRemediateWebhookJob)
           .not_to have_received(:perform_later)
           .with(file_id)
@@ -176,7 +176,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'throws a server error' do
-      get :solr_download_final_submission, params: { id: file_id, download_token: }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:internal_server_error)
       expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
