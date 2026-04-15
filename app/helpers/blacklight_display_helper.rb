@@ -95,7 +95,7 @@ module BlacklightDisplayHelper
                                            class: 'file-link form-control'))
 
         if should_show_modal
-          link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id: final_submission_id })
+          link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id:, file_path: })
         else
           link_content
         end

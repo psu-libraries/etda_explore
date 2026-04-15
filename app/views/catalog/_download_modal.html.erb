@@ -17,7 +17,7 @@
         </div>
         <div class="modal-footer">
         <%= link_to "OK",
-                    Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id),
+                    file_path,
                     class: "btn btn-primary",
                     onclick: "$('#downloadModal-#{final_submission_id}').modal('hide')" %>
         </div>
