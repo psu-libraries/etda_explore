@@ -33,9 +33,11 @@ Rails.application.config.to_prepare do
   # How long will a challenge success exempt a session from further challenges?
   BotChallengePage::BotChallengePageController.bot_challenge_config.session_passed_good_for = 24.hours
   BotChallengePage::BotChallengePageController.bot_challenge_config.allow_exempt = ->(controller, _config) {
-    # Does not challenge the user if they are not making a search (EG "About Page")
+    # Does not challenge logged-in, non-guest users
+    return true if controller.current_user.present? && !controller.current_user.guest?
+
     # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-    controller.request.query_parameters.blank? || !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
+    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
   }
 
   # Exempt some requests from bot challenge protection
