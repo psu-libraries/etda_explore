@@ -119,7 +119,7 @@ RSpec.describe BlacklightDisplayHelper do
           expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
           expect(render_download_links(oa_doc_no_remediated)).to include /Accessible Version in Progress|We're generating an accessible version/
           expect(render_download_links(oa_doc_no_remediated)).to have_link('OK',
-                                                                           href: "/files/final_submissions/#{oa_doc_no_remediated[:value].first}")
+                                                                           href: %r{/files/final_submissions/#{oa_doc_no_remediated[:value].first}\?remediate_token=.+})
           expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-toggle="modal"').twice
         end
       end
