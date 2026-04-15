@@ -241,6 +241,7 @@ class CatalogController < ApplicationController
     def enforce_bot_challenge
       # Going to the front page also goes to index, and we only want this on searches
       return if request.query_parameters.blank?
+
       BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 end
