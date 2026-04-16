@@ -11,13 +11,17 @@ RSpec.describe FilesController, type: :controller do
   let(:remediate_token) do
     remediate_token_verifier.generate(file_id, expires_in: 60, purpose: :remediate_request)
   end
+  let(:allowed_ips) { '192.168.1.1' }
 
   before do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
+    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_enforce_filter)
+    ENV['BOT_CHALLENGE_IP_WHITELIST'] = allowed_ips
   end
 
   after do
     ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
+    ENV['BOT_CHALLENGE_IP_WHITELIST'] = nil
   end
 
   context 'when open access' do
@@ -37,6 +41,22 @@ RSpec.describe FilesController, type: :controller do
     it 'returns favorably' do
       get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'runs the bot_challenge_enforce filter' do
+      get :solr_download_final_submission, params: { id: file_id }
+      expect(BotChallengePage::BotChallengePageController).to have_received(:bot_challenge_enforce_filter)
+    end
+
+    context 'when the request comes from an allowed IP' do
+      before do
+        @request.remote_addr = allowed_ips
+      end
+
+      it 'bypasses the bot_challenge_enforce filter' do
+        get :solr_download_final_submission, params: { id: file_id }
+        expect(BotChallengePage::BotChallengePageController).not_to have_received(:bot_challenge_enforce_filter)
+      end
     end
 
     context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
