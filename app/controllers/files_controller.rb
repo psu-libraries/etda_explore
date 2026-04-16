@@ -52,9 +52,10 @@ class FilesController < ApplicationController
       allowed_ips = ENV.fetch('BOT_CHALLENGE_IP_WHITELIST', '')
         .split(',')
         .filter_map { |ip| IPAddr.new(ip.strip) unless ip.strip.empty? }
-
+      Rails.logger.info("Download request from IP: #{request.remote_ip}")
       return if allowed_ips.any? { |ip| ip.include?(IPAddr.new(request.remote_ip)) }
 
+      Rails.logger.info("#{request.remote_ip} not in allowed list: Proceeding to Bot Challenge")
       BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 
