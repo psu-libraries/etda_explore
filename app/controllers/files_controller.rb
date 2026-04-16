@@ -48,6 +48,13 @@ class FilesController < ApplicationController
     end
 
     def enforce_bot_challenge
+      # Challenge only if remote IP is not allowed
+      allowed_ips = ENV.fetch('BOT_CHALLENGE_IP_WHITELIST', '')
+        .split(',')
+        .filter_map { |ip| IPAddr.new(ip.strip) unless ip.strip.empty? }
+
+      return if allowed_ips.any? { |ip| ip.include?(IPAddr.new(request.remote_ip)) }
+
       BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 
