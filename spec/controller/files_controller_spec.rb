@@ -14,6 +14,8 @@ RSpec.describe FilesController, type: :controller do
 
   before do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
+    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_enforce_filter)
+    ENV["DOWNLOAD_KEY_#{current_partner.id.upcase}"] = 'ABCDEFG123456789'
   end
 
   after do
@@ -37,6 +39,22 @@ RSpec.describe FilesController, type: :controller do
     it 'returns favorably' do
       get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
+    end
+
+    it 'runs the Bot Challenge page' do
+      get :solr_download_final_submission, params: { id: file_id }
+      expect(BotChallengePage::BotChallengePageController).to have_received('bot_challenge_enforce_filter')
+    end
+
+    context 'when a header download key is provided' do
+      before do
+        @request.headers['HTTP_X_DOWNLOAD_KEY'] = ENV.fetch("DOWNLOAD_KEY_#{current_partner.id.upcase}", nil)
+      end
+
+      it 'does not run the bot challenge page if a header download key is provided' do
+        get :solr_download_final_submission, params: { id: file_id }
+        expect(BotChallengePage::BotChallengePageController).not_to have_received('bot_challenge_enforce_filter')
+      end
     end
 
     context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do

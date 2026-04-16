@@ -48,6 +48,11 @@ class FilesController < ApplicationController
     end
 
     def enforce_bot_challenge
+      secret = ENV.fetch("DOWNLOAD_KEY_#{current_partner.id.upcase}", nil)
+
+      token = request.headers['X-DOWNLOAD-KEY'].to_s
+      return if !secret.nil? && ActiveSupport::SecurityUtils.secure_compare(token, secret)
+
       BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
     end
 
