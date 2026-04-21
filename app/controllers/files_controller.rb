@@ -73,6 +73,6 @@ class FilesController < ApplicationController
     # There are "good bots" that will get past cloudflare (Search Engines, etc)
     # We want them to have access to the site but they should not trigger the remediation process on download
     def bot_request?
-      !!(request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
+      !!(request.headers['User-Agent'] =~ /bot/i)
     end
 end
