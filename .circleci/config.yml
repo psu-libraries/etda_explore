@@ -97,6 +97,7 @@ jobs:
       REGISTRY_REPO: "etda-explore"
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
     steps:
       - clone-config-repo
