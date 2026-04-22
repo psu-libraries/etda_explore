@@ -85,6 +85,14 @@ RSpec.describe FilesController, type: :controller do
           .not_to have_received(:perform_later)
           .with(file_id)
       end
+
+      it 'does not trigger the AutoRemediationJob if the request was made by a bot' do
+        @request.headers['User-Agent'] = 'bingbot'
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
     end
 
     context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
