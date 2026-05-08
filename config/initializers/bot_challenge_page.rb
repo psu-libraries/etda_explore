@@ -37,7 +37,7 @@ Rails.application.config.to_prepare do
     return true if controller.current_user.present? && !controller.current_user.guest?
 
     # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins/i)
+    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins|ProQuest Harvesting/i)
   }
 
   # Exempt some requests from bot challenge protection

@@ -11,7 +11,8 @@ class FilesController < ApplicationController
     remediated = ActiveModel::Type::Boolean.new.cast(files_params[:remediated])
 
     should_remediate =
-      ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && valid_remediate_token?(token, file_id) && !bot_request?
+      ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true' && valid_remediate_token?(token,
+                                                                                  file_id) && !user_agent_to_bypass?
     file_path = full_file_path(file_id, remediated)
     if file_path.nil?
       render plain: 'An Error has occurred', status: :internal_server_error
@@ -70,9 +71,9 @@ class FilesController < ApplicationController
       Rails.application.message_verifier(:remediate_request_token)
     end
 
-    # There are "good bots" that will get past cloudflare (Search Engines, etc)
-    # We want them to have access to the site but they should not trigger the remediation process on download
-    def bot_request?
-      !!(request.headers['User-Agent'] =~ /bot/i)
+    # Some user agents will bypass cloudflare but should not trigger the remediation process
+    # This include search engines Googlebot/Bingbot and Proquest Harvesting
+    def user_agent_to_bypass?
+      !!(request.headers['User-Agent'] =~ /bot|ProQuest Harvesting/i)
     end
 end
