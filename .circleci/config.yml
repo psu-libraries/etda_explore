@@ -33,6 +33,9 @@ parameters:
   CLUSTERS_PROD:
     type: string
     default: "prod"
+  CLUSTERS_ULPROD:
+    type: string
+    default: "ulprod"
   REGISTRY_HOST:
     type: string
     default: "harbor.k8s.libraries.psu.edu"
@@ -91,7 +94,7 @@ jobs:
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
       clusters: << parameters.clusters >>
-      CONFIG_REPO: git@github.com:psu-libraries/etda-config.git
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: "etda-explore"
@@ -104,18 +107,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-
-            # Split comma-separated clusters into array and loop
-            clusters="${clusters// /}"
-            IFS=',' read -ra CLUSTERS \<<< "$clusters"
-            for cluster in "${CLUSTERS[@]}"; do
-              export TARGET_CLUSTER="$cluster"
-              echo "Processing cluster: $TARGET_CLUSTER"
-              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
-            done
+            /usr/local/bin/image-release-for-clusters
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
@@ -302,14 +294,14 @@ workflows:
           delete_branch: << pipeline.parameters.GHA_Meta >>
           filters:
             branches:
-              only: main
+              only: /.*/
   explore-ci-cd:
     unless:
       equal: ["delete", << pipeline.parameters.GHA_Event >>]
     jobs:
       - release-image:
           name: release-image
-          clusters: << pipeline.parameters.CLUSTERS_PROD >>
+          clusters: << pipeline.parameters.CLUSTERS_ULPROD >>
           context:
             - org-global
           from_tag: "<< pipeline.git.revision >>"
