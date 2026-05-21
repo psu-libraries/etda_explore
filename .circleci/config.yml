@@ -107,7 +107,10 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            /usr/local/bin/image-release-for-clusters
+            export TRIGGERED_BY="$CIRCLE_USERNAME"
+            /usr/local/bin/image-tag
+            cd $CONFIG_REPO_NAME
+            /usr/local/bin/image-release-pr "clusters/ulprod/manifests/etda-workflow/prod.yaml"
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
