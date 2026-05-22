@@ -110,6 +110,7 @@ jobs:
             export TRIGGERED_BY="$CIRCLE_USERNAME"
             /usr/local/bin/image-tag
             cd $CONFIG_REPO_NAME
+            /usr/local/bin/image-release-pr "clusters/prod/manifests/prod.yaml"
             /usr/local/bin/image-release-pr "clusters/ulprod/manifests/etda-workflow/prod.yaml"
   build-image:
     environment:
@@ -304,7 +305,7 @@ workflows:
     jobs:
       - release-image:
           name: release-image
-          clusters: << pipeline.parameters.CLUSTERS_ULPROD >>
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>,<< pipeline.parameters.CLUSTERS_ULPROD >>
           context:
             - org-global
           from_tag: "<< pipeline.git.revision >>"
