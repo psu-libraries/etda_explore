@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.6.4"
+    default: "v4.6.5"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
@@ -107,11 +107,7 @@ jobs:
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-            /usr/local/bin/image-release-pr "clusters/prod/manifests/prod.yaml"
-            /usr/local/bin/image-release-pr "clusters/ulprod/manifests/etda-workflow/prod.yaml"
+            /usr/local/bin/image-release-for-clusters --manifest-path "clusters/{cluster}/manifests/prod.yaml"
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
