@@ -57,18 +57,17 @@ Note: To reset the solr collection and configset run:
     bundle exec rake solr:reset
 
 ### SOLR Indexing
-These steps will help you reindex the solr collections in ETDA Explore. Please note you will need to work with ETDA Workflows for 
-the following steps to work properly. 
+These steps will help you reindex the solr collections in ETDA Explore. Please note you will need to utilize both EETDA Workflows and Explore for the following steps to work
 
-1. Make sure to reset the solr collections and configsets:
+1. Make sure to reset the solr collections and configsets (in explore pod):
 
     bundle exec rake solr:reset
 
-2. Initialize the solr collections    
+2. Initialize the solr collections (in explore pod):    
 
     bundle exec rake solr:init
 
-3. Reindex all the collections 
+3. Reindex all the collections (in workflow pod): 
 
     bundle exec rake workflow:solr:index_all
 
