@@ -9,9 +9,7 @@ Rails.application.routes.draw do
 
   mount OkComputer::Engine, at: '/health'
 
-  authenticate :user do
-    get '/login', to: 'application#login', as: :login
-  end
+  get '/login', to: 'application#login', as: :login
 
   resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
