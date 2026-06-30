@@ -4,7 +4,11 @@ export WORKFLOW_HOST=submit-etda.libraries.psu.edu
 export EXPLORE_HOST=etda.libraries.psu.edu
 export RAILS_ENV=development
 export AUTO_REMEDIATE_WEBHOOK_PATH="/webhooks/auto_remediate"
-export AUTO_REMEDIATE_WEBHOOK_TOKEN=abc123
+export AUTO_REMEDIATE_WEBHOOK_TOKEN_GRADUATE=abc123
+export AUTO_REMEDIATE_WEBHOOK_TOKEN_HONORS=def456
+export AUTO_REMEDIATE_WEBHOOK_TOKEN_MILSCH=ghi789
+export REMEDIATE_TOKEN_TTL
+export BOT_CHALLENGE_IP_WHITELIST
 
 # MySQL Parameters
 # We should use root so we can create the test database
@@ -23,3 +27,6 @@ export SOLR_CONFIG_DIR=solr/conf
 export SOLR_COLLECTION=blacklight-core
 export SOLR_NUM_SHARDS=1
 export SOLR_PORT=8983
+
+export CLOUDFLARE_CHALLENGE_ENABLED=true
+export ENABLE_ACCESSIBILITY_REMEDIATION=false

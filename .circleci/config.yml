@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@3.0.1
-  browser-tools: circleci/browser-tools@1.5.2
+  browser-tools: circleci/browser-tools@2.4.0
 
 parameters:
 
@@ -20,7 +20,7 @@ parameters:
     default: ""
   CI_UTILS_IMAGE_TAG:
     type: string
-    default: "v4.4.0"
+    default: "v4.6.5"
   CONFIG_REPO_NAME:
     type: string
     default: "etda-config"
@@ -32,10 +32,13 @@ parameters:
     default: "uldev"
   CLUSTERS_PROD:
     type: string
-    default: "prod"    
+    default: "prod"
+  CLUSTERS_ULPROD:
+    type: string
+    default: "ulprod"
   REGISTRY_HOST:
     type: string
-    default: "harbor.k8s.libraries.psu.edu"    
+    default: "harbor.k8s.libraries.psu.edu"
   PIPELINE_CONFIG_VERSION:
     type: string
     default: "1.0.1"
@@ -63,7 +66,7 @@ commands:
               SLUG=$(slugify-branch "$CIRCLE_BRANCH")
               TAG="${SLUG}--$CIRCLE_SHA1"
             fi
-            echo "export TAG=$TAG" >> "$BASH_ENV"    
+            echo "export TAG=$TAG" >> "$BASH_ENV"
 
 executors:
 
@@ -91,37 +94,27 @@ jobs:
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     environment:
       clusters: << parameters.clusters >>
-      CONFIG_REPO: git@github.com:psu-libraries/etda-config.git
+      CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: "etda-explore"
       FROM_TAG: << parameters.from_tag >>
       TO_TAG: << parameters.to_tag >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
       PIPELINE_CONFIG_VERSION: << pipeline.parameters.PIPELINE_CONFIG_VERSION >>
     steps:
       - clone-config-repo
       - run:
           name: Tag & Release Image
           command: |
-            export TRIGGERED_BY="$CIRCLE_USERNAME"
-            export REGISTRY_REPO="$CIRCLE_PROJECT_REPONAME"
-            /usr/local/bin/image-tag
-            cd $CONFIG_REPO_NAME
-
-            # Split comma-separated clusters into array and loop
-            clusters="${clusters// /}"
-            IFS=',' read -ra CLUSTERS \<<< "$clusters"
-            for cluster in "${CLUSTERS[@]}"; do
-              export TARGET_CLUSTER="$cluster"
-              echo "Processing cluster: $TARGET_CLUSTER"
-              /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/prod.yaml"
-            done   
+            /usr/local/bin/image-release-for-clusters --manifest-path "clusters/{cluster}/manifests/prod.yaml"
   build-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
-      REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
+      REGISTRY_REPO: "library/etda-explore"     # Use "library/etda-explore" as the repository name in the registry
     executor:
       name: ci-utils
-      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
       registry_host: << pipeline.parameters.REGISTRY_HOST >>
     steps:
       - setup_remote_docker:
@@ -139,12 +132,12 @@ jobs:
       - run:
           name: Save Docker image
           command: |
-            docker save $REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG -o /tmp/docker-image.tar
+            docker save $REGISTRY_HOST/$REGISTRY_REPO:$TAG -o /tmp/docker-image.tar
       - run:
           name: Save image info for push job
           command: |
             mkdir -p /tmp/docker-image-info
-            echo "$REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG" > /tmp/docker-image-info/image-name.txt
+            echo "$REGISTRY_HOST/$REGISTRY_REPO:$TAG" > /tmp/docker-image-info/image-name.txt
       - persist_to_workspace:
           root: /tmp
           paths:
@@ -154,7 +147,7 @@ jobs:
   push-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
-      REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
+      REGISTRY_REPO: "library/etda-explore"
     executor:
       name: ci-utils
       image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>
@@ -175,7 +168,7 @@ jobs:
       - docker/push:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
-          tag: $TAG  
+          tag: $TAG
 
   delete-deployment:
     parameters:
@@ -208,6 +201,7 @@ jobs:
       CONFIG_REPO_NAME: << pipeline.parameters.CONFIG_REPO_NAME >>
       CONFIG_REPO_URL: << pipeline.parameters.CONFIG_REPO_URL >>
       CONFIG_REPO: << pipeline.parameters.CONFIG_REPO_URL >>
+      TO_YAML_TAG_TARGET: ".spec.source.helm.values.explore.image.tag"
     parameters:
       clusters:
         type: string
@@ -229,11 +223,11 @@ jobs:
                 ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
-            done            
+            done
 
   test-application:
     docker:
-      - image: cimg/ruby:3.4.1-browsers
+      - image: cimg/ruby:3.4.9-browsers
       - image: mysql:8
         environment:
           MYSQL_ROOT_PASSWORD: etda
@@ -266,7 +260,9 @@ jobs:
         name: "Bundle"
         command: |
           gem install bundler
-          bundle check --path vendor/bundle || bundle install --deployment
+          bundle config set path 'vendor/bundle'
+          bundle config set deployment 'true'
+          bundle check || bundle install
     - save_cache:
         paths:
           - vendor/bundle
@@ -298,14 +294,14 @@ workflows:
           delete_branch: << pipeline.parameters.GHA_Meta >>
           filters:
             branches:
-              only: main
+              only: /.*/
   explore-ci-cd:
     unless:
       equal: ["delete", << pipeline.parameters.GHA_Event >>]
     jobs:
-      - release-image: 
+      - release-image:
           name: release-image
-          clusters: << pipeline.parameters.CLUSTERS_PROD >>
+          clusters: << pipeline.parameters.CLUSTERS_PROD >>,<< pipeline.parameters.CLUSTERS_ULPROD >>
           context:
             - org-global
           from_tag: "<< pipeline.git.revision >>"
@@ -331,7 +327,7 @@ workflows:
           context:
             - org-global
           filters:
-            branches:              
+            branches:
               only:
                 - main
                 - /preview\/.*/
@@ -349,4 +345,4 @@ workflows:
                 - /preview\/.*/
           requires:
             - test-application
-            - push-image            
+            - push-image

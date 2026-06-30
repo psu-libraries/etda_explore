@@ -5,6 +5,10 @@ require 'rails_helper'
 RSpec.describe BlacklightDisplayHelper do
   include DeviseGuests::Controllers::Helpers
 
+  after do
+    ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
+  end
+
   describe '#render_as_list' do
     let(:keywords_doc) { { value: ['Keyword 1', 'Keyword 2'] } }
 
@@ -82,23 +86,57 @@ RSpec.describe BlacklightDisplayHelper do
         allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      it 'returns a link for open access and restricted to institution submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
-        expect(render_download_links(rti_doc)).to eq "<span><span><a data-confirm=\"#{I18n.t('registered.confirmation')}\" class=\"file-link form-control\" href=\"/files/final_submissions/#{rti_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{rti_doc[:document][:file_name_ssim].first}</a></span></span>"
-        expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
+      it 'includes remediate_token for non-remediated files' do
+        expect(render_download_links(oa_doc_no_remediated)).to include 'remediate_token='
+        expect(render_download_links(oa_doc)).not_to include 'remediate_token='
       end
 
-      it 'includes modal trigger attributes and modal only when no remediated files' do
-        expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
-        expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
-        expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
-        expect(render_download_links(oa_doc_no_remediated)).to include /Accessible Version in Progress|We're generating an accessible version/
-        expect(render_download_links(oa_doc_no_remediated)).to have_link('OK',
-                                                                         href: "/files/final_submissions/#{oa_doc_no_remediated[:value].first}")
-        expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-toggle="modal"').twice
+      it 'includes "remediated" as a query parameter' do
+        expect(render_download_links(oa_doc_no_remediated)).to include 'remediated=false'
+        expect(render_download_links(oa_doc)).to include 'remediated=true'
+      end
+
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+        before do
+          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+        end
+
+        it 'returns a link for open access and restricted to institution submissions' do
+          expect(render_download_links(oa_doc)).to include "href=\"/files/final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}"
+          expect(render_download_links(oa_doc)).to include "Download #{oa_doc[:document][:remediated_file_name_ssim].first}</a></span></span>"
+          expect(render_download_links(rti_doc)).to include "href=\"/files/final_submissions/#{rti_doc[:document][:remediated_final_submission_file_isim].first}"
+          expect(render_download_links(rti_doc)).to include "Download #{rti_doc[:document][:remediated_file_name_ssim].first}"
+          expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
+        end
+
+        it 'includes modal trigger attributes and modal only when no remediated files' do
+          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
+          expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
+          expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
+          expect(render_download_links(oa_doc_no_remediated)).to include /Accessible Version in Progress|We're generating an accessible version/
+          expect(render_download_links(oa_doc_no_remediated)).to have_link('OK',
+                                                                           href: %r{/files/final_submissions/#{oa_doc_no_remediated[:value].first}\?remediate_token=.+})
+          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-toggle="modal"').twice
+        end
+      end
+
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is false' do
+        before do
+          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+        end
+
+        it 'does not include the modal trigger even on unremediated files' do
+          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-toggle="modal"')
+          expect(render_download_links(oa_doc_no_remediated)).not_to include /Accessible Version in Progress|We're generating an accessible version/
+        end
       end
     end
 
@@ -108,21 +146,75 @@ RSpec.describe BlacklightDisplayHelper do
         allow_any_instance_of(described_class).to receive(:this_user).and_return user
       end
 
-      it 'only returns a link for open access submissions' do
-        expect(render_download_links(oa_doc)).to eq "<span><span><a class=\"file-link form-control\" href=\"/files/final_submissions/#{oa_doc[:value].first}\"><i class=\"fa fa-download download-link-fa\"></i>Download #{oa_doc[:document][:file_name_ssim].first}</a></span></span>"
-        expect(render_download_links(rti_doc)).to eq '<span><a href="/login">Login to Download</a></span>'
-        expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+        before do
+          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+        end
+
+        it 'only returns a link for open access submissions' do
+          expect(render_download_links(oa_doc)).to include "href=\"/files/final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}"
+          expect(render_download_links(oa_doc)).to include "Download #{oa_doc[:document][:remediated_file_name_ssim].first}"
+          expect(render_download_links(rti_doc)).to eq '<span><a href="/login">Login to Download</a></span>'
+          expect(render_download_links(r_doc)).to eq '<p>No files available due to restrictions.</p>'
+        end
+
+        it 'includes modal trigger attributes and modal only when no remediated files' do
+          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
+          expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
+          expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
+          # Not logged in so no modal for RTI
+          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-toggle="modal"'
+        end
       end
 
-      it 'includes modal trigger attributes and modal only when no remediated files' do
-        expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-        expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
-        expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
-        expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
-        # Not logged in so no modal for RTI
-        expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-toggle="modal"'
+      context 'when ENABLE_ACCESSIBILITY_REMEDIATION is false' do
+        before do
+          @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+          ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+        end
+
+        it 'does not include the modal trigger even on unremediated files' do
+          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-toggle="modal"')
+          expect(render_download_links(oa_doc_no_remediated)).not_to include /Accessible Version in Progress|We're generating an accessible version/
+        end
+      end
+    end
+
+    context 'when current_user is the author' do
+      before do
+        user = User.new(email: oa_doc[:document][:author_email_ssi], guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns links for both remediated and final submission files' do
+        links = render_download_links(oa_doc)
+        expect(links).to include("Download #{oa_doc[:document][:remediated_file_name_ssim].first}")
+        expect(links).to include("href=\"/files/final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}")
+        expect(links).to include("Download #{oa_doc[:document][:file_name_ssim].first}")
+        expect(links).to include("href=\"/files/final_submissions/#{oa_doc[:document][:final_submission_file_isim].first}")
+      end
+    end
+
+    context 'when current_user is not the author' do
+      before do
+        user = User.new(email: 'test123@psu.edu', guest: false)
+        allow_any_instance_of(described_class).to receive(:this_user).and_return user
+      end
+
+      it 'returns link for remediated submission file only' do
+        links = render_download_links(oa_doc)
+        expect(links).to include "href=\"/files/final_submissions/#{oa_doc[:document][:remediated_final_submission_file_isim].first}"
+        expect(links).to include "Download #{oa_doc[:document][:remediated_file_name_ssim].first}"
+
+        expect(links).not_to include("Download #{oa_doc[:document][:file_name_ssim].first}")
+        expect(links).not_to include("href=\"/files/final_submissions/#{oa_doc[:document][:final_submission_file_isim].first}")
       end
     end
   end

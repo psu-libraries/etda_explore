@@ -5,13 +5,26 @@ require 'rails_helper'
 require 'fileutils'
 
 RSpec.describe FilesController, type: :controller do
+  let(:remediate_token_verifier) { Rails.application.message_verifier(:remediate_request_token) }
+  let(:doc) { FakeSolrDocument.new }
+  let(:file_id) { doc.doc[:final_submission_file_isim].first }
+  let(:remediate_token) do
+    remediate_token_verifier.generate(file_id, expires_in: 60, purpose: :remediate_request)
+  end
+  let(:allowed_ips) { '192.168.1.1' }
+
   before do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
+    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_enforce_filter)
+    ENV['BOT_CHALLENGE_IP_WHITELIST'] = allowed_ips
+  end
+
+  after do
+    ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = @original_env_value
+    ENV['BOT_CHALLENGE_IP_WHITELIST'] = nil
   end
 
   context 'when open access' do
-    let(:doc) { FakeSolrDocument.new }
-
     before do
       doc.doc[:access_level_ss] = 'open_access'
       doc.doc[:final_submission_file_isim] = ['123']
@@ -26,17 +39,86 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns favorably' do
-      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
-      expect(AutoRemediateWebhookJob)
-        .to have_received(:perform_later)
-        .with(doc.doc[:final_submission_file_isim].first)
+    end
+
+    it 'runs the bot_challenge_enforce filter' do
+      get :solr_download_final_submission, params: { id: file_id }
+      expect(BotChallengePage::BotChallengePageController).to have_received(:bot_challenge_enforce_filter)
+    end
+
+    context 'when the request comes from an allowed IP' do
+      before do
+        @request.remote_addr = allowed_ips
+      end
+
+      it 'bypasses the bot_challenge_enforce filter' do
+        get :solr_download_final_submission, params: { id: file_id }
+        expect(BotChallengePage::BotChallengePageController).not_to have_received(:bot_challenge_enforce_filter)
+      end
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+      end
+
+      it 'triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if no remediate_token is provided' do
+        get :solr_download_final_submission, params: { id: file_id }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if token does not match' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: 'bogus-token' }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if the request was made by a bot' do
+        @request.headers['User-Agent'] = 'bingbot'
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if the request was made by Proquest' do
+        @request.headers['User-Agent'] = 'Mozilla/5.0 ProQuest Harvesting'
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+      end
+
+      it 'does not triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
     end
   end
 
   context 'when restricted to institution and logged out' do
-    let(:doc) { FakeSolrDocument.new }
-
     before do
       doc.doc[:access_level_ss] = 'restricted_to_institution'
       doc.doc[:final_submission_file_isim] = ['1234']
@@ -47,15 +129,13 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'raises an error' do
-      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:unauthorized)
       expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
   end
 
   context 'when restricted to institution and logged in' do
-    let(:doc) { FakeSolrDocument.new }
-
     before do
       doc.doc[:access_level_ss] = 'restricted_to_institution'
       doc.doc[:final_submission_file_isim] = ['1235']
@@ -70,17 +150,54 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns a 200 message' do
-      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:ok)
-      expect(AutoRemediateWebhookJob)
-        .to have_received(:perform_later)
-        .with(doc.doc[:final_submission_file_isim].first)
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'true'
+      end
+
+      it 'triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if no remediate_token is provided' do
+        get :solr_download_final_submission, params: { id: file_id }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+
+      it 'does not trigger the AutoRemediationJob if token does not match' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: 'bogus-token' }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
+    end
+
+    context 'when ENABLE_ACCESSIBILITY_REMEDIATION is not true' do
+      before do
+        @original_env_value = ENV.fetch('ENABLE_ACCESSIBILITY_REMEDIATION', nil)
+        ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] = 'false'
+      end
+
+      it 'does not triggers the AutoRemediateWebhookJob' do
+        get :solr_download_final_submission, params: { id: file_id, remediate_token: }
+        expect(AutoRemediateWebhookJob)
+          .not_to have_received(:perform_later)
+          .with(file_id)
+      end
     end
   end
 
   context 'when restricted' do
-    let(:doc) { FakeSolrDocument.new }
-
     before do
       doc.doc[:access_level_ss] = 'restricted'
       doc.doc[:final_submission_file_isim] = ['1236']
@@ -95,7 +212,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'throws a server error' do
-      get :solr_download_final_submission, params: { id: doc.doc[:final_submission_file_isim].first }
+      get :solr_download_final_submission, params: { id: file_id, remediate_token: }
       expect(response).to have_http_status(:internal_server_error)
       expect(AutoRemediateWebhookJob).not_to have_received(:perform_later)
     end
