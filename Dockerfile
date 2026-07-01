@@ -28,4 +28,4 @@ ENV PARTNER=graduate
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=$(bundle exec rails secret) bundle exec rails assets:precompile
 
-CMD ["/app/bin/startup"]
+CMD ["/app/bin/startup"] 
