@@ -45,7 +45,7 @@ group :test do
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'webdrivers', require: false
   gem 'webmock'
 end
 

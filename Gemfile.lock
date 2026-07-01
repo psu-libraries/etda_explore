@@ -142,8 +142,6 @@ GEM
       rexml
     crass (1.0.6)
     date (3.5.1)
-    deprecation (1.1.0)
-      activesupport
     devise (5.0.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
