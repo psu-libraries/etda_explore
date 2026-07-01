@@ -3,8 +3,7 @@
     <div class="modal-content">
         <div class="modal-header">
         <h4 class="modal-title">Accessible Version in Progress</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
         </div>
         <div class="modal-body">
@@ -18,8 +17,7 @@
         <div class="modal-footer">
         <%= link_to "OK",
                     file_path,
-                    class: "btn btn-primary",
-                    onclick: "$('#downloadModal-#{final_submission_id}').modal('hide')" %>
+                    class: "btn btn-primary" %>
         </div>
     </div>
     </div>
