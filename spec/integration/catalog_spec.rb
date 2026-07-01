@@ -114,7 +114,7 @@ RSpec.describe 'Catalog', type: :feature do
       click_link_or_button('Explore')
     end
 
-    it 'allows faceted browsing', js: true do
+    it 'allows faceted browsing', :js do
       degree_toggle = find('.blacklight-degree_name_ssi .collapse-toggle', visible: :all)
       degree_toggle.click if degree_toggle[:'aria-expanded'] == 'false'
       expect(page).to have_css('.blacklight-degree_name_ssi .collapse-toggle[aria-expanded="true"]', visible: :all)
@@ -122,8 +122,10 @@ RSpec.describe 'Catalog', type: :feature do
 
       committee_toggle = find('.blacklight-committee_member_name_ssim .collapse-toggle', visible: :all)
       committee_toggle.click if committee_toggle[:'aria-expanded'] == 'false'
-      expect(page).to have_css('.blacklight-committee_member_name_ssim .collapse-toggle[aria-expanded="true"]', visible: :all)
-      expect(page).to have_css('#facet-committee_member_name_ssim', text: doc[:committee_member_name_tesim].first, visible: :all)
+      expect(page).to have_css('.blacklight-committee_member_name_ssim .collapse-toggle[aria-expanded="true"]',
+                               visible: :all)
+      expect(page).to have_css('#facet-committee_member_name_ssim', text: doc[:committee_member_name_tesim].first,
+                                                                    visible: :all)
       # expect(page).to have_css(".modal-dialog")
       # expect(page).to have_content("Bebe Senger")
     end
