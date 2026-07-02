@@ -8,8 +8,12 @@ $dark-green: #006400;
 
 $theme-colors: (
   "primary": $blue-theme,
-  "dark": #1f427c
+  "dark": #001e44,
 );
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
 
 .logo-title {
   a {
