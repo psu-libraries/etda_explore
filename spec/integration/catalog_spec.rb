@@ -188,7 +188,7 @@ RSpec.describe 'Catalog', type: :feature do
         click_link 'title'
       end
 
-      expect(page).to have_current_path(/sort=title_si\+asc%2C\+year_isi\+desc/, url: true)
+      expect(page).to have_current_path(/sort=title_si\+asc%2C\+pub_date_si\+desc/, url: true)
 
       expect(page).to have_css('#sort-dropdown .dropdown-menu a.dropdown-item.active', text: 'title', visible: :all)
 
