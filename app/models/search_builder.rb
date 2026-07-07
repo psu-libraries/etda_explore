@@ -8,9 +8,9 @@ class SearchBuilder < Blacklight::SearchBuilder
   def add_facets_for_advanced_search_form(solr_parameters)
     controller = search_state.respond_to?(:controller) ? search_state.controller : nil
 
-    return unless controller&.respond_to?(:action_name) &&
-                  controller.action_name == 'advanced_search' &&
-                  blacklight_config.advanced_search[:form_solr_parameters]
+    return unless controller.respond_to?(:action_name) &&
+      controller.action_name == 'advanced_search' &&
+      blacklight_config.advanced_search[:form_solr_parameters]
 
     solr_parameters.merge!(blacklight_config.advanced_search[:form_solr_parameters])
   end

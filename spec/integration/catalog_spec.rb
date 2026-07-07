@@ -174,13 +174,13 @@ RSpec.describe 'Catalog', type: :feature do
   context 'when using sort and per-page controls', :existing_solr_records do
     before do
       visit '/catalog?q=*%3A*'
-      expect(page).to have_css('#sort-dropdown')
-      expect(page).to have_css('#per_page-dropdown')
     end
 
     it 'updates the selected sort when the sort button is used', :js do
+      expect(page).to have_css('#sort-dropdown')
+
       within '#sort-dropdown' do
-        expect(page).to have_css('button', text: 'Sort by relevance')
+        expect(page).to have_button('Sort by relevance')
         click_button
       end
 
@@ -195,12 +195,13 @@ RSpec.describe 'Catalog', type: :feature do
       titles = all('.document-title-heading').first(2).map { |heading| heading.text.strip.downcase }
       expect(titles.size).to eq(2)
       expect(titles.first).to be <= titles.second
-
     end
 
     it 'updates the selected per-page option when the per-page button is used', :js do
+      expect(page).to have_css('#per_page-dropdown')
+
       within '#per_page-dropdown' do
-        expect(page).to have_css('button', text: '10')
+        expect(page).to have_button('10')
         click_button
       end
 
@@ -210,9 +211,9 @@ RSpec.describe 'Catalog', type: :feature do
 
       expect(page).to have_current_path(/per_page=20/, url: true)
 
-      expect(page).to have_css('#per_page-dropdown .dropdown-menu a.dropdown-item.active', text: '20 per page', visible: :all)
+      expect(page).to have_css('#per_page-dropdown .dropdown-menu a.dropdown-item.active', text: '20 per page',
+                                                                                           visible: :all)
       expect(page).to have_css('.document-title-heading', count: 20)
-      
     end
   end
 end
