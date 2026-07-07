@@ -13,8 +13,8 @@ $theme-colors: (
 
 .logo-title {
   a {
-    border-left: 1px solid $white;
-    color: $white;
+    border-left: 1px solid #fff;
+    color: #fff;
     display: block;
     margin-left: 30px;
     padding-left: 1rem;
@@ -27,23 +27,27 @@ $theme-colors: (
   }
 }
 
+.topbar {
+  background-color: #1f427c !important;
+}
+
 .download-link-fa {
   margin: 5px 5px 0 0;
 }
 
 .file-link {
-  background-color: $blue-theme;
-  border-color: $light-gray;
+  background-color: #2674ca;
+  border-color: #d3d3d3;
   border-radius: 6px;
-  color: $white;
+  color: #fff;
   display: block;
   flex: 1;
   height: auto;
   overflow: visible;
 
   &:hover {
-    background-color: $dark-green;
-    color: $white;
+    background-color: #006400;
+    color: #fff;
     text-decoration: none;
   }
 }
@@ -66,6 +70,148 @@ a {
   &:focus {
     text-decoration: none;
   }
+}
+
+#sortAndPerPage {
+  .search-widgets .btn-group .dropdown-toggle {
+    background-color: transparent;
+    border: 1px solid #212529;
+    border-radius: 0.25rem;
+    color: #212529;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .search-widgets .btn-group .dropdown-toggle:hover,
+  .search-widgets .btn-group .dropdown-toggle:focus,
+  .search-widgets .btn-group .dropdown-toggle:active,
+  .search-widgets .btn-group.show .dropdown-toggle {
+    background-color: #212529;
+    border-color: #212529;
+    box-shadow: none;
+    color: #fff;
+  }
+}
+
+.facets .facet-limit,
+#facets .facet-limit,
+.sidenav .facet-limit.card {
+  --bs-card-bg: #e0e0e0;
+  --bs-card-cap-bg: #d6d6d6;
+  background-color: #e0e0e0 !important;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.facets .accordion-item.facet-limit,
+#facets .accordion-item.facet-limit,
+.sidenav .accordion-item.facet-limit {
+  background-color: #f9f9f9 !important;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.25rem;
+  margin-bottom: 0.55rem;
+}
+
+.facets .facet-limit.card,
+#facets .facet-limit.card,
+.sidenav .facet-limit.card {
+  overflow: hidden;
+}
+
+.facets .facet-limit .card-header,
+#facets .facet-limit .card-header,
+.sidenav .facet-limit.card .card-header {
+  background-color: #d6d6d6 !important;
+  border-bottom: 1px solid #bdbdbd;
+  padding: 0;
+}
+
+.facets .facet-limit .facet-field-heading,
+#facets .facet-limit .facet-field-heading,
+.sidenav .facet-limit.card .facet-field-heading {
+  background-color: #f5f5f5 !important;
+  margin: 0;
+}
+
+.facets .facet-limit .btn.collapse-toggle,
+#facets .facet-limit .btn.collapse-toggle,
+.sidenav .facet-limit.card .btn.collapse-toggle {
+  background-color: #f5f5f5 !important;
+  border: 0;
+  color: #212529 !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 0.7rem;
+}
+
+.facets .accordion-item.facet-limit .facet-field-heading,
+#facets .accordion-item.facet-limit .facet-field-heading,
+.sidenav .accordion-item.facet-limit .facet-field-heading {
+  background-color: #f5f5f5 !important;
+  margin: 0;
+}
+
+.facets .accordion-item.facet-limit .accordion-button,
+.facets .accordion-item.facet-limit .accordion-button.collapsed,
+.facets .accordion-item.facet-limit .accordion-button:not(.collapsed),
+#facets .accordion-item.facet-limit .accordion-button,
+#facets .accordion-item.facet-limit .accordion-button.collapsed,
+#facets .accordion-item.facet-limit .accordion-button:not(.collapsed),
+.sidenav .accordion-item.facet-limit .accordion-button,
+.sidenav .accordion-item.facet-limit .accordion-button.collapsed,
+.sidenav .accordion-item.facet-limit .accordion-button:not(.collapsed) {
+  background-color: #f5f5f5 !important;
+  border: 0;
+  box-shadow: none;
+  color: #212529 !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 0.7rem;
+}
+
+.facets .facet-limit .card-body,
+#facets .facet-limit .card-body,
+.sidenav .facet-limit.card .card-body {
+  background-color: #fff !important;
+  padding: 0.4rem 0.55rem;
+}
+
+.facets .accordion-item.facet-limit .accordion-body,
+#facets .accordion-item.facet-limit .accordion-body,
+.sidenav .accordion-item.facet-limit .accordion-body {
+  background-color: #fff !important;
+  padding: 0.4rem 0.55rem;
+}
+
+.facets .facet-limit .facet-content,
+.facets .facet-limit .facet-values,
+.facets .facet-limit .facet-values li,
+#facets .facet-limit .facet-content,
+#facets .facet-limit .facet-values,
+#facets .facet-limit .facet-values li,
+.sidenav .facet-limit.card .facet-content,
+.sidenav .facet-limit.card .facet-values,
+.sidenav .facet-limit.card .facet-values li {
+  background-color: #fff !important;
+}
+
+.facets .facet-limit .facet-values .facet-label,
+.facets .facet-limit .facet-values .facet-select,
+.facets .facet-limit .facet-values .selected,
+#facets .facet-limit .facet-values .facet-label,
+#facets .facet-limit .facet-values .facet-select,
+#facets .facet-limit .facet-values .selected,
+.sidenav .facet-limit.card .facet-values .facet-label,
+.sidenav .facet-limit.card .facet-values .facet-select,
+.sidenav .facet-limit.card .facet-values .selected {
+  color: #212529;
+  font-weight: 400 !important;
+}
+
+.facets .facet-limit .facet-values .facet-select,
+#facets .facet-limit .facet-values .facet-select,
+.sidenav .facet-limit.card .facet-values .facet-select {
+  color: #2674ca !important;
 }
 
 

@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'OAI', type: :feature do
   before do
+    Blacklight.default_index.connection.delete_by_query('*:*')
     @doc = FakeSolrDocument.new(released_metadata_at_dtsi: DateTime.parse('1999-01-01').getutc)
     Blacklight.default_index.connection.add(@doc.doc)
     Blacklight.default_index.connection.commit

@@ -1,10 +1,10 @@
 GIT
-  remote: https://github.com/projectblacklight/blacklight_oai_provider.git
-  revision: 69795b06cc37150386b6d9732be027d200412598
-  ref: 69795b0
+  remote: https://github.com/Smullz622/blacklight_oai_provider.git
+  revision: e4b8d1259f962ad68f33e23b1033c18e3701d62a
+  ref: e4b8d12
   specs:
     blacklight_oai_provider (7.0.2)
-      blacklight (>= 7.0, < 9)
+      blacklight (>= 7.0)
       oai (~> 1.2)
       rexml
 
@@ -101,14 +101,14 @@ GEM
       smart_properties
     bigdecimal (4.1.2)
     bindex (0.8.1)
-    blacklight (8.12.3)
+    blacklight (9.0.0)
       globalid
       i18n (>= 1.7.0)
       jbuilder (~> 2.7)
       kaminari (>= 0.15)
       ostruct (>= 0.3.2)
-      rails (>= 6.1, < 9)
-      view_component (>= 2.74, < 5)
+      rails (>= 7.0, < 9)
+      view_component (>= 3.0, < 5.0)
       zeitwerk
     bootsnap (1.18.4)
       msgpack (~> 1.2)
@@ -534,7 +534,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  blacklight (~> 8.12.3)
+  blacklight (~> 9)
   blacklight_oai_provider!
   bootsnap
   bootstrap (~> 5.1.3)
