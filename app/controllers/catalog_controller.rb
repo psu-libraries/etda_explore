@@ -33,7 +33,7 @@ class CatalogController < ApplicationController
     }
 
     config.show.document_actions.delete(:bookmark)
-
+    config.advanced_search.enabled = false
     # solr path which will be added to solr base url before the other solr params.
     # config.solr_path = 'select'
     # config.document_solr_path = 'get'
