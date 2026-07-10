@@ -28,5 +28,9 @@ export SOLR_COLLECTION=blacklight-core
 export SOLR_NUM_SHARDS=1
 export SOLR_PORT=8983
 
+# Google Analytics
+# Only set if you want to test out analytics
+export GOOGLE_TAG_MANAGER_ID=
+
 export CLOUDFLARE_CHALLENGE_ENABLED=true
 export ENABLE_ACCESSIBILITY_REMEDIATION=false
