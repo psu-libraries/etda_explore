@@ -201,53 +201,66 @@ a {
   color: $blue-theme;
 }
 
+%mb-2 {
+  margin-bottom: .5rem;
+}
+
+%mx-1 {
+  margin-left: .25rem;
+  margin-right: .25rem;
+}
+
 .constraints-container {
-  @extend .mb-2 !optional;
+  @extend %mb-2;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.25rem;
+  gap: .5rem .25rem;
 }
 
 .applied-filter {
-  @extend .mx-1 !optional;
+  @extend %mx-1;
 
   .constraint-value {
     cursor: default;
-    text-overflow: ellipsis;
     overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
 
     @media (max-width: $breakpoint-sm) {
-      max-width: $breakpoint-sm * 0.5;
+      max-width: $breakpoint-sm * .5;
     }
 
     @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-sm-max) {
-      max-width: $breakpoint-sm * 0.5;
+      max-width: $breakpoint-sm * .5;
     }
 
     @media (min-width: $breakpoint-md) and (max-width: $breakpoint-md-max) {
-      max-width: $breakpoint-md * 0.5;
+      max-width: $breakpoint-md * .5;
     }
 
     @media (min-width: $breakpoint-lg) {
-      max-width: $breakpoint-lg * 0.5;
+      max-width: $breakpoint-lg * .5;
     }
 
-    &:hover, &:active {
+    &:hover,
+    &:active {
       background-color: $secondary;
       border-color: $secondary;
       box-shadow: none;
     }
   }
 
-  .filter-name:after {
+  .filter-name::after {
     color: $gray-500;
-    content: "❯";
+    content: '❯';
     font-size: 90%;
     padding-left: $caret-width;
   }
 
-  .remove:hover, .remove:active {
-    @extend .btn-danger !optional;
+  .remove:hover,
+  .remove:active {
+    background-color: $danger;
+    border-color: $danger;
+    color: $white;
   }
 }
