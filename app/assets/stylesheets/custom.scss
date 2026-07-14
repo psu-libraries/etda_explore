@@ -6,15 +6,24 @@ $white: #fff;
 $light-gray: #d3d3d3;
 $dark-green: #006400;
 $dark-blue: #1f427c;
+$secondary: #6c757d;
 $text-dark: #212529;
 $surface-100: #f9f9f9;
 $surface-150: #f5f5f5;
 $surface-200: #e0e0e0;
 $surface-250: #d6d6d6;
 $border-gray: #bdbdbd;
+$gray-500: #adb5bd;
+$caret-width: .3em;
+$breakpoint-sm: 576px;
+$breakpoint-sm-max: 575.98px;
+$breakpoint-md: 768px;
+$breakpoint-md-max: 767.98px;
+$breakpoint-lg: 992px;
 
 $theme-colors: (
   "primary": $blue-theme,
+  "secondary": $secondary,
   "dark": $dark-blue
 );
 
@@ -192,4 +201,53 @@ a {
   color: $blue-theme;
 }
 
+.constraints-container {
+  @extend .mb-2 !optional;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.25rem;
+}
 
+.applied-filter {
+  @extend .mx-1 !optional;
+
+  .constraint-value {
+    cursor: default;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+    @media (max-width: $breakpoint-sm) {
+      max-width: $breakpoint-sm * 0.5;
+    }
+
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-sm-max) {
+      max-width: $breakpoint-sm * 0.5;
+    }
+
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-md-max) {
+      max-width: $breakpoint-md * 0.5;
+    }
+
+    @media (min-width: $breakpoint-lg) {
+      max-width: $breakpoint-lg * 0.5;
+    }
+
+    &:hover, &:active {
+      background-color: $secondary;
+      border-color: $secondary;
+      box-shadow: none;
+    }
+  }
+
+  .filter-name:after {
+    color: $gray-500;
+    content: "❯";
+    font-size: 90%;
+    padding-left: $caret-width;
+  }
+
+  .remove:hover, .remove:active {
+    @extend .btn-danger !optional;
+  }
+}
