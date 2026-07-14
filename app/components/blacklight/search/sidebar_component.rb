@@ -9,11 +9,11 @@ module Blacklight
         @group_component_class = view_config.facet_group_component
       end
 
-      def visible_facet_fields(groupname)
-        facet_fields_in_group(groupname).select do |field|
-          field.paginator&.items&.any?
-        end
-      end
+def visible_facet_fields(groupname)
+  facet_fields_in_group(groupname).select do |field|
+    response.facet_fields[field.field].present?
+  end
+end
 
       attr_reader :group_component_class, :response
 
