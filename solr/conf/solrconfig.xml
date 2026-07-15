@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <config>
   <!-- NOTE: various comments and unused configuration possibilities have been purged
-     from this file.  Please refer to https://solr.apache.org/guide/solr/latest/
-     as well as the default solrconfig file included with Solr -->
+    from this file.  Please refer to https://solr.apache.org/guide/solr/latest/
+    as well as the default solrconfig file included with Solr -->
 
   <luceneMatchVersion>9.10.1</luceneMatchVersion>
 
@@ -17,18 +17,20 @@
   <!-- Solr 9 Modules - Updated from "contrib" to "modules" -->
   <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lib" />
   <lib dir="${solr.install.dir:../../../..}/modules/analysis-extras/lucene-libs" />
+  <!-- Load any jars packaged with the configset under solr/conf/lib -->
+  <lib dir="lib" />
 
   <dataDir>${solr.data.dir:}</dataDir>
 
   <requestHandler name="/select" class="solr.SearchHandler" default="true">
-     <lst name="defaults">
-       <str name="defType">edismax</str>
-       <str name="echoParams">explicit</str>
-       <str name="q.alt">*:*</str>
-       <str name="mm">2&lt;-1 5&lt;-2 6&lt;55%</str>
-       <int name="qs">1</int>
-       <int name="ps">3</int>
-       <float name="tie">0.01</float>
+    <lst name="defaults">
+      <str name="defType">edismax</str>
+      <str name="echoParams">explicit</str>
+      <str name="q.alt">*:*</str>
+      <str name="mm">2&lt;-1 5&lt;-2 6&lt;55%</str>
+      <int name="qs">1</int>
+      <int name="ps">3</int>
+      <float name="tie">0.01</float>
       <str name="qf">
         title_tesi^25000
         title_ssi^25000
@@ -59,8 +61,8 @@
 
       <str name="fl">
          *,
-         score
-       </str>
+        score
+      </str>
 
       <str name="facet">true</str>
       <str name="facet.mincount">1</str>
@@ -77,7 +79,7 @@
       <str name="spellcheck.extendedResults">true</str>
       <str name="spellcheck.collate">false</str>
       <str name="spellcheck.count">5</str>
-     </lst>
+    </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
@@ -107,10 +109,10 @@
   </requestHandler>
 
   <requestHandler name="standard" class="solr.SearchHandler">
-     <lst name="defaults">
-       <str name="echoParams">explicit</str>
-       <str name="defType">lucene</str>
-     </lst>
+    <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="defType">lucene</str>
+    </lst>
   </requestHandler>
 
   <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
