@@ -20,7 +20,7 @@
 
   <dataDir>${solr.data.dir:}</dataDir>
 
-  <requestHandler name="search" class="solr.SearchHandler" default="true">
+  <requestHandler name="/select" class="solr.SearchHandler" default="true">
      <lst name="defaults">
        <str name="defType">edismax</str>
        <str name="echoParams">explicit</str>
@@ -83,7 +83,7 @@
     </arr>
   </requestHandler>
 
-  <requestHandler name="permissions" class="solr.SearchHandler" >
+  <requestHandler name="/permissions" class="solr.SearchHandler" >
     <lst name="defaults">
       <str name="facet">off</str>
       <str name="echoParams">all</str>
