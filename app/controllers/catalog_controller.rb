@@ -8,7 +8,7 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  # Going to the front page also goes to index, and we only want this on searches
+  # Going to the front page also goes to index, and we only want to challenge on searches
   bot_challenge only: :index, unless: -> { request.query_parameters.blank? }
 
   def index
