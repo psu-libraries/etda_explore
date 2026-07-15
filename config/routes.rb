@@ -13,7 +13,7 @@ Rails.application.routes.draw do
     get '/login', to: 'application#login', as: :login
   end
 
-  resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+  resources :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
     concerns :oai_provider
   end
