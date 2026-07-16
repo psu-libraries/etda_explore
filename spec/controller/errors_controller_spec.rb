@@ -15,13 +15,13 @@ RSpec.describe ErrorsController, type: :controller do
     context 'with the default html format' do
       before { get :render_not_found }
 
-      its(:status) { is_expected.to eq(404) }
+      it { is_expected.to have_http_status(:not_found) }
     end
 
     context 'with any other specified format' do
       before { get :render_not_found, format: :non_html_format }
 
-      its(:status) { is_expected.to eq(404) }
+      it { is_expected.to have_http_status(:not_found) }
     end
   end
 
@@ -29,13 +29,13 @@ RSpec.describe ErrorsController, type: :controller do
     context 'with the default html format' do
       before { get :render_server_error }
 
-      its(:status) { is_expected.to eq(500) }
+      it { is_expected.to have_http_status(:internal_server_error) }
     end
 
     context 'with any other specified format' do
       before { get :render_server_error, format: :non_html_format }
 
-      its(:status) { is_expected.to eq(500) }
+      it { is_expected.to have_http_status(:internal_server_error) }
     end
   end
 
@@ -43,13 +43,13 @@ RSpec.describe ErrorsController, type: :controller do
     context 'with the default html format' do
       before { get :render_unauthorized }
 
-      its(:status) { is_expected.to eq(401) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
 
     context 'with any other specified format' do
       before { get :render_unauthorized, format: :non_html_format }
 
-      its(:status) { is_expected.to eq(401) }
+      it { is_expected.to have_http_status(:unauthorized) }
     end
   end
 end
