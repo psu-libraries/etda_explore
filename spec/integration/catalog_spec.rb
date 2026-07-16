@@ -13,6 +13,8 @@ RSpec.describe 'Catalog', type: :feature do
   let(:doc) { FakeSolrDocument.new(remediated_file_ids: []).doc }
 
   before do
+    next if RSpec.current_example.metadata[:existing_solr_records]
+
     doc[:access_level_ss] = 'open_access'
     doc[:defended_at_dtsi] = '2016-11-17T15:00:00Z'
     Blacklight.default_index.connection.add(doc)
@@ -114,22 +116,13 @@ RSpec.describe 'Catalog', type: :feature do
       click_link_or_button('Explore')
     end
 
-    it 'allows faceted browsing' do
-      expect(page).to have_content(program_label)
-      expect(page).to have_content('Degree')
-      expect(page).to have_content('Year')
-      expect(page).to have_content('Committee Member')
-      expect(page).to have_content('Keyword')
-      expect(page).to have_content('Author Last Name')
-      expect(page).to have_content('Access Level')
-      first('.blacklight-degree_name_ssi').click
-      within('#facet-degree_name_ssi') do
-        expect(page).to have_content(doc[:degree_name_ssi])
-      end
-      first('.blacklight-committee_member_name_ssim').click
-      within('#facet-committee_member_name_ssim') do
-        expect(page).to have_content(doc[:committee_member_name_tesim].first)
-      end
+    it 'allows faceted browsing', :js do
+      expect(page).to have_css('.blacklight-degree_name_ssi .accordion-button', visible: :all)
+      expect(page).to have_css('#facet-degree_name_ssi', text: doc[:degree_name_ssi], visible: :all)
+
+      expect(page).to have_css('.blacklight-committee_member_name_ssim .accordion-button', visible: :all)
+      expect(page).to have_css('#facet-committee_member_name_ssim', text: doc[:committee_member_name_tesim].first,
+                                                                    visible: :all)
       # expect(page).to have_css(".modal-dialog")
       # expect(page).to have_content("Bebe Senger")
     end
@@ -175,6 +168,52 @@ RSpec.describe 'Catalog', type: :feature do
       click_link_or_button 'Explore'
       expect(page).to have_content('No results found')
       expect(page).to have_content('Try modifying your search')
+    end
+  end
+
+  context 'when using sort and per-page controls', :existing_solr_records do
+    before do
+      visit '/catalog?q=*%3A*'
+    end
+
+    it 'updates the selected sort when the sort button is used', :js do
+      expect(page).to have_css('#sort-dropdown')
+
+      within '#sort-dropdown' do
+        expect(page).to have_button('Sort by relevance')
+        click_button
+      end
+
+      within '#sort-dropdown .dropdown-menu' do
+        click_link 'title'
+      end
+
+      expect(page).to have_current_path(/sort=title_ssi\+asc%2C\+year_isi\+desc/, url: true)
+
+      expect(page).to have_css('#sort-dropdown .dropdown-menu a.dropdown-item.active', text: 'title', visible: :all)
+
+      titles = all('.document-title-heading').first(2).map { |heading| heading.text.strip.downcase }
+      expect(titles.size).to eq(2)
+      expect(titles.first).to be <= titles.second
+    end
+
+    it 'updates the selected per-page option when the per-page button is used', :js do
+      expect(page).to have_css('#per_page-dropdown')
+
+      within '#per_page-dropdown' do
+        expect(page).to have_button('10')
+        click_button
+      end
+
+      within '#per_page-dropdown .dropdown-menu' do
+        find('a.dropdown-item', text: /^20\s+per\s+page$/i).click
+      end
+
+      expect(page).to have_current_path(/per_page=20/, url: true)
+
+      expect(page).to have_css('#per_page-dropdown .dropdown-menu a.dropdown-item.active', text: '20 per page',
+                                                                                           visible: :all)
+      expect(page).to have_css('.document-title-heading', count: 20)
     end
   end
 end

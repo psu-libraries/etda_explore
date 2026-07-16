@@ -6,3 +6,5 @@ en:
         search:
           placeholder: 'Explore...'
         submit: 'Explore'
+      pagination_info:
+        no_items_found: ''

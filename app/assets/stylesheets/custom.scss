@@ -5,10 +5,27 @@ $blue-theme: #2674ca;
 $white: #fff;
 $light-gray: #d3d3d3;
 $dark-green: #006400;
+$dark-blue: #1f427c;
+$secondary: #6c757d;
+$text-dark: #212529;
+$surface-100: #f9f9f9;
+$surface-150: #f5f5f5;
+$surface-200: #e0e0e0;
+$surface-250: #d6d6d6;
+$border-gray: #bdbdbd;
+$gray-500: #adb5bd;
+$danger: #dc3545;
+$caret-width: .3em;
+$breakpoint-sm: 576px;
+$breakpoint-sm-max: 575.98px;
+$breakpoint-md: 768px;
+$breakpoint-md-max: 767.98px;
+$breakpoint-lg: 992px;
 
 $theme-colors: (
   "primary": $blue-theme,
-  "dark": #1f427c
+  "secondary": $secondary,
+  "dark": $dark-blue
 );
 
 .logo-title {
@@ -19,11 +36,18 @@ $theme-colors: (
     margin-left: 30px;
     padding-left: 1rem;
     padding-right: 0;
+    text-decoration: none;
 
     &:hover {
       text-decoration: none;
     }
   }
+}
+
+.topbar {
+  // Keep Bootstrap bg-dark utilities aligned with the site header color.
+  --bs-dark-rgb: #{red($dark-blue)}, #{green($dark-blue)}, #{blue($dark-blue)};
+  background-color: $dark-blue;
 }
 
 .download-link-fa {
@@ -44,5 +68,200 @@ $theme-colors: (
     background-color: $dark-green;
     color: $white;
     text-decoration: none;
+  }
+}
+
+.container {
+  max-width: 1140px;
+}
+
+a {
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+.btn {
+  &:hover,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.search-widgets .dropdown-toggle {
+  background-color: transparent;
+  border: 1px solid $text-dark;
+  border-radius: .25rem;
+  color: $text-dark;
+  font-size: .875rem;
+  line-height: 1.5;
+  padding: .25rem .5rem;
+}
+
+.search-widgets .dropdown-toggle:hover,
+.search-widgets .dropdown-toggle:focus,
+.search-widgets .dropdown-toggle:active,
+.search-widgets .show > .dropdown-toggle {
+  background-color: $text-dark;
+  border-color: $text-dark;
+  box-shadow: none;
+  color: $white;
+}
+
+.facet-limit,
+.sidenav .facet-limit.card {
+  --bs-card-bg: #{$surface-200};
+  --bs-card-cap-bg: #{$surface-250};
+  background-color: $surface-200;
+  border: 1px solid $border-gray;
+  border-radius: .2rem;
+  margin-bottom: .4rem;
+}
+
+.accordion-item.facet-limit,
+.sidenav .accordion-item.facet-limit {
+  background-color: $surface-100;
+  border: 1px solid $border-gray;
+  border-radius: .25rem;
+  margin-bottom: .55rem;
+}
+
+.facet-limit.card,
+.sidenav .facet-limit.card {
+  overflow: hidden;
+}
+
+.facet-limit .card-header,
+.sidenav .facet-limit.card .card-header {
+  background-color: $surface-250;
+  border-bottom: 1px solid $border-gray;
+  padding: 0;
+}
+
+.facet-limit .facet-field-heading,
+.sidenav .facet-limit.card .facet-field-heading {
+  background-color: $surface-150;
+  margin: 0;
+}
+
+.facet-limit .btn.collapse-toggle,
+.sidenav .facet-limit.card .btn.collapse-toggle {
+  background-color: $surface-150;
+  border: 0;
+  color: $text-dark;
+  font-weight: 600;
+  padding: .5rem .7rem;
+}
+
+.accordion-item.facet-limit .facet-field-heading,
+.sidenav .accordion-item.facet-limit .facet-field-heading {
+  background-color: $surface-150;
+  margin: 0;
+}
+
+.accordion-item.facet-limit .accordion-button,
+.accordion-item.facet-limit .accordion-button.collapsed,
+.sidenav .accordion-item.facet-limit .accordion-button:not(.collapsed) {
+  background-color: $surface-150;
+  border: 0;
+  box-shadow: none;
+  color: $text-dark;
+  font-weight: 600;
+  padding: .5rem .7rem;
+}
+
+.facet-limit .card-body,
+.sidenav .facet-limit.card .card-body {
+  background-color: $white;
+  padding: .4rem .55rem;
+}
+
+.accordion-item.facet-limit .accordion-body,
+.sidenav .accordion-item.facet-limit .accordion-body {
+  background-color: $white;
+  padding: .4rem .55rem;
+}
+
+.facet-limit .facet-content,
+.facet-limit .facet-values,
+.facet-limit .facet-values li {
+  background-color: $white;
+}
+
+.facet-limit .facet-values .facet-label,
+.facet-limit .facet-values .facet-select,
+.facet-limit .facet-values .selected {
+  color: $text-dark;
+  font-weight: 400;
+}
+
+.facet-limit .facet-values .facet-select {
+  color: $blue-theme;
+}
+
+%mb-2 {
+  margin-bottom: .5rem;
+}
+
+%mx-1 {
+  margin-left: .25rem;
+  margin-right: .25rem;
+}
+
+.constraints-container {
+  @extend %mb-2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .25rem;
+}
+
+.applied-filter {
+  @extend %mx-1;
+
+  .constraint-value {
+    cursor: default;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @media (max-width: $breakpoint-sm) {
+      max-width: $breakpoint-sm * .5;
+    }
+
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-sm-max) {
+      max-width: $breakpoint-sm * .5;
+    }
+
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-md-max) {
+      max-width: $breakpoint-md * .5;
+    }
+
+    @media (min-width: $breakpoint-lg) {
+      max-width: $breakpoint-lg * .5;
+    }
+
+    &:hover,
+    &:active {
+      background-color: $secondary;
+      border-color: $secondary;
+      box-shadow: none;
+    }
+  }
+
+  .filter-name::after {
+    color: $gray-500;
+    content: '❯';
+    font-size: 90%;
+    padding-left: $caret-width;
+  }
+
+  .remove:hover,
+  .remove:active {
+    background-color: $danger;
+    border-color: $danger;
+    color: $white;
   }
 }
