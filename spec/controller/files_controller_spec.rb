@@ -54,7 +54,6 @@ RSpec.describe FilesController, type: :controller do
     context 'when the request comes from an allowed IP' do
       before do
         @request.remote_addr = allowed_ips
-        allow(controller).to receive(:current_user).and_return(nil)
       end
 
       it 'bypasses the bot challenge for allowed IPs' do
