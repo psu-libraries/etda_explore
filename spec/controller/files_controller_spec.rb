@@ -60,6 +60,7 @@ RSpec.describe FilesController, type: :controller do
       it 'bypasses the bot challenge for allowed IPs' do
         with_bot_challenge_enabled do
           get :solr_download_final_submission, params: { id: file_id }
+
           expect(response).to have_http_status(:ok)
         end
       end
