@@ -3,7 +3,7 @@
 require 'fileutils'
 namespace :solr do
   desc 'Package solr configset into configset.zip, optionally including analysis-extras jars from SOLR_INSTALL_DIR'
-  task :package_configset do
+  task package_configset: :environment do
     config_dir = 'solr/conf'
     build_dir = 'tmp/solr_configset_build'
     zip_file = 'configset.zip'
