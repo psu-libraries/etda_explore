@@ -31,10 +31,10 @@ BotChallengePage.configure do |config|
   #
   config.skip_when = ->(_config) {
     # Does not challenge logged-in, non-guest users
-    return true if controller.current_user.present? && !controller.current_user.guest?
+    return true if current_user.present? && !current_user.guest?
 
     # Does not challenge "Good Bots" – we have another layer of filters so Header containing "Bot" should be legit
-    !!(controller.request.headers['User-Agent'] =~ /bot|nagios-plugins|ProQuest Harvesting/i)
+    !!(request.headers['User-Agent'] =~ /bot|nagios-plugins|ProQuest Harvesting/i)
   }
 
   # Hook after a bot challenge is presented, for logging or other

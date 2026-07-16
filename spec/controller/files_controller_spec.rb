@@ -15,7 +15,7 @@ RSpec.describe FilesController, type: :controller do
 
   before do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
-    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_enforce_filter)
+    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_guard_action)
     ENV['BOT_CHALLENGE_IP_WHITELIST'] = allowed_ips
   end
 
@@ -43,19 +43,21 @@ RSpec.describe FilesController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'runs the bot_challenge_enforce filter' do
+    it 'runs the bot challenge guard action' do
+      allow(controller).to receive(:current_user).and_return(nil)
       get :solr_download_final_submission, params: { id: file_id }
-      expect(BotChallengePage::BotChallengePageController).to have_received(:bot_challenge_enforce_filter)
+      expect(BotChallengePage::BotChallengePageController).to have_received(:bot_challenge_guard_action)
     end
 
     context 'when the request comes from an allowed IP' do
       before do
         @request.remote_addr = allowed_ips
+        allow(controller).to receive(:current_user).and_return(nil)
       end
 
-      it 'bypasses the bot_challenge_enforce filter' do
+      it 'bypasses the bot challenge guard action' do
         get :solr_download_final_submission, params: { id: file_id }
-        expect(BotChallengePage::BotChallengePageController).not_to have_received(:bot_challenge_enforce_filter)
+        expect(BotChallengePage::BotChallengePageController).not_to have_received(:bot_challenge_guard_action)
       end
     end
 
