@@ -4,12 +4,12 @@ OkComputer.mount_at = false
 
 OkComputer::Registry.register(
   'version',
-  HealthChecks::VersionCheck.new
+  Healthchecks::VersionCheck.new
 )
 
 OkComputer::Registry.register(
   'solr',
-  HealthChecks::SolrCheck.new
+  Healthchecks::SolrCheck.new
 )
 
 OkComputer.make_optional %w(version)
