@@ -16,6 +16,6 @@ Naming/PredicateMethod:
   Exclude:
     - 'app/helpers/blacklight_display_helper.rb'
 
-Capybara/NegationMatcherAfterVisit:
+Capybara/Rspec/NegationMatcherAfterVisit:
   Exclude:
     - 'spec/integration/oai_spec.rb'
