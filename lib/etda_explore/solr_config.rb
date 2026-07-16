@@ -63,30 +63,8 @@ module EtdaExplore
     def tempfile
       tmp = Tempfile.new('configset')
       Zip::File.open(tmp, create: true) do |zipfile|
-        # Add config files
-        Dir["#{dir}/**/**"].each do |file|
-          next unless File.file?(file)
-          zipfile.add(file.sub("#{dir}/", ''), file)
-        end
-
-        # Optionally include jars from a local Solr install (useful in CI)
-        solr_install = ENV['SOLR_INSTALL_DIR']
-        if solr_install && !solr_install.empty?
-          # common locations for analysis extras in different Solr images
-          candidates = [
-            File.join(solr_install, 'modules', 'analysis-extras', 'lib'),
-            File.join(solr_install, 'contrib', 'analysis-extras', 'lib'),
-            File.join(solr_install, 'dist', 'contrib', 'analysis-extras', 'lib')
-          ]
-          candidates.each do |libdir|
-            next unless Dir.exist?(libdir)
-            Dir[File.join(libdir, '*')].each do |jar|
-              next unless File.file?(jar)
-              # place jars under lib/ in the configset so solrconfig.xml <lib dir="lib"/> picks them up
-              zipfile.add(File.join('lib', File.basename(jar)), jar)
-            end
-          end
-        end
+        add_config_files(zipfile)
+        add_solr_jars(zipfile)
       end
       tmp
     end
@@ -100,6 +78,35 @@ module EtdaExplore
           digest.push(Digest::MD5.hexdigest(File.read(f))) if File.file?(f)
         end
         Digest::MD5.hexdigest(digest.join)
+      end
+
+      def add_config_files(zipfile)
+        Dir["#{dir}/**/**"].each do |file|
+          next unless File.file?(file)
+
+          zipfile.add(file.sub("#{dir}/", ''), file)
+        end
+      end
+
+      def add_solr_jars(zipfile)
+        solr_install = ENV.fetch('SOLR_INSTALL_DIR', nil)
+        return unless solr_install.present?
+
+        candidates = [
+          File.join(solr_install, 'modules', 'analysis-extras', 'lib'),
+          File.join(solr_install, 'contrib', 'analysis-extras', 'lib'),
+          File.join(solr_install, 'dist', 'contrib', 'analysis-extras', 'lib')
+        ]
+
+        candidates.each do |libdir|
+          next unless Dir.exist?(libdir)
+
+          Dir[File.join(libdir, '*')].each do |jar|
+            next unless File.file?(jar)
+
+            zipfile.add(File.join('lib', File.basename(jar)), jar)
+          end
+        end
       end
   end
 end
