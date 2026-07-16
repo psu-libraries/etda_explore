@@ -321,6 +321,8 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
+          requires:
+            - test-application
 
       - push-image:
           name: push-image
