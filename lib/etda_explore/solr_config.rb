@@ -90,7 +90,7 @@ module EtdaExplore
 
       def add_solr_jars(zipfile)
         solr_install = ENV.fetch('SOLR_INSTALL_DIR', nil)
-        return unless solr_install.present?
+        return if solr_install.blank?
 
         candidates = [
           File.join(solr_install, 'modules', 'analysis-extras', 'lib'),
