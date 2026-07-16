@@ -42,7 +42,7 @@ RSpec.describe FilesController, type: :controller do
     end
 
     it 'returns a bot challenge response for anonymous users from disallowed IPs' do
-      allow(controller).to receive(:current_user).and_return(nil)
+      allow(controller).to receive(:current_user).and_return(User.new(guest: true))
       with_bot_challenge_enabled do
         get :solr_download_final_submission, params: { id: file_id }
 
@@ -57,6 +57,7 @@ RSpec.describe FilesController, type: :controller do
       end
 
       it 'bypasses the bot challenge for allowed IPs' do
+        allow(controller).to receive(:current_user).and_return(User.new(guest: true))
         with_bot_challenge_enabled do
           get :solr_download_final_submission, params: { id: file_id }
 
