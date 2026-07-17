@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'zip'
+require 'cgi'
 
 module EtdaExplore
   class SolrConfig
@@ -15,6 +16,10 @@ module EtdaExplore
       ENV.fetch('SOLR_PASSWORD', nil)
     end
 
+    def solr_protocol
+      ENV.fetch('SOLR_PROTOCOL', 'http')
+    end
+
     def solr_host
       ENV.fetch('SOLR_HOST', 'localhost')
     end
@@ -24,7 +29,8 @@ module EtdaExplore
     end
 
     def url
-      "http://#{solr_host}:#{solr_port}"
+      port = solr_port.to_s.empty? ? '' : ":#{solr_port}"
+      "#{solr_protocol}://#{solr_host}#{port}"
     end
 
     def config_url
@@ -36,12 +42,12 @@ module EtdaExplore
     end
 
     def query_url
+      base_url = "#{url}/solr/#{collection_name}"
       if solr_username && solr_password
-        solr_auth = "#{solr_username}:#{URI.encode_www_form_component(solr_password)}"
-        "http://#{solr_auth}@#{solr_host}:#{solr_port}/solr/#{collection_name}"
-      else
-        "http://#{solr_host}:#{solr_port}/solr/#{collection_name}"
+        auth = "#{solr_username}:#{CGI.escape(solr_password)}"
+        return base_url.gsub('://', "://#{auth}@")
       end
+      base_url
     end
 
     def dir
