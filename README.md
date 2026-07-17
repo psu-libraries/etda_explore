@@ -63,16 +63,16 @@ These steps will help you reindex the solr collections in ETDA Explore. Please n
 
     bundle exec rake solr:reset
 
-2. Initialize the solr collections (in explore pod):    
+2. Initialize the solr collections (in explore pod):
 
     bundle exec rake solr:init
 
-3. Reindex all the collections (in workflow pod): 
+3. Reindex all the collections (in workflow pod):
 
     bundle exec rake workflow:solr:index_all
 
-The steps above should help you reindex solr. If you encounter errors, you might have to run the steps in a different order or check the 
-`etda*-solrcloud-*` pod under the /var/solr/data directory 
+The steps above should help you reindex solr. If you encounter errors, you might have to run the steps in a different order or check the
+`etda*-solrcloud-*` pod under the /var/solr/data directory
 
 
 ### Testing
@@ -101,3 +101,29 @@ To deploy a preview, prepend your branch name with `preview/` like so: `preview/
 Any PRs merged to main will automatically be deployed to QA.
 
 To initiate a production deploy, create a new release.  Then, merge the automatically created PR in the config repo: https://github.com/psu-libraries/etda-config
+
+### Solr Configuration and Initialization
+
+This project uses Solr 9. The analysis-extras module (ICU, Morfologik, etc.) is loaded directly by Solr via the `SOLR_MODULES` environment variable, ensuring parity with `psulib_blacklight`.
+
+#### Local Development Setup
+
+To initialize Solr for the first time or after a configuration change:
+
+1.  **Package the Configset**:
+    ```bash
+    docker-compose exec app bundle exec rake solr:package_configset
+    ```
+    This creates `configset.zip` from the contents of `solr/conf`.
+
+2.  **Initialize Solr**:
+    ```bash
+    docker-compose exec app bundle exec rake solr:init
+    ```
+    This uploads the configset and creates the collection.
+
+#### Production Parity
+
+In production and CI, ensure `SOLR_MODULES=analysis-extras` is set in the Solr environment. The configset packaging no longer requires vendoring JAR files, as they are provided by the Solr image.
+
+

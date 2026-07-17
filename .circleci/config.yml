@@ -234,7 +234,9 @@ jobs:
           MYSQL_USER: etda
           MYSQL_PASSWORD: etda
           MYSQL_DATABASE: explore
-      - image: solr:9.10.1-slim
+      - image: solr:9.10.1
+        environment:
+          SOLR_MODULES: analysis-extras
         command: [
           "/bin/bash",
           "-c",

@@ -1,43 +1,23 @@
 # frozen_string_literal: true
 
 require 'fileutils'
+require 'zip'
+
 namespace :solr do
-  desc 'Package solr configset into configset.zip, optionally including analysis-extras jars from SOLR_INSTALL_DIR'
+  desc 'Package solr configset into configset.zip'
   task package_configset: :environment do
     config_dir = 'solr/conf'
-    build_dir = 'tmp/solr_configset_build'
     zip_file = 'configset.zip'
 
-    FileUtils.rm_rf(build_dir)
-    FileUtils.mkdir_p(build_dir)
-
-    # Copy config files
-    FileUtils.cp_r(Dir[File.join(config_dir, '**', '*')], build_dir)
-
-    # Prepare lib dir inside the configset build for any jars we want to include
-    lib_dir = File.join(build_dir, 'lib')
-    FileUtils.mkdir_p(lib_dir)
-
-    if ENV['SOLR_INSTALL_DIR'].present?
-      src_dirs = [
-        File.join(ENV['SOLR_INSTALL_DIR'], 'modules', 'analysis-extras', 'lib'),
-        File.join(ENV['SOLR_INSTALL_DIR'], 'modules', 'analysis-extras', 'lucene-libs')
-      ]
-      src_dirs.each do |d|
-        if Dir.exist?(d)
-          Dir.glob(File.join(d, '*')).each do |f|
-            FileUtils.cp(f, lib_dir) if File.file?(f)
-          end
-        end
-      end
-    else
-      puts "SOLR_INSTALL_DIR not set — ensure required jars (icu, analysis-extras) are present in #{config_dir}/lib"
-    end
+    FileUtils.rm_f(zip_file)
 
     # Create zip
-    Dir.chdir(build_dir) do
-      FileUtils.rm_f(File.join('..', '..', zip_file))
-      system('zip', '-r', File.join('..', '..', zip_file), '.') || raise('zip failed')
+    Zip::File.open(zip_file, create: true) do |zip|
+      Dir.glob("#{config_dir}/**/*").each do |file|
+        next if File.directory?(file)
+
+        zip.add(file.sub("#{config_dir}/", ''), file)
+      end
     end
 
     puts "Created #{zip_file}"

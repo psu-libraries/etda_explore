@@ -16,9 +16,6 @@
 
   <!-- Load analysis extras from the Solr installation (contrib path used by official images) -->
   <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lib" />
-  <lib dir="${solr.install.dir:../../../..}/contrib/analysis-extras/lucene-libs" />
-  <!-- Load any jars packaged with the configset under solr/conf/lib -->
-  <lib dir="lib" />
 
   <dataDir>${solr.data.dir:}</dataDir>
 

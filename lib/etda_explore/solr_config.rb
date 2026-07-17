@@ -64,7 +64,6 @@ module EtdaExplore
       tmp = Tempfile.new('configset')
       Zip::File.open(tmp, create: true) do |zipfile|
         add_config_files(zipfile)
-        add_solr_jars(zipfile)
       end
       tmp
     end
@@ -85,27 +84,6 @@ module EtdaExplore
           next unless File.file?(file)
 
           zipfile.add(file.sub("#{dir}/", ''), file)
-        end
-      end
-
-      def add_solr_jars(zipfile)
-        solr_install = ENV.fetch('SOLR_INSTALL_DIR', nil)
-        return if solr_install.blank?
-
-        candidates = [
-          File.join(solr_install, 'modules', 'analysis-extras', 'lib'),
-          File.join(solr_install, 'contrib', 'analysis-extras', 'lib'),
-          File.join(solr_install, 'dist', 'contrib', 'analysis-extras', 'lib')
-        ]
-
-        candidates.each do |libdir|
-          next unless Dir.exist?(libdir)
-
-          Dir[File.join(libdir, '*')].each do |jar|
-            next unless File.file?(jar)
-
-            zipfile.add(File.join('lib', File.basename(jar)), jar)
-          end
         end
       end
   end

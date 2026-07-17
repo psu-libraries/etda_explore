@@ -558,6 +558,7 @@ DEPENDENCIES
   rsolr (>= 1.0, < 3)
   rspec-its
   rspec-rails
+  rubyzip (~> 3.2)
   sassc-rails (~> 2.1)
   selenium-webdriver
   simplecov

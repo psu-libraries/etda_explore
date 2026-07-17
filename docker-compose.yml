@@ -10,13 +10,15 @@ services:
     ports:
       - ${MYSQL_LOCAL_PORT:-3306}:3306
   solr:
-    image: solr:9.10.1-slim
+    image: solr:9.10.1
     restart: always
     environment:
       SOLR_STOP_WAIT: 10
       SOLR_USERNAME: ${SOLR_USERNAME}
       SOLR_PASSWORD: ${SOLR_PASSWORD}
       SOLR_HEAP: ${SOLR_HEAP:-512m}
+      SOLR_OPTS: "-Dsolr.config.lib.enabled=true"
+      SOLR_MODULES: "analysis-extras"
     volumes:
     - solr-data:/var/solr
     - type: bind
@@ -34,21 +36,29 @@ services:
         solr stop
         solr -c -f
       "
-    app:
-      build: .
-      depends_on:
-        - mysql
-        - solr
-      environment:
-        RAILS_ENV: development
-        DATABASE_URL: mysql2://root:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
-        SOLR_HOST: solr
-        SOLR_PORT: 8983
-      ports:
-        - "3000:3000"
-      volumes:
-        - .:/app:cached
-      command: ["/bin/bash","-lc","bundle exec rails server -b 0.0.0.0 -p 3000"]
+  app:
+    user: root
+    build: .
+    depends_on:
+      - mysql
+      - solr
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: mysql2://root:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      SOLR_HOST: solr
+      SOLR_PORT: 8983
+      SOLR_USERNAME: ${SOLR_USERNAME}
+      SOLR_PASSWORD: ${SOLR_PASSWORD}
+      EXPLORE_HOST: ${EXPLORE_HOST:-localhost}
+      WORKFLOW_HOST: ${WORKFLOW_HOST:-localhost}
+      PARTNER: ${PARTNER:-graduate}
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app:cached
+      - bundle-data:/app/vendor/bundle
+    command: ["/bin/bash","-lc","bundle exec rails server -b 0.0.0.0 -p 3000"]
 volumes:
   solr-data:
   mysql-data:
+  bundle-data:
