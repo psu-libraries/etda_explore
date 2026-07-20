@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module HealthChecks
+module Healthchecks
   class SolrCheck < OkComputer::Check
     def check
       solr = RSolr.connect(url: Rails.configuration.solr.query_url)

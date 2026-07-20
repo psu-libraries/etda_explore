@@ -24,6 +24,7 @@ Capybara.javascript_driver = :selenium_chrome_headless_desktop
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'devise'
 require 'view_component/test_helpers'
+require Rails.root.join('spec/support/helpers/bot_challenge_helpers')
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -77,6 +78,7 @@ RSpec.configure do |config|
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include BotChallengeHelpers, type: :controller
 
   config.include ViewComponent::TestHelpers, type: :component
 

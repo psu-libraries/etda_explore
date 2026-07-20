@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-module BlacklightOaiProvider
-  class ResumptionToken < ::OAI::Provider::ResumptionToken
-    # Override encode conditions to allow for parsing date / datetime objects
+require 'blacklight_oai_provider/resumption_token'
+
+module Overrides
+  module ResumptionToken
+    # Override encode conditions to allow parsing date/datetime objects.
     # https://github.com/code4lib/ruby-oai/pull/97
     def encode_conditions
       encoded_token = @prefix.to_s.dup
@@ -26,3 +28,5 @@ module BlacklightOaiProvider
     end
   end
 end
+
+BlacklightOaiProvider::ResumptionToken.prepend(Overrides::ResumptionToken)

@@ -13,10 +13,11 @@ Rails.application.routes.draw do
     get '/login', to: 'application#login', as: :login
   end
 
-  resource :catalog, only: [:index], as: 'catalog', path: '/catalog', controller: 'catalog' do
+  resource :catalog, only: [], as: 'catalog', path: '/catalog', controller: 'catalog' do
     concerns :searchable
     concerns :oai_provider
   end
+
   devise_for :users
 
   concern :exportable, Blacklight::Routes::Exportable.new
