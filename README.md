@@ -10,7 +10,7 @@ The application is used by each of several different "partners". Currently these
 |----------|------|
 | `ruby`    |  3.4 |
 | `rails`   |  8.1 |
-| `solr`   |  8 |
+| `solr`   |  9 |
 | `mariadb` | 11 |
 
 ### Configuration
