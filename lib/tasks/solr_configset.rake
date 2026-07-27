@@ -11,7 +11,6 @@ namespace :solr do
 
     FileUtils.rm_f(zip_file)
 
-    # Create zip
     Zip::File.open(zip_file, create: true) do |zip|
       Dir.glob("#{config_dir}/**/*").each do |file|
         next if File.directory?(file)
