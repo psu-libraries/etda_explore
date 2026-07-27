@@ -4,8 +4,12 @@ require 'etda_explore/solr_admin'
 require_relative '../../app/models/fake_solr_document'
 
 namespace :solr do
+  task app_environment: :environment do
+    Rake::Task['environment'].invoke
+  end
+
   desc 'Reset Solr'
-  task reset: :environment do
+  task reset: :app_environment do
     conf = EtdaExplore::SolrAdmin.new
     conf.delete_collection
 
@@ -13,7 +17,7 @@ namespace :solr do
   end
 
   desc 'Load Fixtures'
-  task :load_fixtures, [:num] => :environment do |_task, args|
+  task :load_fixtures, [:num] => :app_environment do |_task, args|
     args.with_defaults(num: 20)
 
     args[:num].to_i.times do |index|
@@ -28,7 +32,7 @@ namespace :solr do
   end
 
   desc 'Initialize Solr'
-  task init: :environment do
+  task init: :app_environment do
     puts 'Starting initialization of Solr cores'
     conf = EtdaExplore::SolrAdmin.new
     conf.upload_config unless conf.configset_exists?

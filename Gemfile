@@ -5,11 +5,11 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.4.9'
 
-gem 'blacklight', '~> 7.38'
-gem 'blacklight_oai_provider'
+gem 'blacklight', '~> 9'
+gem 'blacklight_oai_provider', github: 'Smullz622/blacklight_oai_provider', ref: 'e4b8d12'
 gem 'bootsnap', require: false
-gem 'bootstrap', '~> 4.0'
-gem 'bot_challenge_page', '~> 0.3.0'
+gem 'bootstrap', '~> 5.1.3'
+gem 'bot_challenge_page', '~> 1.2.0'
 gem 'cancancan'
 gem 'devise'
 gem 'devise-guests', '~> 0.8'
@@ -23,7 +23,7 @@ gem 'jquery-rails'
 gem 'mysql2', '>= 0.5.7'
 gem 'okcomputer'
 gem 'puma', '~> 6'
-gem 'rails', '~> 7.2.3.1'
+gem 'rails', '~> 8.1.3'
 gem 'redis', '~> 4.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'rubyzip', '~> 3.2'
@@ -46,7 +46,7 @@ group :test do
   gem 'rspec-its'
   gem 'rspec-rails'
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'webdrivers', require: false
   gem 'webmock'
 end
 

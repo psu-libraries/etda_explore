@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-
 require 'fileutils'
 
 RSpec.describe FilesController, type: :controller do
@@ -15,7 +14,6 @@ RSpec.describe FilesController, type: :controller do
 
   before do
     allow(AutoRemediateWebhookJob).to receive(:perform_later)
-    allow(BotChallengePage::BotChallengePageController).to receive(:bot_challenge_enforce_filter)
     ENV['BOT_CHALLENGE_IP_WHITELIST'] = allowed_ips
   end
 
@@ -43,9 +41,14 @@ RSpec.describe FilesController, type: :controller do
       expect(response).to have_http_status(:ok)
     end
 
-    it 'runs the bot_challenge_enforce filter' do
-      get :solr_download_final_submission, params: { id: file_id }
-      expect(BotChallengePage::BotChallengePageController).to have_received(:bot_challenge_enforce_filter)
+    it 'returns a bot challenge response for anonymous users from disallowed IPs' do
+      allow(controller).to receive(:current_user).and_return(User.new(guest: true))
+      with_bot_challenge_enabled do
+        get :solr_download_final_submission, params: { id: file_id }
+
+        expect(response).to have_http_status(:forbidden)
+        expect(response.headers['Cache-Control']).to eq('no-store')
+      end
     end
 
     context 'when the request comes from an allowed IP' do
@@ -53,9 +56,13 @@ RSpec.describe FilesController, type: :controller do
         @request.remote_addr = allowed_ips
       end
 
-      it 'bypasses the bot_challenge_enforce filter' do
-        get :solr_download_final_submission, params: { id: file_id }
-        expect(BotChallengePage::BotChallengePageController).not_to have_received(:bot_challenge_enforce_filter)
+      it 'bypasses the bot challenge for allowed IPs' do
+        allow(controller).to receive(:current_user).and_return(User.new(guest: true))
+        with_bot_challenge_enabled do
+          get :solr_download_final_submission, params: { id: file_id }
+
+          expect(response).to have_http_status(:ok)
+        end
       end
     end
 

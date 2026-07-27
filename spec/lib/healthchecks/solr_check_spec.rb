@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe HealthChecks::SolrCheck do
+RSpec.describe Healthchecks::SolrCheck do
   describe '#check' do
     before(:all) do
       WebMock.disable_net_connect!

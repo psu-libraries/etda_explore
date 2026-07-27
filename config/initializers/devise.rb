@@ -292,7 +292,7 @@ Devise.setup do |config|
   # end
 
   config.warden do |manager|
-    manager.failure_app = RedirectToLoginFailure
+    manager.failure_app = Devise::RedirectToLoginFailure
   end
 
   # ==> Mountable engine configurations

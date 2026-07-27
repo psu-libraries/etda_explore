@@ -8,7 +8,8 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  before_action :enforce_bot_challenge, only: :index
+  # Going to the front page also goes to index, and we only want to challenge on searches
+  bot_challenge only: :index, unless: -> { request.query_parameters.blank? }
 
   def index
     super
@@ -33,7 +34,7 @@ class CatalogController < ApplicationController
     }
 
     config.show.document_actions.delete(:bookmark)
-
+    config.advanced_search.enabled = false
     # solr path which will be added to solr base url before the other solr params.
     # config.solr_path = 'select'
     # config.document_solr_path = 'get'
@@ -235,13 +236,4 @@ class CatalogController < ApplicationController
       }
     }
   end
-
-  private
-
-    def enforce_bot_challenge
-      # Going to the front page also goes to index, and we only want this on searches
-      return if request.query_parameters.blank?
-
-      BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
-    end
 end
