@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-class RedirectToLoginFailure < Devise::FailureApp
-  def redirect_url
-    '/login'
+module Devise
+  class RedirectToLoginFailure < FailureApp
+    def redirect_url
+      '/login'
+    end
   end
 end

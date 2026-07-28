@@ -8,7 +8,8 @@ class CatalogController < ApplicationController
     redirect_to '/404'
   end
 
-  before_action :enforce_bot_challenge, only: :index
+  # Going to the front page also goes to index, and we only want to challenge on searches
+  bot_challenge only: :index, unless: -> { request.query_parameters.blank? }
 
   def index
     super
@@ -33,7 +34,7 @@ class CatalogController < ApplicationController
     }
 
     config.show.document_actions.delete(:bookmark)
-
+    config.advanced_search.enabled = false
     # solr path which will be added to solr base url before the other solr params.
     # config.solr_path = 'select'
     # config.document_solr_path = 'get'
@@ -205,10 +206,10 @@ class CatalogController < ApplicationController
     # whether the sort is ascending or descending (it must be asc or desc
     # except in the relevancy case). Add the sort: option to configure a
     # custom Blacklight url parameter value separate from the Solr sort fields.
-    config.add_sort_field 'relevance', sort: 'score desc, pub_date_si desc, title_si asc', label: 'relevance'
-    config.add_sort_field 'year-desc', sort: 'pub_date_si desc, title_si asc', label: 'year'
-    config.add_sort_field 'author', sort: 'author_si asc, title_si asc', label: 'author'
-    config.add_sort_field 'title_si asc, pub_date_si desc', label: 'title'
+    config.add_sort_field 'relevance', sort: 'score desc, year_isi desc, title_ssi asc', label: 'relevance'
+    config.add_sort_field 'year-desc', sort: 'year_isi desc, title_ssi asc', label: 'year'
+    config.add_sort_field 'author', sort: 'last_name_ssi asc, title_ssi asc', label: 'author'
+    config.add_sort_field 'title_ssi asc, year_isi desc', label: 'title'
 
     # If there are more than this many search results, no spelling ("did you
     # mean") suggestion is offered.
@@ -235,13 +236,4 @@ class CatalogController < ApplicationController
       }
     }
   end
-
-  private
-
-    def enforce_bot_challenge
-      # Going to the front page also goes to index, and we only want this on searches
-      return if request.query_parameters.blank?
-
-      BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
-    end
 end

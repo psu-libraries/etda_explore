@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'bot_challenge_page'
+
 class FilesController < ApplicationController
   include Blacklight::Document::SchemaOrg
 
-  before_action :enforce_bot_challenge, only: :solr_download_final_submission
+  bot_challenge only: :solr_download_final_submission, unless: -> { bot_challenge_allowed_ip? }
 
   def solr_download_final_submission
     token = files_params[:remediate_token]
@@ -48,14 +50,13 @@ class FilesController < ApplicationController
       @doc.file_by_id(file_id.to_i, @doc.access_level.current_access_level, remediated)
     end
 
-    def enforce_bot_challenge
+    def bot_challenge_allowed_ip?
       # Challenge only if remote IP is not allowed
       allowed_ips = ENV.fetch('BOT_CHALLENGE_IP_WHITELIST', '')
         .split(',')
         .filter_map { |ip| IPAddr.new(ip.strip) unless ip.strip.empty? }
-      return if allowed_ips.any? { |ip| ip.include?(IPAddr.new(request.remote_ip)) }
 
-      BotChallengePage::BotChallengePageController.bot_challenge_enforce_filter(self, immediate: true)
+      allowed_ips.any? { |ip| ip.include?(IPAddr.new(request.remote_ip)) }
     end
 
     def valid_remediate_token?(token, file_id)

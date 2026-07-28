@@ -2,5 +2,14 @@
 //= link_directory ../stylesheets .css
 //= link_tree ../../javascript .js
 //= link_tree ../../../vendor/javascript .js
-
-//= link application.js
+//= link blacklight-frontend/bookmark_toggle.js
+//= link blacklight-frontend/button_focus.js
+//= link blacklight-frontend/checkbox_submit.js
+//= link blacklight-frontend/core.js
+//= link blacklight-frontend/debounce.js
+//= link blacklight-frontend/facet_suggest.js
+//= link blacklight-frontend/index.js
+//= link blacklight-frontend/modal.js
+//= link blacklight-frontend/search_context.js
+//= link popper.js
+//= link bootstrap.min.js
