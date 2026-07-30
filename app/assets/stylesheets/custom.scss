@@ -4,6 +4,7 @@
 $blue-theme: #2674ca;
 $white: #fff;
 $light-gray: #d3d3d3;
+$med-green: #3A7345;
 $dark-green: #006400;
 $dark-blue: #1f427c;
 $secondary: #6c757d;
@@ -93,6 +94,18 @@ a {
   &:focus {
     text-decoration: none;
   }
+}
+
+.badge-success {
+  background-color: $med-green;
+}
+
+.badge-primary {
+  background-color: $blue-theme;
+}
+
+.badge-danger {
+  background-color: $danger;
 }
 
 .search-widgets .dropdown-toggle {
@@ -220,6 +233,11 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: .5rem .25rem;
+}
+
+
+.form-control::placeholder {
+  color: $text-dark;
 }
 
 .applied-filter {
