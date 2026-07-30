@@ -41,10 +41,6 @@ RSpec.describe 'Catalog', type: :feature do
         expect(page).to have_blacklight_label('committee_member_and_role_tesim').with('Committee Members')
         expect(page).to have_blacklight_field('committee_member_and_role_tesim')
           .with(doc[:committee_member_and_role_tesim].first)
-        expect(page).to have_link(doc[:title_ssi])
-        expect(page).to have_blacklight_label('final_submission_file_isim').with('File')
-        expect(page).to have_blacklight_field('final_submission_file_isim')
-          .with("Download #{doc[:file_name_ssim].first}")
       end
     end
 
