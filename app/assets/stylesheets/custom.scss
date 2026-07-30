@@ -4,7 +4,7 @@
 $blue-theme: #2674ca;
 $white: #fff;
 $light-gray: #d3d3d3;
-$med-green: #3A7345;
+$med-green: #3a7345;
 $dark-green: #006400;
 $dark-blue: #1f427c;
 $secondary: #6c757d;
@@ -30,7 +30,7 @@ $theme-colors: (
 );
 
 .navbar-dark .navbar-nav .nav-link {
-    color: rgba(255, 255, 255, 0.75);
+  color: $surface-150;
 }
 
 .logo-title {
