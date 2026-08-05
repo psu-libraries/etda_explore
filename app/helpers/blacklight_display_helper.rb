@@ -85,8 +85,7 @@ module BlacklightDisplayHelper
         modal_trigger_options = if should_show_modal
                                   { 'bs-toggle': 'modal',
                                     'bs-target': '#downloadModal',
-                                    'file_path': file_path
-                                   }
+                                    file_path: file_path }
                                 end
 
         data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
