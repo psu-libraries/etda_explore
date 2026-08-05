@@ -81,24 +81,22 @@ module BlacklightDisplayHelper
       document.final_submissions.map do |final_submission_id, name|
         query_params = { remediated: 'false', remediate_token: remediate_token(final_submission_id) }
         should_show_modal = document.remediated_final_submissions.blank? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
+        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id, **query_params)
         modal_trigger_options = if should_show_modal
-                                  { toggle: 'modal',
-                                    target: "#downloadModal-#{final_submission_id}" }
+                                  { 'bs-toggle': 'modal',
+                                    'bs-target': '#downloadModal',
+                                    'file_path': file_path
+                                   }
                                 end
 
-        file_path = Rails.application.routes.url_helpers.final_submission_file_path(final_submission_id, **query_params)
         data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
         link_content = content_tag(:span,
                                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                                            file_path,
                                            data: data_options,
-                                           class: 'file-link form-control'))
+                                           class: 'file-link form-control download-trigger'))
 
-        if should_show_modal
-          link_content + render(partial: 'catalog/download_modal', locals: { final_submission_id:, file_path: })
-        else
-          link_content
-        end
+        link_content
       end
     end
 
