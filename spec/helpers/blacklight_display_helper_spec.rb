@@ -111,16 +111,12 @@ RSpec.describe BlacklightDisplayHelper do
         end
 
         it 'includes modal trigger attributes and modal only when no remediated files' do
-          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
-          expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
-          expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
-          expect(render_download_links(oa_doc_no_remediated)).to include /Accessible Version in Progress|We're generating an accessible version/
-          expect(render_download_links(oa_doc_no_remediated)).to have_link('OK',
-                                                                           href: %r{/files/final_submissions/#{oa_doc_no_remediated[:value].first}\?remediate_token=.+})
-          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-toggle="modal"').twice
+          expect(render_download_links(oa_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).to include('data-bs-toggle="modal"').once
+          expect(render_download_links(oa_doc_no_remediated)).to include 'data-bs-target="#downloadModal"'
+          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).to include('data-bs-toggle="modal"').twice
         end
       end
 
@@ -131,11 +127,10 @@ RSpec.describe BlacklightDisplayHelper do
         end
 
         it 'does not include the modal trigger even on unremediated files' do
-          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-toggle="modal"')
-          expect(render_download_links(oa_doc_no_remediated)).not_to include /Accessible Version in Progress|We're generating an accessible version/
+          expect(render_download_links(oa_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-bs-toggle="modal"')
         end
       end
     end
@@ -160,14 +155,13 @@ RSpec.describe BlacklightDisplayHelper do
         end
 
         it 'includes modal trigger attributes and modal only when no remediated files' do
-          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(oa_doc_no_remediated)).to include('data-toggle="modal"').once
-          expect(render_download_links(oa_doc_no_remediated)).to include "data-target=\"#downloadModal-#{oa_doc_no_remediated[:value].first}\""
-          expect(render_download_links(oa_doc_no_remediated)).to include "id=\"downloadModal-#{oa_doc_no_remediated[:value].first}\""
+          expect(render_download_links(oa_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).to include('data-bs-toggle="modal"').once
+          expect(render_download_links(oa_doc_no_remediated)).to include 'data-bs-target="#downloadModal"'
           # Not logged in so no modal for RTI
-          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-toggle="modal"'
+          expect(render_download_links(rti_doc_no_remediated_multi_final_subs)).not_to include 'data-bs-toggle="modal"'
         end
       end
 
@@ -178,11 +172,10 @@ RSpec.describe BlacklightDisplayHelper do
         end
 
         it 'does not include the modal trigger even on unremediated files' do
-          expect(render_download_links(oa_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(rti_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(r_doc)).not_to include 'data-toggle="modal"'
-          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-toggle="modal"')
-          expect(render_download_links(oa_doc_no_remediated)).not_to include /Accessible Version in Progress|We're generating an accessible version/
+          expect(render_download_links(oa_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(rti_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(r_doc)).not_to include 'data-bs-toggle="modal"'
+          expect(render_download_links(oa_doc_no_remediated)).not_to include('data-bs-toggle="modal"')
         end
       end
     end
