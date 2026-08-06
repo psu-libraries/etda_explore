@@ -1,10 +1,10 @@
-<div class="modal fade" id="downloadModal-<%= final_submission_id %>" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
+<div class="modal fade" id="downloadModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
     <div class="modal-content">
         <div class="modal-header">
-        <h4 class="modal-title">Accessible Version in Progress</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-        </button>
+          <h4 class="modal-title">Accessible Version in Progress</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          </button>
         </div>
         <div class="modal-body">
           <p>We're generating an accessible version of this file to meet ADA Title II requirements. This process may take up to one hour. Please return later to access the accessible copy once it's ready.</p>
@@ -16,9 +16,10 @@
         </div>
         <div class="modal-footer">
         <%= link_to "OK",
-                    file_path,
-                    class: "btn btn-primary" %>
+                    '#',
+                    class: "btn btn-primary",
+                    id: 'modalDownloadLink' %>
         </div>
     </div>
-    </div>
+  </div>
 </div>

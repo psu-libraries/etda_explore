@@ -63,5 +63,11 @@ describe 'Home page', type: :feature do
     end
 
     it_behaves_like 'a page with the public layout'
+
+    it 'contains a download modal' do
+      expect(page).to have_css('#downloadModal')
+      expect(page).to have_content(/Accessible Version in Progress|We're generating an accessible version/)
+      expect(page).to have_link('OK')
+    end
   end
 end

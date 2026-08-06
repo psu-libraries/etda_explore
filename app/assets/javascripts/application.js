@@ -7,5 +7,6 @@
 //= require twitter/typeahead
 //= require bootstrap
 //= require blacklight/blacklight
+//= require_tree .
 
 

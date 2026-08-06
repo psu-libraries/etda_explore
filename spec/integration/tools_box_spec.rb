@@ -13,7 +13,7 @@ RSpec.describe 'Tools box', type: :feature do
 
     it 'shows download link and request alternate format link in tools' do
       visit "/catalog/#{doc[:id]}"
-      expect(page).to have_css("a[class='file-link form-control']")
+      expect(page).to have_css("a[class='file-link form-control download-trigger']")
       expect(page).to have_css("a[href*=#{doc[:final_submission_file_isim].first}]")
       expect(page).to have_link('Request paper in alternate format.')
     end
@@ -27,7 +27,7 @@ RSpec.describe 'Tools box', type: :feature do
         allow_any_instance_of(BlacklightDisplayHelper)
           .to receive(:this_user).and_return User.create(email: 'test123@psu.edu', guest: false)
         visit "/catalog/#{doc[:id]}"
-        expect(page).to have_css("a[class='file-link form-control']")
+        expect(page).to have_css("a[class='file-link form-control download-trigger']")
         expect(page).to have_css("a[href*=#{doc[:final_submission_file_isim].first}]")
         expect(page).to have_link('Request paper in alternate format.')
       end
