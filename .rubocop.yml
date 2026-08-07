@@ -54,6 +54,9 @@ RSpec/NestedGroups:
   Exclude:
     - 'spec/helpers/blacklight_display_helper_spec.rb'
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+  
 Style/FormatStringToken:
   Exclude:
     - 'config/routes.rb'
