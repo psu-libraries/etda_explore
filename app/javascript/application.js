@@ -1,5 +1,6 @@
 import "@hotwired/turbo-rails"
 import "controllers"
+import "utils"
 import "popper"
 import "bootstrap"
 import "blacklight-frontend"
