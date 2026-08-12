@@ -88,14 +88,12 @@ module BlacklightDisplayHelper
                                     file_path: file_path }
                                 end
 
-        data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
-        link_content = content_tag(:span,
-                                   link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                                           file_path,
-                                           data: data_options,
-                                           class: 'file-link form-control download-trigger'))
-
-        link_content
+        content_tag(:span,
+                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                            file_path,
+                            onclick: "return confirm('#{document.confirmation}')",
+                            data: modal_trigger_options || {},
+                            class: 'file-link form-control download-trigger'))
       end
     end
 
