@@ -73,7 +73,8 @@ module BlacklightDisplayHelper
                             Rails.application.routes.url_helpers.final_submission_file_path(
                               remediated_final_submission_id, **query_params
                             ),
-                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
+                            onclick: document.confirmation ? "return confirm('#{document.confirmation}')" : nil,
+                            data: { 'turbo-prefetch': false }, class: 'file-link form-control'))
       end
     end
 
@@ -85,14 +86,17 @@ module BlacklightDisplayHelper
         modal_trigger_options = if should_show_modal
                                   { 'bs-toggle': 'modal',
                                     'bs-target': '#downloadModal',
+                                    'turbo-prefetch': false,
                                     file_path: file_path }
+                                else
+                                  { 'turbo-prefetch': false }
                                 end
 
         content_tag(:span,
                     link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                             file_path,
                             onclick: document.confirmation ? "return confirm('#{document.confirmation}')" : nil,
-                            data: modal_trigger_options || {},
+                            data: modal_trigger_options,
                             class: 'file-link form-control download-trigger'))
       end
     end
