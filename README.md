@@ -83,7 +83,7 @@ To run the test suite run:
 
 To run the linter "niftany":
 
-    bundle exec niftany
+    bundle exec niftany -a
 
 ### OAI Endpoint
 
