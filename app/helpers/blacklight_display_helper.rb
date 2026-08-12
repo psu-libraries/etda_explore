@@ -91,7 +91,7 @@ module BlacklightDisplayHelper
         content_tag(:span,
                     link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
                             file_path,
-                            onclick: "return confirm('#{document.confirmation}')",
+                            onclick: document.confirmation ? "return confirm('#{document.confirmation}')" : nil,
                             data: modal_trigger_options || {},
                             class: 'file-link form-control download-trigger'))
       end
