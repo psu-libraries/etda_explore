@@ -73,11 +73,13 @@ module BlacklightDisplayHelper
                             Rails.application.routes.url_helpers.final_submission_file_path(
                               remediated_final_submission_id, **query_params
                             ),
-                            data: { confirm: document.confirmation }, class: 'file-link form-control'))
+                            onclick: document.confirmation ? "return confirm('#{document.confirmation}')" : nil,
+                            data: { 'turbo-prefetch': false }, class: 'file-link form-control'))
       end
     end
 
     def final_submission_links(document)
+      defaults = { 'turbo-prefetch': false }
       document.final_submissions.map do |final_submission_id, name|
         query_params = { remediated: 'false', remediate_token: remediate_token(final_submission_id) }
         should_show_modal = document.remediated_final_submissions.blank? && ENV['ENABLE_ACCESSIBILITY_REMEDIATION'] == 'true'
@@ -87,15 +89,13 @@ module BlacklightDisplayHelper
                                     'bs-target': '#downloadModal',
                                     file_path: file_path }
                                 end
-
-        data_options = { confirm: document.confirmation }.merge(modal_trigger_options || {})
-        link_content = content_tag(:span,
-                                   link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
-                                           file_path,
-                                           data: data_options,
-                                           class: 'file-link form-control download-trigger'))
-
-        link_content
+        data_options = defaults.merge(modal_trigger_options || {})
+        content_tag(:span,
+                    link_to(tag.i(class: 'fa fa-download download-link-fa') + "Download #{name}",
+                            file_path,
+                            onclick: document.confirmation ? "return confirm('#{document.confirmation}')" : nil,
+                            data: data_options,
+                            class: 'file-link form-control download-trigger'))
       end
     end
 
