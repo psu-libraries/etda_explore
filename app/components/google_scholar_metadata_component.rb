@@ -4,7 +4,6 @@ class GoogleScholarMetadataComponent < ViewComponent::Base
   attr_reader :document
 
   def initialize(document)
-    super
     @document = document.fetch(:document)
   end
 

@@ -60,3 +60,8 @@ RSpec/MultipleMemoizedHelpers:
 Style/FormatStringToken:
   Exclude:
     - 'config/routes.rb'
+
+Lint/MissingSuper:
+  Exclude:
+    - 'app/components/blacklight/search/sidebar_component.rb'
+    - 'app/components/google_scholar_metadata_component.rb'
