@@ -19,7 +19,7 @@ export MYSQL_DATABASE=explore
 export MYSQL_HOST=mysql
 export MYSQL_LOCAL_PORT=3306
 
-# Solr Parameters 
+# Solr Parameters
 export SOLR_USERNAME=etda
 export SOLR_PASSWORD=etda
 export SOLR_HOST=127.0.0.1
@@ -27,6 +27,7 @@ export SOLR_CONFIG_DIR=solr/conf
 export SOLR_COLLECTION=blacklight-core
 export SOLR_NUM_SHARDS=1
 export SOLR_PORT=8983
+export SOLR_PROTOCOL=http
 
 # Google Analytics
 # Only set if you want to test out analytics

@@ -6,8 +6,8 @@ module EtdaExplore
   class SolrAdmin
     def self.reset
       conf = new
-      conf.delete_collection
-      conf.delete_configset
+      conf.delete_collection if conf.collection_exists?
+      conf.delete_configset if conf.configset_exists?
       conf.upload_config
       conf.create_collection
     end
@@ -60,7 +60,7 @@ module EtdaExplore
     def upload_config
       resp = connection.post(SolrConfig::CONFIG_PATH) do |req|
         req.params = { action: 'UPLOAD', name: config.configset_name }
-        req.headers['Content-Type'] = 'octect/stream'
+        req.headers['Content-Type'] = 'application/octet-stream'
         req.body = raw_data
       end
       check_resp(resp)

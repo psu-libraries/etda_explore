@@ -234,11 +234,13 @@ jobs:
           MYSQL_USER: etda
           MYSQL_PASSWORD: etda
           MYSQL_DATABASE: explore
-      - image: solr:8.11.1-slim
+      - image: solr:9.10.1
+        environment:
+          SOLR_MODULES: analysis-extras
         command: [
           "/bin/bash",
-           "-c",
-           "solr -c && solr auth enable -credentials etda:etda -z localhost:9983; solr stop && solr -c -f",]
+          "-c",
+          "solr -c && solr auth enable -credentials etda:etda -z localhost:9983; solr stop && solr -c -f",]
     environment:
       RAILS_ENV: test
       PARTNER: graduate
@@ -321,6 +323,8 @@ workflows:
               only:
                 - main
                 - /preview\/.*/
+          requires:
+            - test-application
 
       - push-image:
           name: push-image
