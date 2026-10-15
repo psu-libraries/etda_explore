@@ -8,9 +8,9 @@ The application is used by each of several different "partners". Currently these
 
 | Software |  Version |
 |----------|------|
-| `ruby`    |  3.4 |
-| `rails`   |  8.1 |
-| `solr`   |  8 |
+| `ruby`    |  3.4.11 |
+| `rails`   |  8.1.4 |
+| `solr`   |  8.11.2 |
 | `mariadb` | 11 |
 
 ### Configuration

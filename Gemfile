@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.9'
+ruby '3.4.11'
 
 gem 'blacklight', '~> 9'
 gem 'blacklight_oai_provider', github: 'Smullz622/blacklight_oai_provider', ref: 'e4b8d12'
@@ -23,7 +23,7 @@ gem 'jquery-rails'
 gem 'mysql2', '>= 0.5.7'
 gem 'okcomputer'
 gem 'puma', '~> 7.2'
-gem 'rails', '~> 8.1.3'
+gem 'rails', '~> 8.1.4'
 gem 'redis', '~> 4.0'
 gem 'rsolr', '>= 1.0', '< 3'
 gem 'sassc-rails', '~> 2.1'
